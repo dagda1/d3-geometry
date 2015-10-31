@@ -16,8 +16,8 @@ const yScale = d3.scale.linear()
 
 const points = {
   a: {x: xScale(1), y: yScale(1)},
-  b: {x: xScale(12), y: yScale(10)},
-  c: {x: xScale(14), y: yScale(6)}
+  b: {x: xScale(5), y: yScale(19)},
+  c: {x: xScale(17), y: yScale(6)}
 };
 
 const xAxis = d3.svg.axis()
@@ -170,7 +170,7 @@ function perpendicularBisector(a, b) {
         yIntercept = getYIntercept(midPoint, slope),
         xIntercept =  - yIntercept / (slope);
 
-  if(yIntercept === Infinity || yIntercept === -Infinity) {
+  if((yIntercept === Infinity || yIntercept === -Infinity)) {
     return drawTriangleLine(g, {
       x1: xScale(midPoint.x),
       y1: yScale(0),
@@ -179,7 +179,7 @@ function perpendicularBisector(a, b) {
     });
   }
 
-  if(a.x === b.x) {
+  if((a.x === b.x) || isNaN(xIntercept)) {
     return drawTriangleLine(g, {
       x1: xScale(0),
       y1: yScale(midPoint.y),
@@ -216,6 +216,10 @@ function drawPerpendicularBisectors() {
 }
 
 function drawCirumCircle(lineA, lineB) {
+  if(!lineA || !lineB) {
+    return;
+  }
+
   const x1 = - lineA.slope,
       y1 = 1,
       c1 = getYIntercept(lineA.vertex, lineA.slope),
@@ -255,7 +259,7 @@ const drag = d3.behavior
   const label = d3.select(".label." + d.label);
 
     label.text( function () {
-      return `${d.label} (${d3.format(",.0f")(xScale.invert(d3.event.x))}, ${d3.format(",.0f")(yScale.invert(d3.event.y))})`;
+      return `${d.label.toUpperCase()} (${d3.format(",.0f")(xScale.invert(d3.event.x))}, ${d3.format(",.0f")(yScale.invert(d3.event.y))})`;
   });
 
   label.attr('x', d3.event.x).attr('y', d3.event.y - 20);
@@ -294,11 +298,11 @@ g.selectAll('text')
   .attr("y", function(d){return d.point.y + 1;})
   .attr('class', function(d) {return "label " + d.label;})
   .text( function(d) {
-    return `${d.label} (${xScale.invert(d.point.x)}, ${yScale.invert(d.point.y)})`;
+    return `${d.label.toUpperCase()} (${xScale.invert(d.point.x)}, ${yScale.invert(d.point.y)})`;
   })
   .attr("font-family", "sans-serif")
-  .attr("font-size", "14px")
-  .attr("fill", "blue");
+  .attr("font-size", "24px")
+  .attr("fill", "gray");
 
 // drawAltitudes();
 
