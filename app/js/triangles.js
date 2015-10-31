@@ -16,7 +16,7 @@ const yScale = d3.scale.linear()
 
 const points = {
   a: {x: xScale(1), y: yScale(1)},
-  b: {x: xScale(10), y: yScale(11)},
+  b: {x: xScale(12), y: yScale(10)},
   c: {x: xScale(14), y: yScale(6)}
 };
 
@@ -154,39 +154,65 @@ function altitude(vertex, a, b) {
     .attr('y2', yScale(result.y));
 }
 
+const drawTriangleLine = function drawTriangleLine(group, vertices) {
+  group.append('line')
+    .style('stroke', 'green')
+    .attr('class', 'line')
+    .attr('x1', vertices.x1)
+    .attr('y1', vertices.y1)
+    .attr('x2', vertices.x2)
+    .attr('y2', vertices.y2);
+};
+
 function perpendicularBisector(a, b) {
   const slope = perpendicularGradient(a, b),
-      midPoint = midpoint(a, b),
-      yIntercept = getYIntercept(midPoint, slope),
-      xIntercept =  - yIntercept / (slope);
+        midPoint = midpoint(a, b),
+        yIntercept = getYIntercept(midPoint, slope),
+        xIntercept =  - yIntercept / (slope);
 
-  if(xIntercept > 0) {
-    g.append('line')
-    .style('stroke', 'green')
-    .attr('class', 'line')
-    .attr('x1', xScale(0))
-    .attr('y1', yScale(yIntercept))
-    .attr('x2', xScale(xIntercept))
-    .attr('y2', yScale(0));
-  } else {
-    svg.append('line')
-    .style('stroke', 'green')
-    .attr('class', 'line')
-    .attr('x1', xScale(midPoint.x))
-    .attr('y1', yScale(midPoint.y))
-    .attr('x2', xScale(0))
-    .attr('y2', yScale(yIntercept));
+  if(yIntercept === Infinity || yIntercept === -Infinity) {
+    return drawTriangleLine(g, {
+      x1: xScale(midPoint.x),
+      y1: yScale(0),
+      x2: xScale(midPoint.x),
+      y2: yScale(20)
+    });
   }
+
+  if(a.x === b.x) {
+    return drawTriangleLine(g, {
+      x1: xScale(0),
+      y1: yScale(midPoint.y),
+      x2: xScale(20),
+      y2: yScale(midPoint.y)
+    });
+  }
+
+  if(xIntercept < 0 || yIntercept < 0) {
+    return drawTriangleLine(g, {
+      x1: xScale(xIntercept),
+      y1: yScale(0),
+      x2: xScale(20),
+      y2: yScale((slope * 20) + yIntercept)
+    });
+  }
+
+  drawTriangleLine(g, {
+      x1: xScale(xIntercept),
+      y1: yScale(0),
+      x2: xScale(0),
+      y2: yScale(yIntercept)
+    });
 
   return {vertex: midPoint, slope: slope};
 }
 
 function drawPerpendicularBisectors() {
   const ab = perpendicularBisector(convertPoint(points.a), convertPoint(points.b));
-  const bc = perpendicularBisector(convertPoint(points.a), convertPoint(points.c));
-  const cd = perpendicularBisector(convertPoint(points.b), convertPoint(points.c));
+  const ac = perpendicularBisector(convertPoint(points.a), convertPoint(points.c));
+  const bc = perpendicularBisector(convertPoint(points.b), convertPoint(points.c));
 
-  drawCirumCircle(ab, bc);
+  drawCirumCircle(ab, ac);
 }
 
 function drawCirumCircle(lineA, lineB) {
@@ -228,8 +254,8 @@ const drag = d3.behavior
 
   const label = d3.select(".label." + d.label);
 
-  label.text( function () {
-    return "( " + d3.format(",.0f")(xScale.invert(d3.event.x))  + ", " + d3.format(",.0f")(yScale.invert(d3.event.y)) +" )"; 
+    label.text( function () {
+      return `${d.label} (${d3.format(",.0f")(xScale.invert(d3.event.x))}, ${d3.format(",.0f")(yScale.invert(d3.event.y))})`;
   });
 
   label.attr('x', d3.event.x).attr('y', d3.event.y - 20);
@@ -267,7 +293,9 @@ g.selectAll('text')
   .attr("x", function(d){return d.point.x;})
   .attr("y", function(d){return d.point.y + 1;})
   .attr('class', function(d) {return "label " + d.label;})
-  .text( function (d) { return "( " + xScale.invert(d.point.x)  + ", " + yScale.invert(d.point.y) +" )"; })
+  .text( function(d) {
+    return `${d.label} (${xScale.invert(d.point.x)}, ${yScale.invert(d.point.y)})`;
+  })
   .attr("font-family", "sans-serif")
   .attr("font-size", "14px")
   .attr("fill", "blue");
