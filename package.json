@@ -1,0 +1,27 @@
+{
+  "name": "d3-geometry",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "scripts": {
+    "dev": "webpack-dev-server --devtool eval --progress --colors --content-base build --port 3030"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dagda1/d3-geometry.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dagda1/d3-geometry/issues"
+  },
+  "homepage": "https://github.com/dagda1/d3-geometry",
+  "devDependencies": {
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.1"
+  },
+  "dependencies": {},
+  "keywords": [
+    "d3"
+  ]
+}

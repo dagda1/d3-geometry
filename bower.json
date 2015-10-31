@@ -1,0 +1,28 @@
+{
+  "name": "geometry",
+  "version": "0.0.1",
+  "homepage": "https://github.com/dagda1/geometry",
+  "authors": [
+    "dagda1 <dagda1@scotalt.net>"
+  ],
+  "description": "my fumblings with d3",
+  "main": "",
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "d3",
+    "graphics"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.5.6"
+  }
+}
