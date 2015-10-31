@@ -17,7 +17,7 @@ var config = {
 	module: {
 		noParse: [],
 		loaders: [
-			{test: /\.css$/, loader: 'style!css'}
+       { test: /\.css$/, loader: "style-loader!css-loader" }
 		]
 	},
 	resolve: {
