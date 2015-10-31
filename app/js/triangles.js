@@ -1,3 +1,5 @@
+"use strict";
+
 require("../css/style.css");
 
 const margin = {top: 20, right: 100, bottom: 30, left: 100},
@@ -11,6 +13,12 @@ const xScale = d3.scale.linear()
 const yScale = d3.scale.linear()
     .domain([0, 20])
     .range([height, 0]);
+
+const points = {
+  a: {x: xScale(1), y: yScale(1)},
+  b: {x: xScale(10), y: yScale(11)},
+  c: {x: xScale(14), y: yScale(6)}
+};
 
 const xAxis = d3.svg.axis()
     .scale(xScale)
@@ -35,18 +43,14 @@ svg.append('g')
     .attr('class', 'y axis')
     .call(yAxis);
 
-const pointA = {x: xScale(1), y: yScale(1)},
-    pointB = {x: xScale(6), y: yScale(18)},
-    pointC = {x: xScale(14), y: yScale(6)};
-
 const g = svg.append('g');
 
-var drawTriangle = function() {
+const drawTriangle = function() {
   g.append('path')
-    .attr('d', function(d) { 
-      return 'M ' + pointA.x +' '+ pointA.y + 
-             ' L' + pointB.x + ' ' + pointB.y + 
-             ' L' + pointC.x + ' ' + pointC.y + 
+    .attr('d', function() {
+      return 'M ' + points.a.x +' '+ points.a.y +
+             ' L' + points.b.x + ' ' + points.b.y +
+             ' L' + points.c.x + ' ' + points.c.y +
              ' z';
     })
      .attr('class', 'triangle')
@@ -57,19 +61,19 @@ drawTriangle();
 
 Math.approx = function(d){ return Math.round(d*100)/100; };
 
-var midpoint = function(a, b) {
+const midpoint = function(a, b) {
   return {x: ((a.x + b.x) / 2), y: ((a.y + b.y) / 2)};
 };
 
-var gradient = function(a, b) {  
+const gradient = function(a, b) {
   return ((b.y - a.y) / (b.x - a.x));
 };
 
-var perpendicularGradient = function (a, b) {
+const perpendicularGradient = function (a, b) {
   return -1 / gradient(a, b);
 };
 
-var convertPoint = function(point) {
+const convertPoint = function(point) {
   return {x: xScale.invert(point.x), y: yScale.invert(point.y)};
 };
 
@@ -86,23 +90,23 @@ function det(matrix) {
 }
 
 function solveMatrix(matrix, r) {
-   var determinant = det(matrix);
-   var x = det([
+   const determinant = det(matrix);
+   const x = det([
       [r[0], matrix[0][1]],
       [r[1], matrix[1][1]]
     ]) / determinant;
-  
-   var y = det([
+
+   const y = det([
      [matrix[0][0], r[0]],
      [matrix[1][0], r[1]]
    ]) / determinant;
-  
+
   return {x: Math.approx(x), y: Math.approx(y)};
 }
 
 function drawMedian(vertex, pointA, pointB) {
-  var mid = midpoint(pointA, pointB);
-  
+  const mid = midpoint(pointA, pointB);
+
   g.append('line')
     .style('stroke', 'red')
     .attr('class', 'line')
@@ -113,19 +117,19 @@ function drawMedian(vertex, pointA, pointB) {
 }
 
 function drawMedians() {
-  drawMedian(pointA, pointB ,pointC);
-  drawMedian(pointB, pointA, pointC);
-  drawMedian(pointC, pointB, pointA);
+  drawMedian(points.a, points.b ,points.c);
+  drawMedian(points.b, points.a, points.c);
+  drawMedian(points.c, points.b, points.a);
 }
 
 function drawAltitudes() {
-  altitude(convertPoint(pointA), convertPoint(pointB), convertPoint(pointC));
-  altitude(convertPoint(pointB), convertPoint(pointA), convertPoint(pointC));
-  altitude(convertPoint(pointC), convertPoint(pointB), convertPoint(pointA));
+  altitude(convertPoint(points.a), convertPoint(points.b), convertPoint(points.c));
+  altitude(convertPoint(points.b), convertPoint(points.a), convertPoint(points.c));
+  altitude(convertPoint(points.c), convertPoint(points.b), convertPoint(points.a));
 }
 
 function altitude(vertex, a, b) {
-  var slope = gradient(a, b),
+  const slope = gradient(a, b),
       x1 = - slope,
       y1 = 1,
       c1 = getYIntercept(a, slope),
@@ -133,13 +137,13 @@ function altitude(vertex, a, b) {
       x2 = - perpendicularSlope,
       y2 = 1,
       c2 = getYIntercept(vertex, perpendicularSlope);
- 
-  var matrix = [
+
+  const matrix = [
     [x1, y1],
     [x2, y2]
   ];
-  
-  var result = solveMatrix(matrix, [c1, c2]);
+
+  const result = solveMatrix(matrix, [c1, c2]);
 
   g.append('line')
     .style('stroke', 'red')
@@ -148,14 +152,14 @@ function altitude(vertex, a, b) {
     .attr('y1', yScale(vertex.y))
     .attr('x2', xScale(result.x))
     .attr('y2', yScale(result.y));
-} 
+}
 
 function perpendicularBisector(a, b) {
-  var slope = perpendicularGradient(a, b),
+  const slope = perpendicularGradient(a, b),
       midPoint = midpoint(a, b),
       yIntercept = getYIntercept(midPoint, slope),
       xIntercept =  - yIntercept / (slope);
-  
+
   if(xIntercept > 0) {
     g.append('line')
     .style('stroke', 'green')
@@ -178,28 +182,28 @@ function perpendicularBisector(a, b) {
 }
 
 function drawPerpendicularBisectors() {
-  var ab = perpendicularBisector(convertPoint(pointA), convertPoint(pointB));
-  var bc = perpendicularBisector(convertPoint(pointA), convertPoint(pointC));
-  var cd = perpendicularBisector(convertPoint(pointB), convertPoint(pointC));
+  const ab = perpendicularBisector(convertPoint(points.a), convertPoint(points.b));
+  const bc = perpendicularBisector(convertPoint(points.a), convertPoint(points.c));
+  const cd = perpendicularBisector(convertPoint(points.b), convertPoint(points.c));
 
   drawCirumCircle(ab, bc);
 }
 
 function drawCirumCircle(lineA, lineB) {
-  var x1 = - lineA.slope,
+  const x1 = - lineA.slope,
       y1 = 1,
       c1 = getYIntercept(lineA.vertex, lineA.slope),
       x2 = - lineB.slope,
       y2 = 1,
       c2 = getYIntercept(lineB.vertex, lineB.slope);
 
-  var matrix = [
+  const matrix = [
     [x1, y1],
     [x2, y2]
   ];
 
-  var circumCircleCentre = solveMatrix(matrix, [c1, c2]),
-      dist = distance(convertPoint(pointB), circumCircleCentre);
+  const circumCircleCentre = solveMatrix(matrix, [c1, c2]),
+      dist = distance(convertPoint(points.b), circumCircleCentre);
 
   g.append('circle')
    .attr('cx', xScale(circumCircleCentre.x))
@@ -212,19 +216,25 @@ function drawCirumCircle(lineA, lineB) {
 
 drawPerpendicularBisectors();
 
-var that = this;
+const drag = d3.behavior
+        .drag()
+        .on("drag", function(d) {
 
-var drag = d3.behavior
-     .drag()
-     .on("drag", function(d) {
-  
-  var circle = d3.select(this);
+  const circle = d3.select(this);
 
   d3.select('.triangle').remove();
   d3.select('.circumcircle').remove();
   d3.selectAll('.line').remove();
 
-  that[d.label] = {x: d3.event.x, y: d3.event.y};
+  const label = d3.select(".label." + d.label);
+
+  label.text( function () {
+    return "( " + d3.format(",.0f")(xScale.invert(d3.event.x))  + ", " + d3.format(",.0f")(yScale.invert(d3.event.y)) +" )"; 
+  });
+
+  label.attr('x', d3.event.x).attr('y', d3.event.y - 20);
+
+  points[d.label] = {x: d3.event.x, y: d3.event.y};
 
   drawTriangle();
 
@@ -235,13 +245,14 @@ var drag = d3.behavior
     .attr('cy', d.y = d3.event.y);
 });
 
-var circles = g
-  .selectAll('.grabber')
-  .data([
-    {point: pointA, label: 'pointA'},
-    {point: pointB, label: 'pointB'},
-    {point: pointC, label: 'pointC'}
-  ])
+const vertices = [
+  {point: points.a, label: 'a'},
+  {point: points.b, label: 'b'},
+  {point: points.c, label: 'c'}
+];
+
+g.selectAll('.grabber')
+  .data(vertices)
   .enter().append('circle')
   .attr('class', function(d) { return 'grabber ' + d.label; })
   .attr('cx', function(d) { return d.point.x; })
@@ -250,6 +261,16 @@ var circles = g
   .style('fill', 'red')
   .call(drag);
 
+g.selectAll('text')
+  .data(vertices)
+  .enter().append('text')
+  .attr("x", function(d){return d.point.x;})
+  .attr("y", function(d){return d.point.y + 1;})
+  .attr('class', function(d) {return "label " + d.label;})
+  .text( function (d) { return "( " + xScale.invert(d.point.x)  + ", " + yScale.invert(d.point.y) +" )"; })
+  .attr("font-family", "sans-serif")
+  .attr("font-size", "14px")
+  .attr("fill", "blue");
 
 // drawAltitudes();
 
