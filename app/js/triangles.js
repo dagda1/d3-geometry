@@ -1,24 +1,26 @@
-var margin = {top: 20, right: 100, bottom: 30, left: 100},
+require("../css/style.css");
+
+const margin = {top: 20, right: 100, bottom: 30, left: 100},
     width = 660 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var xScale = d3.scale.linear()
+const xScale = d3.scale.linear()
     .domain([0, 20])
     .range([0, width]);
 
-var yScale = d3.scale.linear()
+const yScale = d3.scale.linear()
     .domain([0, 20])
     .range([height, 0]);
 
-var xAxis = d3.svg.axis()
+const xAxis = d3.svg.axis()
     .scale(xScale)
     .orient("bottom");
 
-var yAxis = d3.svg.axis()
+const yAxis = d3.svg.axis()
     .scale(yScale)
     .orient("left");
 
-var svg = d3.select("body").append("svg")
+const svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -33,11 +35,11 @@ svg.append('g')
     .attr('class', 'y axis')
     .call(yAxis);
 
-var pointA = {x: xScale(1), y: yScale(1)},
+const pointA = {x: xScale(1), y: yScale(1)},
     pointB = {x: xScale(6), y: yScale(18)},
     pointC = {x: xScale(14), y: yScale(6)};
 
-var g = svg.append('g');
+const g = svg.append('g');
 
 var drawTriangle = function() {
   g.append('path')
@@ -171,7 +173,7 @@ function perpendicularBisector(a, b) {
     .attr('x2', xScale(0))
     .attr('y2', yScale(yIntercept));
   }
-  
+
   return {vertex: midPoint, slope: slope};
 }
 
@@ -179,7 +181,7 @@ function drawPerpendicularBisectors() {
   var ab = perpendicularBisector(convertPoint(pointA), convertPoint(pointB));
   var bc = perpendicularBisector(convertPoint(pointA), convertPoint(pointC));
   var cd = perpendicularBisector(convertPoint(pointB), convertPoint(pointC));
-  
+
   drawCirumCircle(ab, bc);
 }
 
@@ -190,15 +192,15 @@ function drawCirumCircle(lineA, lineB) {
       x2 = - lineB.slope,
       y2 = 1,
       c2 = getYIntercept(lineB.vertex, lineB.slope);
-  
+
   var matrix = [
     [x1, y1],
     [x2, y2]
   ];
-  
+
   var circumCircleCentre = solveMatrix(matrix, [c1, c2]),
       dist = distance(convertPoint(pointB), circumCircleCentre);
-  
+
   g.append('circle')
    .attr('cx', xScale(circumCircleCentre.x))
    .attr('cy', yScale(circumCircleCentre.y))
@@ -247,7 +249,7 @@ var circles = g
   .attr('r', 10)
   .style('fill', 'red')
   .call(drag);
-  
+
 
 // drawAltitudes();
 

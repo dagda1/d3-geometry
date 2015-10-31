@@ -1,5 +1,8 @@
+"use strict";
+var path = require('path');
 var webpack = require('webpack');
-var bower_dir = __dirname + '/bower_components';
+var bower_dir = path.join(__dirname, '/bower_components');
+
 
 var config = {
 	addVendor: function(name, path){
@@ -17,11 +20,17 @@ var config = {
 	module: {
 		noParse: [],
 		loaders: [
-       { test: /\.css$/, loader: "style-loader!css-loader" }
+      { test: /\.css$/, loader: "style-loader!css-loader?root=." },
+      {
+        test: /\.js?$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel'
+    }
 		]
 	},
 	resolve: {
-		alias: {}
+		alias: {},
+    root: [path.join(__dirname, "app/css"), path.join(__dirname, "app/js")]
 	},
 	plugins: [
 		// This plugin makes a module available as variable in every module
