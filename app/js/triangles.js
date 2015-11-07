@@ -1,10 +1,36 @@
-"use strict";
+ (function () {
+   'use strict';
+}());
 
 require("../css/style.css");
 
+import {solveMatrix} from './utils/matrices';
+
+import {
+  distance,
+  midpoint,
+  gradient,
+  perpendicularGradient,
+  getYIntercept
+} from "./utils/line";
+
+import {
+  availableViewPort
+} from "./utils/dom";
+
+function convertPoint(point) {
+  return {x: xScale.invert(point.x), y: yScale.invert(point.y)};
+}
+
+const viewportDimensions = availableViewPort();
+
+
+const availableHeight = viewportDimensions.h - 50;
+const availableWidth = availableHeight * 1.2;
+
 const margin = {top: 20, right: 100, bottom: 30, left: 100},
-    width = 660 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = availableWidth - margin.left - margin.right,
+    height = availableHeight - margin.top - margin.bottom;
 
 const xScale = d3.scale.linear()
     .domain([0, 20])
@@ -15,9 +41,9 @@ const yScale = d3.scale.linear()
     .range([height, 0]);
 
 const points = {
-  a: {x: xScale(1), y: yScale(1)},
-  b: {x: xScale(5), y: yScale(19)},
-  c: {x: xScale(17), y: yScale(6)}
+  a: {x: xScale(5), y: yScale(1)},
+  b: {x: xScale(4), y: yScale(17)},
+  c: {x: xScale(16), y: yScale(2)}
 };
 
 const xAxis = d3.svg.axis()
@@ -53,56 +79,11 @@ const drawTriangle = function() {
              ' L' + points.c.x + ' ' + points.c.y +
              ' z';
     })
-     .attr('class', 'triangle')
+    .attr('class', 'triangle')
     .style('stroke', 'blue');
 };
 
 drawTriangle();
-
-Math.approx = function(d){ return Math.round(d*100)/100; };
-
-const midpoint = function(a, b) {
-  return {x: ((a.x + b.x) / 2), y: ((a.y + b.y) / 2)};
-};
-
-const gradient = function(a, b) {
-  return ((b.y - a.y) / (b.x - a.x));
-};
-
-const perpendicularGradient = function (a, b) {
-  return -1 / gradient(a, b);
-};
-
-const convertPoint = function(point) {
-  return {x: xScale.invert(point.x), y: yScale.invert(point.y)};
-};
-
-function getYIntercept(vertex, slope) {
-  return vertex.y - (slope * vertex.x);
-}
-
-function distance(a, b) {
-  return Math.floor(Math.sqrt(Math.pow((b.x - a.x), 2) + Math.pow((b.y - a.y), 2)));
-}
-
-function det(matrix) {
-  return (matrix[0][0]*matrix[1][1])-(matrix[0][1]*matrix[1][0]);
-}
-
-function solveMatrix(matrix, r) {
-   const determinant = det(matrix);
-   const x = det([
-      [r[0], matrix[0][1]],
-      [r[1], matrix[1][1]]
-    ]) / determinant;
-
-   const y = det([
-     [matrix[0][0], r[0]],
-     [matrix[1][0], r[1]]
-   ]) / determinant;
-
-  return {x: Math.approx(x), y: Math.approx(y)};
-}
 
 function drawMedian(vertex, pointA, pointB) {
   const mid = midpoint(pointA, pointB);
@@ -180,21 +161,25 @@ function perpendicularBisector(a, b) {
   }
 
   if((a.x === b.x) || isNaN(xIntercept)) {
-    return drawTriangleLine(g, {
+    drawTriangleLine(g, {
       x1: xScale(0),
       y1: yScale(midPoint.y),
       x2: xScale(20),
       y2: yScale(midPoint.y)
     });
+
+    return { vertex: midPoint, slope: slope};
   }
 
   if(xIntercept < 0 || yIntercept < 0) {
-    return drawTriangleLine(g, {
+    drawTriangleLine(g, {
       x1: xScale(xIntercept),
       y1: yScale(0),
       x2: xScale(20),
       y2: yScale((slope * 20) + yIntercept)
     });
+
+    return { vertex: midPoint, slope: slope};
   }
 
   drawTriangleLine(g, {
@@ -294,11 +279,14 @@ g.selectAll('.grabber')
 g.selectAll('text')
   .data(vertices)
   .enter().append('text')
-  .attr("x", function(d){return d.point.x;})
-  .attr("y", function(d){return d.point.y + 1;})
+  .attr("x", function(d){return d.point.x + 10;})
+  .attr("y", function(d){return d.point.y + 10;})
   .attr('class', function(d) {return "label " + d.label;})
   .text( function(d) {
-    return `${d.label.toUpperCase()} (${xScale.invert(d.point.x)}, ${yScale.invert(d.point.y)})`;
+    const x = Math.round(xScale.invert(d.point.x));
+    const y = Math.round(yScale.invert(d.point.y));
+
+    return `${d.label.toUpperCase()} (${x}, ${y})`;
   })
   .attr("font-family", "sans-serif")
   .attr("font-size", "24px")
