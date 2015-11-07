@@ -19,7 +19,10 @@ import {
 } from "./utils/dom";
 
 function convertPoint(area, point) {
-  return {x: area.xScale.invert(area.points[point].x), y: area.yScale.invert(area.points[point].y)};
+  return {
+    x: area.xScale.invert(area.points[point].x),
+    y: area.yScale.invert(area.points[point].y)
+  };
 }
 
 function render() {
@@ -103,17 +106,13 @@ function render() {
 }
 
 function addRadioButtons(area) {
-  const effectNames = _.toArray(getEffects()).map((fn) => {
-    return fn.name;
-  });
-
   const form = d3.select('body').append('form');
 
   form.selectAll('label')
-    .data(effectNames)
+    .data(_.toArray(getEffects()))
     .enter()
     .append('label')
-    .text(function(d) { return d; })
+    .text(function(d) { return d.label; })
     .insert('input')
     .attr({
       type: 'radio',
@@ -122,10 +121,10 @@ function addRadioButtons(area) {
       value: function(d) {
         return d;
       }
-    }).property('checked', function(label) {
-      return (label === area.currentEffect);
-    }).on('change', function(label) {
-      area.currentEffect = label;
+    }).property('checked', function(effect) {
+      return (effect.func.name === area.currentEffect);
+    }).on('change', function(effect) {
+      area.currentEffect = effect.func.name;
 
       addCurrentEffects(area);
     });
@@ -135,7 +134,7 @@ function addCurrentEffects(area) {
   d3.select('.circumcircle').remove();
   d3.selectAll('.line').remove();
 
-  getEffects()[area.currentEffect].call(null, area);
+  getEffects()[area.currentEffect].func.call(null, area);
 }
 
 window.addEventListener("resize", _.throttle(render));
@@ -296,9 +295,18 @@ function drawCirumCircle(area, lineA, lineB) {
 
 function getEffects() {
   return {
-    drawPerpendicularBisectors: drawPerpendicularBisectors,
-    drawMedians: drawMedians,
-    drawAltitudes: drawAltitudes
+    drawPerpendicularBisectors: {
+      func: drawPerpendicularBisectors,
+      label: "Perpendicular Bisectors"
+    },
+    drawMedians: {
+      func: drawMedians,
+      label: "Medians"
+    },
+    drawAltitudes: {
+      func: drawAltitudes,
+      label: "Altitudes"
+    }
   };
 }
 
