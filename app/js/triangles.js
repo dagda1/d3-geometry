@@ -34,6 +34,9 @@ function render() {
 
   d3.select("body").select("svg").remove();
 
+  d3.selectAll('label').remove();
+  d3.selectAll('input[type=radio]').remove();
+
   const xScale = d3.scale.linear()
           .domain([0, 20])
           .range([0, width]);
@@ -76,12 +79,15 @@ function render() {
   drawTriangle(points, g);
 
   const area = {
+    currentEffect: "drawMedians",
     points: points,
     xScale: xScale,
     yScale: yScale,
     svg: svg,
     g: g
   };
+
+  addRadioButtons(area);
 
   addCurrentEffects(area);
 
@@ -96,10 +102,40 @@ function render() {
   addGrbbers(area, vertices);
 }
 
-function addCurrentEffects(area) {
-  const current = "medians";
+function addRadioButtons(area) {
+  const effectNames = _.toArray(getEffects()).map((fn) => {
+    return fn.name;
+  });
 
-  getEffects()[current].call(null, area);
+  const form = d3.select('body').append('form');
+
+  form.selectAll('label')
+    .data(effectNames)
+    .enter()
+    .append('label')
+    .text(function(d) { return d; })
+    .insert('input')
+    .attr({
+      type: 'radio',
+      class: "shape",
+      name: 'mode',
+      value: function(d) {
+        return d;
+      }
+    }).property('checked', function(label) {
+      return (label === area.currentEffect);
+    }).on('change', function(label) {
+      area.currentEffect = label;
+
+      addCurrentEffects(area);
+    });
+}
+
+function addCurrentEffects(area) {
+  d3.select('.circumcircle').remove();
+  d3.selectAll('.line').remove();
+
+  getEffects()[area.currentEffect].call(null, area);
 }
 
 window.addEventListener("resize", _.throttle(render));
@@ -260,9 +296,9 @@ function drawCirumCircle(area, lineA, lineB) {
 
 function getEffects() {
   return {
-    perpendicularBisectors: drawPerpendicularBisectors,
-    medians: drawMedians,
-    altitudes: drawAltitudes
+    drawPerpendicularBisectors: drawPerpendicularBisectors,
+    drawMedians: drawMedians,
+    drawAltitudes: drawAltitudes
   };
 }
 
@@ -298,8 +334,8 @@ function addGrbbers(area, vertices) {
     .attr('r', 10)
     .style('fill', 'red')
     .call(drag);
-
 }
+
 
 function draggable(area, d) {
   const circle = d3.select(`.grabber.${d.label}`);
