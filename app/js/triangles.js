@@ -97,7 +97,7 @@ function render() {
 }
 
 function addCurrentEffects(area) {
-  const current = "perpendicularBisectors";
+  const current = "medians";
 
   getEffects()[current].call(null, area);
 }
@@ -119,25 +119,24 @@ function drawTriangle(points, g) {
 function drawMedian(area, vertex, pointA, pointB) {
   const mid = midpoint(pointA, pointB);
 
-  area.g.append('line')
-    .style('stroke', 'red')
-    .attr('class', 'line')
-    .attr('x1', vertex.x)
-    .attr('y1', vertex.y)
-    .attr('x2', mid.x)
-    .attr('y2', mid.y);
+  drawTriangleLine(area.g, {
+    x1: vertex.x,
+    y1: vertex.y,
+    x2: mid.x,
+    y2: mid.y
+  });
 }
 
 function drawMedians(area) {
-  drawMedian(area.points.a, area.points.b ,area.points.c);
-  drawMedian(area.points.b, area.points.a, area.points.c);
-  drawMedian(area.points.c, area.points.b, area.points.a);
+  drawMedian(area, area.points.a, area.points.b ,area.points.c);
+  drawMedian(area, area.points.b, area.points.a, area.points.c);
+  drawMedian(area, area.points.c, area.points.b, area.points.a);
 }
 
 function drawAltitudes(area) {
-  altitude(convertPoint(area, 'a'), convertPoint(area, 'b'), convertPoint(area, 'c'));
-  altitude(convertPoint(area, 'b'), convertPoint(area, 'a'), convertPoint(area, 'c'));
-  altitude(convertPoint(area, 'c'), convertPoint(area, 'b'), convertPoint(area, 'a'));
+  altitude(area, convertPoint(area, 'a'), convertPoint(area, 'b'), convertPoint(area, 'c'));
+  altitude(area, convertPoint(area, 'b'), convertPoint(area, 'a'), convertPoint(area, 'c'));
+  altitude(area, convertPoint(area, 'c'), convertPoint(area, 'b'), convertPoint(area, 'a'));
 }
 
 function altitude(area, vertex, a, b) {
@@ -157,13 +156,12 @@ function altitude(area, vertex, a, b) {
 
   const result = solveMatrix(matrix, [c1, c2]);
 
-  area.g.append('line')
-    .style('stroke', 'red')
-    .attr('class', 'line')
-    .attr('x1', area.xScale(vertex.x))
-    .attr('y1', area.yScale(vertex.y))
-    .attr('x2', area.xScale(result.x))
-    .attr('y2', area.yScale(result.y));
+  drawTriangleLine(area.g, {
+    x1: area.xScale(vertex.x),
+    y1: area.yScale(vertex.y),
+    x2: area.xScale(result.x),
+    y2: area.yScale(result.y)
+  });
 }
 
 function drawTriangleLine(group, vertices) {
