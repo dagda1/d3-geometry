@@ -11,7 +11,7 @@ var config = {
 	},
 	entry: {
 		app: ["./app/js/triangles.js"],
-		vendors: ["d3"]
+		vendors: ["d3", "_"]
 	},
 	output: {
 		"path": "./build",
@@ -35,7 +35,8 @@ var config = {
 	plugins: [
 		// This plugin makes a module available as variable in every module
 		new webpack.ProvidePlugin({
-			d3: "d3"
+			d3: "d3",
+      _: "_"
 		}),
 		// CommonsChunkPlugin will take the vendors chunk and create a commonly used js file
 		new webpack.optimize.CommonsChunkPlugin('vendors','vendors.js', Infinity)
@@ -44,5 +45,6 @@ var config = {
 };
 
 config.addVendor('d3', bower_dir + '/d3/d3.min.js');
+config.addVendor('_', bower_dir + '/lodash/lodash.min.js');
 
 module.exports = config;
