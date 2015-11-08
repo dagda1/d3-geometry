@@ -9,7 +9,8 @@
     "FastClick",
     "Radium",
     "moment",
-    "_"
+    "_",
+    "getEventListeners"
   ],
   "browser": true,
   "boss": true,

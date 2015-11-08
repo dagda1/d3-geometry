@@ -25,7 +25,11 @@ function convertPoint(area, point) {
   };
 }
 
-function render() {
+function render(state = {}) {
+  if(state.resizeFunc) {
+    window.removeEventListener("resize", state.resizeFunc);
+  }
+
   const viewportDimensions = availableViewPort();
 
   const availableHeight = viewportDimensions.h - 50;
@@ -48,11 +52,41 @@ function render() {
           .domain([0, 20])
           .range([height, 0]);
 
-  const points = {
-    a: {x: xScale(5), y: yScale(1)},
-    b: {x: xScale(4), y: yScale(17)},
-    c: {x: xScale(16), y: yScale(2)}
+  let points;
+
+  if(state.points) {
+    points = {
+      a: {
+        x: xScale(xScale.invert(state.points.a.x)),
+        y: yScale(yScale.invert(state.points.a.y))
+      },
+      b: {
+        x: xScale(xScale.invert(state.points.b.x)),
+        y: yScale(yScale.invert(state.points.b.y))
+      },
+      c: {
+        x: xScale(xScale.invert(state.points.c.x)),
+        y: yScale(yScale.invert(state.points.c.y))
+      }
+    };
+  } else {
+    points = {
+      a: {x: xScale(5), y: yScale(1)},
+      b: {x: xScale(4), y: yScale(17)},
+      c: {x: xScale(16), y: yScale(2)}
+    };
+  }
+
+  const area = {
+    xScale: xScale,
+    yScale: yScale
   };
+
+  area.currentEffect = state.currentEffect || "drawMedians";
+
+  area.points = points;
+
+  addRadioButtons(area);
 
   const xAxis = d3.svg.axis()
           .scale(xScale)
@@ -79,18 +113,10 @@ function render() {
 
   const g = svg.append('g');
 
+  area.g = g;
+  area.svg = svg;
+
   drawTriangle(points, g);
-
-  const area = {
-    currentEffect: "drawMedians",
-    points: points,
-    xScale: xScale,
-    yScale: yScale,
-    svg: svg,
-    g: g
-  };
-
-  addRadioButtons(area);
 
   addCurrentEffects(area);
 
@@ -103,6 +129,12 @@ function render() {
   addPointLabels(area, vertices);
 
   addGrbbers(area, vertices);
+
+  const resizeFunc = render.bind(null, area);
+
+  area.resizeFunc = resizeFunc;
+
+  window.addEventListener("resize", area.resizeFunc);
 }
 
 function addRadioButtons(area) {
@@ -136,8 +168,6 @@ function addCurrentEffects(area) {
 
   getEffects()[area.currentEffect].func.call(null, area);
 }
-
-window.addEventListener("resize", _.throttle(render));
 
 function drawTriangle(points, g) {
   g.append('path')
