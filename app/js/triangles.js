@@ -57,16 +57,16 @@ function render(state = {}) {
   if(state.points) {
     points = {
       a: {
-        x: xScale(xScale.invert(state.points.a.x)),
-        y: yScale(yScale.invert(state.points.a.y))
+        x: xScale(state.xScale.invert(state.points.a.x)),
+        y: yScale(state.yScale.invert(state.points.a.y))
       },
       b: {
-        x: xScale(xScale.invert(state.points.b.x)),
-        y: yScale(yScale.invert(state.points.b.y))
+        x: xScale(state.xScale.invert(state.points.b.x)),
+        y: yScale(state.yScale.invert(state.points.b.y))
       },
       c: {
-        x: xScale(xScale.invert(state.points.c.x)),
-        y: yScale(yScale.invert(state.points.c.y))
+        x: xScale(state.xScale.invert(state.points.c.x)),
+        y: yScale(state.yScale.invert(state.points.c.y))
       }
     };
   } else {
