@@ -24,3 +24,7 @@ form > label {
   text-shadow: 0 1px 0 #fff;
   cursor: move;
 }
+
+.grabber {
+  z-index: 1000;
+}

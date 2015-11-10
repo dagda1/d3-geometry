@@ -2,7 +2,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var bower_dir = path.join(__dirname, '/bower_components');
-
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 var config = {
 	addVendor: function(name, path){
@@ -14,7 +14,7 @@ var config = {
 		vendors: ["d3", "_"]
 	},
 	output: {
-		"path": "./build",
+		"path": process.env.NODE_ENV === 'production' ? './dist' : './build',
 		"filename": "bundle.js"
 	},
 	module: {
@@ -39,7 +39,11 @@ var config = {
       _: "_"
 		}),
 		// CommonsChunkPlugin will take the vendors chunk and create a commonly used js file
-		new webpack.optimize.CommonsChunkPlugin('vendors','vendors.js', Infinity)
+		new webpack.optimize.CommonsChunkPlugin('vendors','vendors.js', Infinity),
+    // https://www.npmjs.com/package/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      title: 'Triangle Functions'
+    })
 	]
 
 };

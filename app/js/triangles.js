@@ -289,7 +289,7 @@ function perpendicularBisector(area, a, b) {
 function drawPerpendicularBisectors(area) {
   const ab = perpendicularBisector(area, convertPoint(area, 'a'), convertPoint(area, 'b'));
   const ac = perpendicularBisector(area, convertPoint(area, 'a'), convertPoint(area, 'c'));
-  const bc = perpendicularBisector(area, convertPoint(area, 'b'), convertPoint(area, 'c'));
+  perpendicularBisector(area, convertPoint(area, 'b'), convertPoint(area, 'c'));
 
   drawCirumCircle(area, ab, ac);
 }
