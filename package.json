@@ -6,7 +6,7 @@
   "author": "",
   "scripts": {
     "dev": "webpack-dev-server --devtool eval --progress --colors --content-base build --port 3030",
-    "deploy": "NODE_ENV=production webpack -p && rsync -avze 'ssh -p 22' dist/ root@46.101.17.251:home/nginx/nginx/dist"
+    "deploy": "NODE_ENV=production webpack -p && gulp deploy"
   },
   "repository": {
     "type": "git",

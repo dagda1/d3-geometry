@@ -72,7 +72,7 @@ function render(state = {}) {
   } else {
     points = {
       a: {x: xScale(0), y: yScale(0)},
-      b: {x: xScale(4), y: yScale(17)},
+      b: {x: xScale(6), y: yScale(18)},
       c: {x: xScale(16), y: yScale(2)}
     };
   }
@@ -242,7 +242,7 @@ function altitude(area, vertex, a, b) {
 
 function drawTriangleLine(group, vertices) {
   group.append('line')
-    .style('stroke', 'red')
+    .style('stroke', 'yellow')
     .attr('class', 'line')
     .attr('x1', vertices.x1)
     .attr('y1', vertices.y1)
