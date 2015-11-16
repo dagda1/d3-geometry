@@ -1,4 +1,4 @@
- (function () {
+(function () {
    'use strict';
 }());
 
@@ -71,7 +71,7 @@ function render(state = {}) {
     };
   } else {
     points = {
-      a: {x: xScale(5), y: yScale(1)},
+      a: {x: xScale(0), y: yScale(0)},
       b: {x: xScale(4), y: yScale(17)},
       c: {x: xScale(16), y: yScale(2)}
     };
@@ -82,7 +82,7 @@ function render(state = {}) {
     yScale: yScale
   };
 
-  area.currentEffect = state.currentEffect || "drawMedians";
+  area.currentEffect = state.currentEffect || drawMedians;
 
   area.points = points;
 
@@ -116,15 +116,15 @@ function render(state = {}) {
   area.g = g;
   area.svg = svg;
 
-  drawTriangle(points, g);
-
-  addCurrentEffects(area);
-
   const vertices = [
     {point: area.points.a, label: 'a'},
     {point: area.points.b, label: 'b'},
     {point: area.points.c, label: 'c'}
   ];
+
+  drawTriangle(points, g);
+
+  addCurrentEffects(area);
 
   addPointLabels(area, vertices);
 
@@ -140,8 +140,16 @@ function render(state = {}) {
 function addRadioButtons(area) {
   const form = d3.select('body').append('form');
 
+  const effects = _.toArray(getEffects());
+
+  const findEffectFunction = (effect) => {
+    return _.find(effects, (e) =>  {
+      return effect.label === e.label;
+    });
+  };
+
   form.selectAll('label')
-    .data(_.toArray(getEffects()))
+    .data(effects)
     .enter()
     .append('label')
     .text(function(d) { return d.label; })
@@ -154,10 +162,12 @@ function addRadioButtons(area) {
         return d;
       }
     }).property('checked', function(effect) {
-      return (effect.func.name === area.currentEffect);
-    }).on('change', function(effect) {
-      area.currentEffect = effect.func.name;
+      const currentEffect = findEffectFunction(effect);
 
+      return area.currentEffect === currentEffect.func;
+    }).on('change', function(effect) {
+      const selected = findEffectFunction(effect);
+      area.currentEffect = selected.func;
       addCurrentEffects(area);
     });
 }
@@ -166,7 +176,7 @@ function addCurrentEffects(area) {
   d3.select('.circumcircle').remove();
   d3.selectAll('.line').remove();
 
-  getEffects()[area.currentEffect].func.call(null, area);
+  area.currentEffect.call(null, area);
 }
 
 function drawTriangle(points, g) {
@@ -178,7 +188,8 @@ function drawTriangle(points, g) {
              ' z';
     })
     .attr('class', 'triangle')
-    .style('stroke', 'blue');
+    .attr('fill-opacity', 0.3)
+    .style('stroke', 'red');
 }
 
 function drawMedian(area, vertex, pointA, pointB) {
@@ -231,7 +242,7 @@ function altitude(area, vertex, a, b) {
 
 function drawTriangleLine(group, vertices) {
   group.append('line')
-    .style('stroke', 'green')
+    .style('stroke', 'red')
     .attr('class', 'line')
     .attr('x1', vertices.x1)
     .attr('y1', vertices.y1)
@@ -325,17 +336,17 @@ function drawCirumCircle(area, lineA, lineB) {
 
 function getEffects() {
   return {
-    drawPerpendicularBisectors: {
-      func: drawPerpendicularBisectors,
-      label: "Perpendicular Bisectors"
+    "drawPerpendicularBisectors": {
+      "func": drawPerpendicularBisectors,
+      "label": "Perpendicular Bisectors"
     },
-    drawMedians: {
-      func: drawMedians,
-      label: "Medians"
+    "drawMedians": {
+      "func": drawMedians,
+      "label": "Medians"
     },
-    drawAltitudes: {
-      func: drawAltitudes,
-      label: "Altitudes"
+    "drawAltitudes": {
+      "func": drawAltitudes,
+      "label": "Altitudes"
     }
   };
 }
@@ -355,7 +366,7 @@ function addPointLabels(area, vertices) {
     })
     .attr("font-family", "sans-serif")
     .attr("font-size", "24px")
-    .attr("fill", "gray");
+    .attr("fill", "black");
 }
 
 function addGrbbers(area, vertices) {
