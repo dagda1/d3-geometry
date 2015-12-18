@@ -44,6 +44,18 @@ function render(state = {}) {
   d3.selectAll('label').remove();
   d3.selectAll('input[type=radio]').remove();
 
+  const initialScale = 1;
+  const initialXY = [0, 0];
+
+  d3.behavior.zoom()
+    .scale(initialScale)
+    .translate(initialXY)
+    .size([width, height])
+    .on("zoom",function() {
+      svg.attr("transform","translate("+ d3.event.translate.join(",") + ") scale(" + d3.event.scale + ")");
+    });
+
+
   const xScale = d3.scale.linear()
           .domain([0, 20])
           .range([0, width]);
@@ -77,17 +89,6 @@ function render(state = {}) {
     };
   }
 
-  const area = {
-    xScale: xScale,
-    yScale: yScale
-  };
-
-  area.currentEffect = state.currentEffect || drawMedians;
-
-  area.points = points;
-
-  addRadioButtons(area);
-
   const xAxis = d3.svg.axis()
           .scale(xScale)
           .orient("bottom");
@@ -111,6 +112,17 @@ function render(state = {}) {
     .attr('class', 'y axis')
     .call(yAxis);
 
+  const area = {
+    xScale: xScale,
+    yScale: yScale
+  };
+
+  area.currentEffect = state.currentEffect || drawMedians;
+
+  area.points = points;
+
+  addRadioButtons(area);
+
   const g = svg.append('g');
 
   area.g = g;
@@ -128,13 +140,13 @@ function render(state = {}) {
 
   addPointLabels(area, vertices);
 
-  addGrbbers(area, vertices);
+  addGrabbers(area, vertices);
 
   const resizeFunc = render.bind(null, area);
 
   area.resizeFunc = resizeFunc;
 
-  window.addEventListener("resize", area.resizeFunc);
+  //window.addEventListener("resize", area.resizeFunc);
 }
 
 function addRadioButtons(area) {
@@ -242,7 +254,7 @@ function altitude(area, vertex, a, b) {
 
 function drawTriangleLine(group, vertices) {
   group.append('line')
-    .style('stroke', 'yellow')
+    .style('stroke', 'red')
     .attr('class', 'line')
     .attr('x1', vertices.x1)
     .attr('y1', vertices.y1)
@@ -331,7 +343,7 @@ function drawCirumCircle(area, lineA, lineB) {
    .attr('r', area.xScale(dist))
    .attr('class', 'circumcircle')
    .attr('fill-opacity', 0.0)
-   .style('stroke', 'black');
+   .style('stroke', 'red');
 }
 
 function getEffects() {
@@ -369,7 +381,7 @@ function addPointLabels(area, vertices) {
     .attr("fill", "black");
 }
 
-function addGrbbers(area, vertices) {
+function addGrabbers(area, vertices) {
   const drag = d3.behavior
         .drag()
         .on("drag", draggable.bind(null, area));
