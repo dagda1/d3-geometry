@@ -10,7 +10,7 @@ var config = {
 		this.module.noParse.push(path);
 	},
 	entry: {
-		app: ["./app/js/triangles.js"],
+		app: ["./app/js/index.js"],
 		vendors: ["d3", "_"]
 	},
 	output: {
@@ -21,11 +21,10 @@ var config = {
 		noParse: [],
 		loaders: [
       { test: /\.css$/, loader: "style-loader!css-loader?root=." },
-      {
-        test: /\.js?$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'babel'
-    }
+      { test: /\.js?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' },
+      { test: /\.gif$/, loader: "url-loader?mimetype=image/png" },
+      // { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
+      { test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/, loader: 'url-loader?limit=100000' }
 		]
 	},
 	resolve: {
@@ -42,7 +41,8 @@ var config = {
 		new webpack.optimize.CommonsChunkPlugin('vendors','vendors.js', Infinity),
     // https://www.npmjs.com/package/html-webpack-plugin
     new HtmlWebpackPlugin({
-      title: 'Triangle Functions'
+      title: 'D3 and react',
+      template: 'build/index.html'
     })
 	]
 
