@@ -16,9 +16,16 @@ export default class Menu extends Component {
           <div id="navbarCollapse" className="collapse navbar-collapse">
             <ul className="nav navbar-nav">
               <li className="active">
-                <a href="#">Home</a></li>
-              <li>
-                 <a href="#">Profile</a>
+                <a href="#">Home</a>
+              </li>
+              <li className="dropdown">
+                <a tabIndex="0" data-toggle="dropdown" data-submenu="" aria-expanded="false">Geometry<span className="caret"></span>
+                </a>
+                <ul className="dropdown-menu">
+                  <li className="dropdown-submenu">
+                    <a tabIndex="0">Triangles</a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>

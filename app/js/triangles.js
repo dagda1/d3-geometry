@@ -2,8 +2,6 @@
    'use strict';
 }());
 
-require("../css/style.css");
-
 import {solveMatrix} from './utils/matrices';
 
 import {

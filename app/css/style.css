@@ -6,11 +6,16 @@ form > label {
   margin-right: 20px;
 }
 
+a {
+  cursor: pointer;
+}
+
 .chart {
   background: #fff;
   font: 10px sans-serif;
   shape-rendering: crispEdges;
 }
+
 .chart text {
   fill: black;
 }
