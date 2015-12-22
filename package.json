@@ -5,7 +5,7 @@
   "main": "index.js",
   "author": "",
   "scripts": {
-    "dev": "webpack-dev-server --devtool eval --progress --colors --content-base build --port 3030",
+    "dev": "webpack-dev-server --devtool eval --history-api-fallback --progress --colors --content-base build --port 3030",
     "deploy": "NODE_ENV=production webpack -p && gulp deploy"
   },
   "repository": {
