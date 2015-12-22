@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { pushPath } from 'redux-simple-router';
+import { Link } from 'react-router';
 
 export default class Menu extends Component {
   render() {
@@ -16,14 +18,14 @@ export default class Menu extends Component {
           <div id="navbarCollapse" className="collapse navbar-collapse">
             <ul className="nav navbar-nav">
               <li className="active">
-                <a href="#">Home</a>
+                <Link to="/">Home</Link>
               </li>
               <li className="dropdown">
                 <a tabIndex="0" data-toggle="dropdown" data-submenu="" aria-expanded="false">Geometry<span className="caret"></span>
                 </a>
                 <ul className="dropdown-menu">
                   <li className="dropdown-submenu">
-                    <a tabIndex="0">Triangles</a>
+                    <Link to="/triangles">Triangles</Link>
                   </li>
                 </ul>
               </li>

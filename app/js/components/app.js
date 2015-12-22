@@ -5,7 +5,12 @@ import Menu from './menu';
 export default class App extends Component {
   render() {
     return (
-       <Menu/>
+      <div>
+        <Menu/>
+        <div className="jumbotron">
+          {this.props.children}
+        </div>
+      </div>
     );
   }
 };
