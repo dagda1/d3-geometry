@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 
 export default class Menu extends Component {
   render() {
-    console.log(this.props);
     return (
         <nav role="navigation" className="navbar navbar-default">
           <div className="navbar-header">

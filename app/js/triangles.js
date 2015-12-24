@@ -42,18 +42,6 @@ function render(state = {}) {
   d3.selectAll('label').remove();
   d3.selectAll('input[type=radio]').remove();
 
-  const initialScale = 1;
-  const initialXY = [0, 0];
-
-  d3.behavior.zoom()
-    .scale(initialScale)
-    .translate(initialXY)
-    .size([width, height])
-    .on("zoom",function() {
-      svg.attr("transform","translate("+ d3.event.translate.join(",") + ") scale(" + d3.event.scale + ")");
-    });
-
-
   const xScale = d3.scale.linear()
           .domain([0, 20])
           .range([0, width]);
