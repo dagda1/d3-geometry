@@ -7,12 +7,12 @@ import Triangulator from './triangulator.js';
 
 export default class Triangles extends Component {
   componentDidMount() {
-    this.triangulator = new Triangulator();
+    const triangulator = new Triangulator();
 
     // FIXME: use refs?
-    const el = ReactDOM.findDOMNode(this);
+    const el = document.querySelector('.triangle-container');
 
-    this.triangulator.render(el);
+    triangulator.render(el);
   }
 
   render() {

@@ -33,3 +33,7 @@ a {
 .grabber {
   z-index: 1000;
 }
+
+.triangle-selector .input[type=checkbox] {
+  margin-left: 10px;
+}

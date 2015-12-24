@@ -9,7 +9,7 @@ import {
 } from "../utils/line";
 
 import {
-  availableViewPort
+  viewPortFromElement
 } from "../utils/dom";
 
 export default class Triangulator {
@@ -18,23 +18,15 @@ export default class Triangulator {
       window.removeEventListener("resize", props.resizeFunc);
     }
 
-    const availableHeight = window.innerHeight - (el.offsetTop + el.offsetHeight + 100);
-
-    const availableWidth = availableHeight * 1.24;
-
-    const margin = {top: 20, right: 100, bottom: 30, left: 100};
-
-    const width = availableWidth;
-    const height = availableWidth;
+    const availableDimensions = viewPortFromElement(el);
 
     const xScale = d3.scale.linear()
             .domain([0, 20])
-            .range([0, width]);
+            .range([0, availableDimensions.width]);
 
     const yScale = d3.scale.linear()
             .domain([0, 20])
-            .range([height, 0]);
-
+            .range([availableDimensions.height, 0]);
 
     let points;
 
@@ -69,15 +61,17 @@ export default class Triangulator {
             .scale(yScale)
             .orient("left");
 
+    const margin = {top: 20, right: 100, bottom: 30, left: 100};
+
     const svg = d3.select(el).append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("width", availableDimensions.width + margin.left + margin.right)
+            .attr("height", availableDimensions.height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     svg.append('g')
       .attr('class', 'x axis')
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(0," + availableDimensions.height + ")")
       .call(xAxis);
 
     svg.append('g')

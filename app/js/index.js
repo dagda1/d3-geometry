@@ -10,6 +10,7 @@ import reducers from './reducers';
 import App from './components/app';
 import Home from './components/home';
 import Triangles from './components/triangles';
+import LineEquation from './components/equation-of-a-line';
 
 require("../css/style.css");
 
@@ -28,6 +29,7 @@ ReactDOM.render(
       <Route path="/" component={App}>
         <IndexRoute component={Home}/>
         <Route path="triangles" component={Triangles}/>
+        <Route path="equation-of-a-line" component={LineEquation}/>
       </Route>
     </Router>
   </Provider>,
