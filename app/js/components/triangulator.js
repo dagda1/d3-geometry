@@ -18,7 +18,7 @@ export default class Triangulator {
       window.removeEventListener("resize", props.resizeFunc);
     }
 
-    const availableHeight = window.innerHeight - (el.offsetTop + el.offsetHeight) - 100;
+    const availableHeight = window.innerHeight - (el.offsetTop + el.offsetHeight + 100);
 
     const availableWidth = availableHeight * 1.24;
 
@@ -140,11 +140,11 @@ export default class Triangulator {
         value: function(d) {
           return d;
         }
-      }).property('checked', function(effect) {
-        const currentEffect = findEffectFunction(effect);
+      }).property('checked', (effect) => {
+        const currentEffect = (effect);
 
         return area.currentEffect === currentEffect.func;
-      }).on('change', function(effect) {
+      }).on('change', (effect) => {
         const selected = findEffectFunction(effect);
         area.currentEffect = selected.func;
         this.addCurrentEffects(area);
@@ -208,7 +208,7 @@ export default class Triangulator {
 
     const result = solveMatrix(matrix, [c1, c2]);
 
-    drawTriangleLine(area.g, {
+    this.drawTriangleLine(area.g, {
       x1: area.xScale(vertex.x),
       y1: area.yScale(vertex.y),
       x2: area.xScale(result.x),

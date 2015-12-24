@@ -17,7 +17,7 @@ export default class Triangles extends Component {
 
   render() {
     return (
-        <div className="triangle"></div>
+        <div className="triangle-container"></div>
     );
   }
 };
