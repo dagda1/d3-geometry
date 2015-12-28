@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
-import Menu from './menu';
-import Triangulator from './triangulator.js';
+import Triangulator from './triangulator';
 
 
 export default class Triangles extends Component {

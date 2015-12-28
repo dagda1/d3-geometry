@@ -1,0 +1,15 @@
+.plotter svg { width: 100%; height: 100%; }
+.plotter path {
+  fill: none;
+  stroke: teal;
+}
+
+.plotter .axis path, line {
+  stroke: #aaa;
+  shape-rendering: crispEdges;
+}
+
+.plotter .axis text {
+  fill: #aaa;
+  font-size: 11px;
+}
