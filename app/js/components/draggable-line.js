@@ -4,40 +4,38 @@ import {
 
 export default class DraggableLine {
   render(el, props = {}) {
-    const availableDimensions = viewPortFromElement(el);
+    const dimensions = viewPortFromElement(el);
 
     const xScale = d3.scale.linear()
           .domain([0, 20])
-          .range([0, availableDimensions.width]);
+          .range([0, dimensions.width]);
 
     const yScale = d3.scale.linear()
           .domain([0, 20])
-          .range([availableDimensions.height, 0]);
+          .range([dimensions.height, 0]);
 
     const xAxis = d3.svg.axis()
           .scale(xScale)
           .orient("bottom")
-          .innerTickSize(-availableDimensions.height)
+          .innerTickSize(-dimensions.height)
           .tickPadding(10);
 
     const yAxis = d3.svg.axis()
           .scale(yScale)
           .orient("left")
-          .innerTickSize(-availableDimensions.width)
+          .innerTickSize(-dimensions.width)
           .outerTickSize(0)
           .tickPadding(10);
 
-    const margin = {top: 20, right: 100, bottom: 30, left: 100};
-
     const svg = d3.select(el).append("svg")
-          .attr("width", availableDimensions.width + margin.left + margin.right)
-          .attr("height", availableDimensions.height + margin.top + margin.bottom)
+          .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
+          .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
           .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
 
     svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + availableDimensions.height + ")")
+      .attr("transform", "translate(0," + dimensions.height + ")")
       .call(xAxis);
 
     svg.append("g")

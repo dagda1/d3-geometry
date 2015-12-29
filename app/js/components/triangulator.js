@@ -18,15 +18,15 @@ export default class Triangulator {
       window.removeEventListener("resize", props.resizeFunc);
     }
 
-    const availableDimensions = viewPortFromElement(el);
+    const dimensions = viewPortFromElement(el);
 
     const xScale = d3.scale.linear()
             .domain([0, 20])
-            .range([0, availableDimensions.width]);
+            .range([0, dimensions.width]);
 
     const yScale = d3.scale.linear()
             .domain([0, 20])
-            .range([availableDimensions.height, 0]);
+            .range([dimensions.height, 0]);
 
     let points;
 
@@ -61,17 +61,15 @@ export default class Triangulator {
             .scale(yScale)
             .orient("left");
 
-    const margin = {top: 20, right: 100, bottom: 30, left: 100};
-
     const svg = d3.select(el).append("svg")
-            .attr("width", availableDimensions.width + margin.left + margin.right)
-            .attr("height", availableDimensions.height + margin.top + margin.bottom)
+            .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
+            .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
 
     svg.append('g')
       .attr('class', 'x axis')
-      .attr("transform", "translate(0," + availableDimensions.height + ")")
+      .attr("transform", "translate(0," + dimensions.height + ")")
       .call(xAxis);
 
     svg.append('g')
@@ -186,14 +184,14 @@ export default class Triangulator {
   }
 
   altitude(area, vertex, a, b) {
-    const slope = gradient(a, b),
-          x1 = - slope,
-          y1 = 1,
-          c1 = getYIntercept(a, slope),
-          perpendicularSlope = perpendicularGradient(a, b),
-          x2 = - perpendicularSlope,
-          y2 = 1,
-          c2 = getYIntercept(vertex, perpendicularSlope);
+    const slope = gradient(a, b);
+    const x1 = - slope;
+    const y1 = 1;
+    const c1 = getYIntercept(a, slope);
+    const perpendicularSlope = perpendicularGradient(a, b);
+    const x2 = - perpendicularSlope;
+    const y2 = 1;
+    const c2 = getYIntercept(vertex, perpendicularSlope);
 
     const matrix = [
       [x1, y1],

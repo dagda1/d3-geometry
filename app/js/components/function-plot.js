@@ -1,6 +1,3 @@
-const DEFAULT_WIDTH = 550;
-const DEFAULT_HEIGHT = 350;
-
 export default class FunctionPlot {
   render(el, props = {}) {
     const margin = {top: 50, right: 50, bottom: 50, left: 50};
@@ -22,7 +19,6 @@ export default class FunctionPlot {
     const xAxis = d3.svg.axis()
             .scale(x);
 
-
     const yAxis = d3.svg.axis()
       .orient('left')
       .scale(y);
@@ -33,7 +29,7 @@ export default class FunctionPlot {
             .y(function (d) {return y(d.y);});
 
     const fn = (x) => {
-      return Math.pow(x, 2);
+      return Math.pow(x, 3) - (3 * Math.pow(x, 2) + (3 * x) - 1);
     };
 
     const data = d3.range(-10, 11).map(function (d) {
