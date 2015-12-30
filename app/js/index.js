@@ -7,7 +7,7 @@ import { createHistory } from 'history';
 import { syncReduxAndRouter, routeReducer } from 'redux-simple-router';
 import reducers from './reducers';
 
-// import "./polyfills/index";
+import "./polyfills/index";
 
 import App from './components/app';
 import Home from './components/home';
