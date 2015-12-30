@@ -1,14 +1,19 @@
-export default class FunctionPlot {
-  render(el, props = {}) {
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+
+export default class FunctionPlot extends Component {
+  componentDidMount() {
     const margin = {top: 50, right: 50, bottom: 50, left: 50};
     const width = 960 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
 
+    const el = ReactDOM.findDOMNode(this);
+
     var svg = d3.select(el).append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     const x = d3.scale.linear()
           .range([0, width]);
@@ -54,5 +59,9 @@ export default class FunctionPlot {
       .attr('d', line);
   }
 
-
+  render() {
+    return (
+      <div className="plotter"></div>
+    );
+  }
 };

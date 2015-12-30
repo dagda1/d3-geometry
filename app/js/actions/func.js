@@ -1,8 +1,10 @@
-function compute(expression) {
+import {COMPUTE_EXPRESSION} from "../constants";
+
+function computeExpression(expression) {
   return {
-    type: "compute",
+    type: COMPUTE_EXPRESSION,
     expression: expression
   };
 };
 
-export default { compute };
+export default { computeExpression };

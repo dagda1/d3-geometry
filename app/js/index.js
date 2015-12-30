@@ -13,7 +13,7 @@ import App from './components/app';
 import Home from './components/home';
 import Triangles from './components/triangles';
 import LineEquation from './components/equation-of-a-line';
-import Functions from "./components/functions";
+import FunctionContainer from "./components/functions-container";
 
 require("../css/style.css");
 
@@ -33,7 +33,7 @@ ReactDOM.render(
         <IndexRoute component={Home}/>
         <Route path="triangles" component={Triangles}/>
         <Route path="equation-of-a-line" component={LineEquation}/>
-        <Route path="functions" component={Functions}/>
+        <Route path="functions" component={FunctionContainer}/>
       </Route>
     </Router>
   </Provider>,
