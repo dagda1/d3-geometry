@@ -1,8 +1,8 @@
-import {COMPUTE_EXPRESSION} from "../constants";
+import {SET_EXPRESSION} from "../constants";
 
-export function computeExpression(expression) {
+export function setExpression(expression) {
   return {
-    type: COMPUTE_EXPRESSION,
+    type: SET_EXPRESSION,
     expression: expression
   };
 };

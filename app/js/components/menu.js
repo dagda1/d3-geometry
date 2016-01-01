@@ -13,7 +13,7 @@ export default class Menu extends Component {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a href="#" className="navbar-brand">D3.js and React.js</a>
+            <a href="#" className="navbar-brand">D3.js, React.js & Redux</a>
           </div>
           <div id="navbarCollapse" className="collapse navbar-collapse">
             <ul className="nav navbar-nav">

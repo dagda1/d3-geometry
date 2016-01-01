@@ -1,4 +1,4 @@
-import { COMPUTE_EXPRESSION } from "../constants";
+import { SET_EXPRESSION } from "../constants";
 
 const initialState = {
   expression: 'x^3 + 6x'
@@ -6,10 +6,9 @@ const initialState = {
 
 export default function update(state = initialState, action = {}) {
   switch(action.type) {
-  case COMPUTE_EXPRESSION:
-    // do some stuff
+  case SET_EXPRESSION:
+    return {expression: action.expression};
 
-    return state;
   default:
     return state;
   };

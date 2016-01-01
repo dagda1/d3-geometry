@@ -4,6 +4,10 @@
   stroke: teal;
 }
 
+.plotter h1 {
+  text-align: center;
+}
+
 .plotter .axis path, line {
   stroke: #aaa;
   shape-rendering: crispEdges;
