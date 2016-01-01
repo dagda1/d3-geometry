@@ -61,11 +61,13 @@ export default class Triangulator {
             .scale(yScale)
             .orient("left");
 
+    const margin = {top: 20, right: 100, bottom: 30, left: 100};
+
     const svg = d3.select(el).append("svg")
-            .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
-            .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
+            .attr("width", dimensions.width + margin.left + margin.right)
+            .attr("height", dimensions.height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     svg.append('g')
       .attr('class', 'x axis')
