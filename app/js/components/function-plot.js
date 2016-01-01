@@ -21,55 +21,80 @@ export default class FunctionPlot extends Component {
 
     const el = ReactDOM.findDOMNode(this);
 
-    var svg = d3.select(el).append("svg")
+    this.svg = d3.select(el).append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
           .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    const x = d3.scale.linear()
+    let xScale, yScale;
+
+    this.xScale =  xScale = d3.scale.linear()
           .range([0, width]);
 
-    const y = d3.scale.linear()
+    this.yScale = yScale = d3.scale.linear()
           .range([height, 0]);
 
     const xAxis = d3.svg.axis()
-            .scale(x);
+            .scale(this.xScale);
 
     const yAxis = d3.svg.axis()
       .orient('left')
-      .scale(y);
+            .scale(this.yScale);
 
-    const line = d3.svg.line()
-            .interpolate('basis')
-            .x(function (d) {return x(d.x);})
-            .y(function (d) {return y(d.y);});
+    const data = this.getDataFromProps(this.props.expression);
 
-    const expression = math.parse(this.props.expression);
+    this.xScale.domain(d3.extent(data, function (d) {return d.x;}));
+    this.yScale.domain([0, d3.max(data, function (d) {return d.y;})]);
+
+    this.svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis);
+
+    this.svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', 'translate(' + width/2 + ',0)')
+      .call(yAxis);
+
+    this.drawCurve(this.props.expression);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.expression === this.props.expression) {
+      return;
+    }
+
+    this.drawCurve(nextProps.expression);
+  }
+
+  getDataFromProps(expr) {
+    const expression = math.parse(expr);
 
     const fn = (x) => {
       return expression.eval({x: x});
     };
 
-    const data = d3.range(-10, 11).map(function (d) {
+    return d3.range(-10, 11).map(function (d) {
       return {x:d, y:fn(d)};
     });
+  }
 
-    x.domain(d3.extent(data, function (d) {return d.x;}));
-    y.domain([0, d3.max(data, function (d) {return d.y;})]);
+  drawCurve(expression) {
+    d3.select('.curve').remove();
 
-    svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', 'translate(0,' + height + ')')
-      .call(xAxis);
+    const xScale = this.xScale;
+    const yScale = this.yScale;
+    const data = this.getDataFromProps(expression);
 
-    svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', 'translate(' + width/2 + ',0)')
-      .call(yAxis);
+    const line = d3.svg.line()
+            .interpolate('basis')
+            .x(function (d) {return xScale(d.x);})
+            .y(function (d) {return yScale(d.y);});
 
-    svg.append('path')
+    this.svg.append('path')
       .datum(data)
+      .attr('class', 'curve')
       .attr('d', line);
   }
 
