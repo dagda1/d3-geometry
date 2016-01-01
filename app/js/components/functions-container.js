@@ -1,14 +1,19 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import FunctionPlot from './function-plot';
 
-require("../../css/functions.css");
+import * as actions from "../actions/fuction-actions";
 
-export default class FunctionContainer extends Component {
-  render() {
-    return (
-      <FunctionPlot/>
-    );
-  }
+function mapStateToProps(state) {
+  return {
+    expression: state.func.expression
+  };
 };
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actions, dispatch);
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(FunctionPlot);

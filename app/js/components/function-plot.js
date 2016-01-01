@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+import math from 'mathjs';
+
+require("../../css/functions.css");
+
 export default class FunctionPlot extends Component {
   componentDidMount() {
     const margin = {top: 50, right: 50, bottom: 50, left: 50};
@@ -33,8 +37,10 @@ export default class FunctionPlot extends Component {
             .x(function (d) {return x(d.x);})
             .y(function (d) {return y(d.y);});
 
+    const expression = math.parse(this.props.expression);
+
     const fn = (x) => {
-      return Math.pow(x, 3) - (3 * Math.pow(x, 2) + (3 * x) - 1);
+      return expression.eval({x: x});
     };
 
     const data = d3.range(-10, 11).map(function (d) {

@@ -22,6 +22,7 @@ const reducer = combineReducers(Object.assign({}, reducers, {
 }));
 
 const store = createStore(reducer);
+
 const history = createHistory();
 
 syncReduxAndRouter(history, store);
