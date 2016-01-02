@@ -23,11 +23,13 @@ export default class FunctionPlot extends Component {
   }
 
   componentDidMount() {
-    const margin = {top: 50, right: 50, bottom: 50, left: 50};
-    const width = 960 - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
-
     const el = ReactDOM.findDOMNode(this);
+
+    const margin = {top: 50, right: 50, bottom: 50, left: 50};
+
+    const width = 800 - margin.left - margin.right;
+    const height = 450 - margin.top - margin.bottom;
+
 
     this.svg = d3.select(el).append("svg")
           .attr("width", width + margin.left + margin.right)
@@ -106,16 +108,16 @@ export default class FunctionPlot extends Component {
 
   render() {
     return (
-      <div className="plotter">
-        <h1>{this.props.expression}</h1>
-        <div></div>
-        <div><input type="text"
+      <div className="plotter row">
+        <h1 className="col-md-offset-3">{this.props.expression}</h1>
+        <div className="expression-input">
+          <input type="text"
                     defaultValue={this.props.expression}
                     onKeyDown={this.handleSubmit.bind(this)}
                     onBlur={this.handleBlur.bind(this)}
                     ref="expressionInput"
-             />
-             <button className="btn btn-primary" onClick={this.setExpression.bind(this)}>Go</button>
+           />
+           <button className="btn btn-primary" onClick={this.setExpression.bind(this)}>Go</button>
         </div>
       </div>
     );

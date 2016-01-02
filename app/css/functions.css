@@ -1,10 +1,13 @@
-.plotter svg { width: 100%; height: 100%; }
+.plotter {
+  position: relative;
+}
+
 .plotter path {
   fill: none;
   stroke: teal;
 }
 
-.plotter h1 {
+.plotter h3 {
   text-align: center;
 }
 
@@ -16,4 +19,9 @@
 .plotter .axis text {
   fill: #aaa;
   font-size: 11px;
+}
+
+.expression-input {
+  position: absolute;
+  top: 41px;
 }

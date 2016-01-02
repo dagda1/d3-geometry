@@ -84,7 +84,7 @@ export default class Triangulator {
       yScale: yScale
     };
 
-    area.currentEffect = props.currentEffect || this.drawMedians;
+    area.currentEffect = props.currentEffect || this.drawPerpendicularBisectors;
 
     area.points = points;
 
@@ -283,7 +283,9 @@ export default class Triangulator {
     ];
 
     const circumCircleCentre = solveMatrix(matrix, [c1, c2]);
-    const dist = distance(this.convertPoint(area, 'b'), circumCircleCentre);
+    const dist = distance(this.convertPoint(area, 'b'), circumCircleCentre) - 0.7;
+
+    console.log(dist);
 
     area.g.append('circle')
       .attr('cx', area.xScale(circumCircleCentre.x))
