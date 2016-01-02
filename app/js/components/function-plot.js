@@ -25,10 +25,10 @@ export default class FunctionPlot extends Component {
   componentDidMount() {
     const el = ReactDOM.findDOMNode(this);
 
-    const margin = {top: 50, right: 50, bottom: 50, left: 50};
+    const margin = {top: 10, right: 50, bottom: 50, left: 50};
 
-    const width = 800 - margin.left - margin.right;
-    const height = 450 - margin.top - margin.bottom;
+    const width = 500 - margin.left - margin.right;
+    const height = 380 - margin.top - margin.bottom;
 
 
     this.svg = d3.select(el).append("svg")
@@ -109,7 +109,7 @@ export default class FunctionPlot extends Component {
   render() {
     return (
       <div className="plotter row">
-        <h1 className="col-md-offset-3">{this.props.expression}</h1>
+        <h2 className="col-md-offset-3">{this.props.expression}</h2>
         <div className="expression-input">
           <input type="text"
                     defaultValue={this.props.expression}

@@ -1,3 +1,7 @@
+.jumbotron {
+  padding-top: 5px;
+}
+
 .plotter {
   position: relative;
 }
