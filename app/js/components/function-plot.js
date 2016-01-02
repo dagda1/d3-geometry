@@ -11,7 +11,15 @@ export default class FunctionPlot extends Component {
       return;
     }
 
-    this.props.setExpression(e.target.value);
+    this.setExpression();
+  }
+
+  handleBlur() {
+    this.setExpression();
+  }
+
+  setExpression() {
+    this.props.setExpression(this.refs.expressionInput.value);
   }
 
   componentDidMount() {
@@ -27,25 +35,23 @@ export default class FunctionPlot extends Component {
           .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    let xScale, yScale;
-
-    this.xScale =  xScale = d3.scale.linear()
+    this.xScale = d3.scale.linear()
           .range([0, width]);
 
-    this.yScale = yScale = d3.scale.linear()
+    this.yScale = d3.scale.linear()
           .range([height, 0]);
 
     const xAxis = d3.svg.axis()
             .scale(this.xScale);
 
     const yAxis = d3.svg.axis()
-      .orient('left')
+            .orient('left')
             .scale(this.yScale);
 
     const data = this.getDataFromProps(this.props.expression);
 
     this.xScale.domain(d3.extent(data, function (d) {return d.x;}));
-    this.yScale.domain([0, d3.max(data, function (d) {return d.y;})]);
+    this.yScale.domain([0, 10]);
 
     this.svg.append('g')
       .attr('class', 'axis')
@@ -106,7 +112,11 @@ export default class FunctionPlot extends Component {
         <div><input type="text"
                     defaultValue={this.props.expression}
                     onKeyDown={this.handleSubmit.bind(this)}
-        /></div>
+                    onBlur={this.handleBlur.bind(this)}
+                    ref="expressionInput"
+             />
+             <button className="btn btn-primary" onClick={this.setExpression.bind(this)}>Go</button>
+        </div>
       </div>
     );
   }
