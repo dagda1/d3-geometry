@@ -51,7 +51,7 @@ export default class FunctionPlot extends Component {
     const data = this.getDataFromProps(this.props.expression);
 
     this.xScale.domain(d3.extent(data, function (d) {return d.x;}));
-    this.yScale.domain([0, 10]);
+    this.yScale.domain([0, d3.max(data, function (d) {return d.y;})]);
 
     this.svg.append('g')
       .attr('class', 'axis')
