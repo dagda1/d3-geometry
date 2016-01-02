@@ -7,15 +7,14 @@ export default class Triangles extends Component {
   componentDidMount() {
     const triangulator = new Triangulator();
 
-    // FIXME: use refs?
-    const el = document.querySelector('.triangle-container');
+    const el = this.refs.triangleContainer;
 
     triangulator.render(el);
   }
 
   render() {
     return (
-        <div className="triangle-container"></div>
+        <div ref="triangleContainer" className="triangle-container"></div>
     );
   }
 };

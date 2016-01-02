@@ -7,14 +7,14 @@ export default class LineEquation extends Component {
   componentDidMount() {
     const draggableLine = new DraggableLine();
 
-    const el = document.querySelector('.equation-of-a-line');
+    const el = this.refs.equationOfALine;
 
     draggableLine.render(el);
   }
 
   render() {
     return (
-      <div className="equation-of-a-line"></div>
+      <div ref="equationOfALine" className="equation-of-a-line"></div>
     );
   }
 };

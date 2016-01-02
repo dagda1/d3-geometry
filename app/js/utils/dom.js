@@ -9,8 +9,7 @@ export function availableViewPort() {
 }
 
 export function viewPortFromElement(el) {
-  const scrollPosition = document.querySelector('body').scrollTop;
-  const availableHeight = (window.innerHeight - (el.offsetTop - scrollPosition)) * 0.65;
+  const availableHeight = (window.innerHeight - el.offsetTop) * 0.65;
 
   const availableWidth = availableHeight * 1.24;
 
