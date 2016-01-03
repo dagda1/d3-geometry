@@ -23,7 +23,7 @@ export default class FunctionPlot extends Component {
   }
 
   componentDidMount() {
-    const el = ReactDOM.findDOMNode(this);
+    const el = this.refs.curve;
 
     const margin = {top: 10, right: 50, bottom: 50, left: 50};
 
@@ -108,16 +108,23 @@ export default class FunctionPlot extends Component {
 
   render() {
     return (
-      <div className="plotter row">
-        <h2 className="col-md-offset-3">{this.props.expression}</h2>
-        <div className="expression-input">
-          <input type="text"
+      <div className="plotter">
+        <h2 className="col-xs-offset-4 col-md-offset-2">{this.props.expression}</h2>
+        <div ref="curve"></div>
+        <div className="form-horizontal">
+          <div className="form-group">
+        <label className="control-label pull-left">Expression</label>
+          <div className="expression col-xs-2">
+            <input type="text"
+                    className="form-control input-md"
                     defaultValue={this.props.expression}
                     onKeyDown={this.handleSubmit.bind(this)}
                     onBlur={this.handleBlur.bind(this)}
                     ref="expressionInput"
-           />
-           <button className="btn btn-primary" onClick={this.setExpression.bind(this)}>Go</button>
+            />
+          </div>
+            <button className="btn btn-primary btn-responsive" onClick={this.setExpression.bind(this)}>Go</button>
+          </div>
         </div>
       </div>
     );

@@ -1,15 +1,3 @@
-form > label:nth-child(1) {
-  margin-left: 100px;
-}
-
-form > label {
-  margin-right: 20px;
-}
-
-a {
-  cursor: pointer;
-}
-
 .chart {
   background: #fff;
   font: 10px sans-serif;
@@ -19,6 +7,7 @@ a {
 .chart text {
   fill: black;
 }
+
 .axis line, .axis path {
   fill: none;
   stroke: #000;
@@ -30,10 +19,23 @@ a {
   cursor: move;
 }
 
-.grabber {
-  z-index: 1000;
-}
-
 .triangle-container input[type=radio] {
   margin-left: 5px;
+}
+
+@media (max-width: 768px) {
+  .btn-responsive {
+    padding:2px 4px 1px;
+    font-size:80%;
+    line-height: 1;
+    border-radius:3px;
+  }
+}
+
+@media (min-width: 769px) {
+  .btn-responsive {
+    padding:9px 10px 8px;
+    font-size:90%;
+    line-height: 1.2;
+  }
 }

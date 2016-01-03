@@ -1,18 +1,6 @@
-.jumbotron {
-  padding-top: 5px;
-}
-
-.plotter {
-  position: relative;
-}
-
 .plotter path {
   fill: none;
   stroke: teal;
-}
-
-.plotter h3 {
-  text-align: center;
 }
 
 .plotter .axis path, line {
@@ -25,7 +13,6 @@
   font-size: 11px;
 }
 
-.expression-input {
-  position: absolute;
-  top: 41px;
+.plotter .expression {
+  padding-right: 0;
 }
