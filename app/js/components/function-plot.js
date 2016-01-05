@@ -106,14 +106,20 @@ export default class FunctionPlot extends Component {
       .attr('d', line);
   }
 
+  componentDidUpdate() {
+    this.queueMathJax();
+  }
+
+  queueMathJax() {
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.refs.expr]);
+  }
+
   render() {
-    console.log(this.props.expression);
     const latextExpression = '$$' + math.parse(this.props.expression).toTex() + '$$';
-    console.log(latextExpression);
 
     return (
       <div className="plotter">
-        <h2 className="col-xs-offset-3 col-md-offset-1">{latextExpression}</h2>
+        <h2 ref="expr" className="col-xs-offset-3 col-md-offset-1">{latextExpression}</h2>
         <div ref="curve"></div>
         <div className="form-horizontal">
           <div className="form-group">
