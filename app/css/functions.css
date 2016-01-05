@@ -16,3 +16,11 @@
 .plotter .expression {
   padding-right: 0;
 }
+
+.plotter .form-horizontal {
+  margin-left: 4%;
+}
+
+.MJXc-display {
+  text-align: left !IMPORTANT;
+}

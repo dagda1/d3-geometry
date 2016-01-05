@@ -25,7 +25,7 @@ export default class FunctionPlot extends Component {
   componentDidMount() {
     const el = this.refs.curve;
 
-    const margin = {top: 10, right: 50, bottom: 50, left: 50};
+    const margin = {top: 10, right: 50, bottom: 20, left: 50};
 
     const width = 500 - margin.left - margin.right;
     const height = 380 - margin.top - margin.bottom;
@@ -107,23 +107,29 @@ export default class FunctionPlot extends Component {
   }
 
   render() {
+    console.log(this.props.expression);
+    const latextExpression = '$$' + math.parse(this.props.expression).toTex() + '$$';
+    console.log(latextExpression);
+
     return (
       <div className="plotter">
-        <h2 className="col-xs-offset-4 col-md-offset-2">{this.props.expression}</h2>
+        <h2 className="col-xs-offset-3 col-md-offset-1">{latextExpression}</h2>
         <div ref="curve"></div>
         <div className="form-horizontal">
           <div className="form-group">
-        <label className="control-label pull-left">Expression</label>
-          <div className="expression col-xs-2">
-            <input type="text"
+             <fieldset className="field-set col-xs-12 col-md-4 col-xs-offset-1">
+              <legend>Enter Expression</legend>
+              <div className="expression col-xs-10 col-md-10">
+                <input type="text"
                     className="form-control input-md"
                     defaultValue={this.props.expression}
                     onKeyDown={this.handleSubmit.bind(this)}
                     onBlur={this.handleBlur.bind(this)}
                     ref="expressionInput"
-            />
-          </div>
-            <button className="btn btn-primary btn-responsive" onClick={this.setExpression.bind(this)}>Go</button>
+                />
+              </div>
+              <button className="btn btn-primary btn-responsive" onClick={this.setExpression.bind(this)}>Go</button>
+            </fieldset>
           </div>
         </div>
       </div>

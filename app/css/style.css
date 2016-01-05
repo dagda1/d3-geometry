@@ -39,3 +39,30 @@
     line-height: 1.2;
   }
 }
+
+.jumbotron {
+  padding-top: 1px;
+}
+
+.field-set {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: small;
+  font-weight: normal;
+  border: 1px solid #999999;
+  padding: 4px 4px 10px 4px;
+  margin: 5px;
+}
+
+.field-set legend {
+  width: auto;
+  font-size: 90%;
+  color: #888888;
+  background-color: transparent;
+  font-weight: bold;
+  border-bottom: none;
+  margin-bottom: auto;
+}
+
+.dropdown {
+  cursor: pointer;
+}
