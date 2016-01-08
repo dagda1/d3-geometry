@@ -285,8 +285,6 @@ export default class Triangulator {
     const circumCircleCentre = solveMatrix(matrix, [c1, c2]);
     const dist = distance(this.convertPoint(area, 'b'), circumCircleCentre) - 0.7;
 
-    console.log(dist);
-
     area.g.append('circle')
       .attr('cx', area.xScale(circumCircleCentre.x))
       .attr('cy', area.yScale(circumCircleCentre.y))

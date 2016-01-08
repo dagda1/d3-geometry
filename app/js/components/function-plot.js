@@ -66,6 +66,8 @@ export default class FunctionPlot extends Component {
       .call(yAxis);
 
     this.drawCurve(this.props.expression);
+
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.refs.expr]);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -115,7 +117,7 @@ export default class FunctionPlot extends Component {
   }
 
   render() {
-    const latextExpression = '$$' + math.parse(this.props.expression).toTex() + '$$';
+    const latextExpression = '$$ f(x) = ' + math.parse(this.props.expression).toTex() + '$$';
 
     return (
       <div className="plotter">
