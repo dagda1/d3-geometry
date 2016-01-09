@@ -30,7 +30,6 @@ export default class FunctionPlot extends Component {
     const width = 500 - margin.left - margin.right;
     const height = 380 - margin.top - margin.bottom;
 
-
     this.svg = d3.select(el).append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
@@ -53,11 +52,11 @@ export default class FunctionPlot extends Component {
     const data = this.getDataFromProps(this.props.expression);
 
     this.xScale.domain(d3.extent(data, function (d) {return d.x;}));
-    this.yScale.domain([0, d3.max(data, function (d) {return d.y;})]);
+    this.yScale.domain(d3.extent(data, function (d) {return d.y;}));
 
     this.svg.append('g')
       .attr('class', 'axis')
-      .attr('transform', 'translate(0,' + height + ')')
+      .attr('transform', 'translate(0,' + height/2 + ')')
       .call(xAxis);
 
     this.svg.append('g')
@@ -66,6 +65,10 @@ export default class FunctionPlot extends Component {
       .call(yAxis);
 
     this.drawCurve(this.props.expression);
+
+    if(!window.MathJax){
+      return;
+    }
 
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.refs.expr]);
   }
