@@ -20,7 +20,8 @@
 }
 
 .triangle-container input[type=radio] {
-  margin-left: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 @media (max-width: 768px) {
