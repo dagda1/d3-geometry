@@ -22,49 +22,37 @@ export default class FunctionPlot extends Component {
     this.props.setExpression(this.refs.expressionInput.value);
   }
 
-  componentDidMount() {
-    const el = this.refs.curve;
-
+  getDimensions() {
     const margin = {top: 10, right: 50, bottom: 20, left: 50};
 
     const width = 500 - margin.left - margin.right;
     const height = 380 - margin.top - margin.bottom;
 
+    return {margin: margin, height: height, width: width};
+  }
+
+  componentDidMount() {
+    const el = this.refs.curve;
+
+    const dimensions = this.getDimensions();
+
     this.svg = d3.select(el).append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
+          .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
+          .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
           .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
 
     this.xScale = d3.scale.linear()
-          .range([0, width]);
+          .range([0, dimensions.width]);
 
     this.yScale = d3.scale.linear()
-          .range([height, 0]);
-
-    const xAxis = d3.svg.axis()
-            .scale(this.xScale);
-
-    const yAxis = d3.svg.axis()
-            .orient('left')
-            .scale(this.yScale);
+          .range([dimensions.height, 0]);
 
     const data = this.getDataFromProps(this.props.expression);
 
-    this.xScale.domain(d3.extent(data, function (d) {return d.x;}));
-    this.yScale.domain(d3.extent(data, function (d) {return d.y;}));
+    this.drawAxis(data);
 
-    this.svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', 'translate(0,' + height/2 + ')')
-      .call(xAxis);
-
-    this.svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', 'translate(' + width/2 + ',0)')
-      .call(yAxis);
-
-    this.drawCurve(this.props.expression);
+    this.drawCurve(data);
 
     if(!window.MathJax){
       return;
@@ -78,11 +66,18 @@ export default class FunctionPlot extends Component {
       return;
     }
 
-    this.drawCurve(nextProps.expression);
+    const data = this.getDataFromProps(nextProps.expression);
+
+    d3.selectAll('.axis').remove();
+
+    this.drawAxis(data);
+
+    this.drawCurve(data);
   }
 
   getDataFromProps(expr) {
     const expression = math.parse(expr);
+
 
     const fn = (x) => {
       return expression.eval({x: x});
@@ -93,12 +88,11 @@ export default class FunctionPlot extends Component {
     });
   }
 
-  drawCurve(expression) {
+  drawCurve(data) {
     d3.select('.curve').remove();
 
     const xScale = this.xScale;
     const yScale = this.yScale;
-    const data = this.getDataFromProps(expression);
 
     const line = d3.svg.line()
             .interpolate('basis')
@@ -109,6 +103,48 @@ export default class FunctionPlot extends Component {
       .datum(data)
       .attr('class', 'curve')
       .attr('d', line);
+  }
+
+  drawAxis(data) {
+    const xAxis = d3.svg.axis()
+            .scale(this.xScale);
+
+    const yAxis = d3.svg.axis()
+            .orient('left')
+            .scale(this.yScale);
+
+    const dimensions = this.getDimensions();
+
+    this.xScale.domain(d3.extent(data, function (d) {return d.x;}));
+
+    let yScaleDomain, xAxisPosition;
+
+    const minY = d3.min(data, (d) => { return d.y; });
+    const maxY = d3.max(data, (d) => { return d.y; });
+
+    if(minY >= 0 && maxY >= 0) {
+      yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
+      xAxisPosition = dimensions.height;
+    } else if(minY < 0 && maxY > 0) {
+      yScaleDomain = d3.extent(data, function (d) {return d.y;});
+      xAxisPosition = dimensions.height/2;
+    } else {
+      yScaleDomain = d3.extent(data, function (d) {return d.y;});
+      xAxisPosition = 0;
+    }
+
+    this.yScale.domain(yScaleDomain);
+
+    this.svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', 'translate(0,' + xAxisPosition + ')')
+      .call(xAxis);
+
+    this.svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', 'translate(' + dimensions.width/2 + ',0)')
+      .call(yAxis);
+
   }
 
   componentDidUpdate() {
