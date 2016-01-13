@@ -126,8 +126,13 @@ export default class FunctionPlot extends Component {
       yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
       xAxisPosition = dimensions.height;
     } else if(minY < 0 && maxY > 0) {
+      const yValues = data.map((d) => { return d.y; });
+
+      const zeroIndex = Math.floor(yValues.indexOf(0));
+      const yLength = Math.floor(yValues.length);
+      const yIndex = Math.floor(yLength - zeroIndex);
       yScaleDomain = d3.extent(data, function (d) {return d.y;});
-      xAxisPosition = dimensions.height/2;
+      xAxisPosition = ((dimensions.height/yLength) * yIndex) + - 9.1;
     } else {
       yScaleDomain = d3.extent(data, function (d) {return d.y;});
       xAxisPosition = 0;
@@ -143,9 +148,7 @@ export default class FunctionPlot extends Component {
     this.svg.append('g')
       .attr('class', 'axis')
       .attr('transform', 'translate(' + dimensions.width/2 + ',0)')
-      .call(yAxis);
-
-  }
+      .call(yAxis);}
 
   componentDidUpdate() {
     this.queueMathJax();
