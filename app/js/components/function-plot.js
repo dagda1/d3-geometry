@@ -124,31 +124,51 @@ export default class FunctionPlot extends Component {
 
     if(minY >= 0 && maxY >= 0) {
       yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
-      xAxisPosition = dimensions.height;
-    } else if(minY < 0 && maxY > 0) {
-      const yValues = data.map((d) => { return d.y; });
-
-      const zeroIndex = Math.floor(yValues.indexOf(0));
-      const yLength = Math.floor(yValues.length);
-      const yIndex = Math.floor(yLength - zeroIndex);
+    }  else {
       yScaleDomain = d3.extent(data, function (d) {return d.y;});
-      xAxisPosition = ((dimensions.height/yLength) * yIndex) + - 9.1;
-    } else {
-      yScaleDomain = d3.extent(data, function (d) {return d.y;});
-      xAxisPosition = 0;
     }
 
     this.yScale.domain(yScaleDomain);
 
     this.svg.append('g')
       .attr('class', 'axis')
-      .attr('transform', 'translate(0,' + xAxisPosition + ')')
-      .call(xAxis);
+      .attr('transform', 'translate(' + dimensions.width/2 + ',0)')
+      .call(yAxis);
+
+    const ticks = [];
+
+    this.svg.selectAll(".tick").each(function(data) {
+      var tick = d3.select(this);
+      var transform = d3.transform(tick.attr("transform")).translate;
+
+      const val = {tick: tick, transform: transform, data: data};
+
+      ticks.push(val);
+    });
+
+    console.log(ticks);
+
+    if(minY >= 0 && maxY >= 0) {
+      yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
+      xAxisPosition = dimensions.height;
+    } else if(minY < 0 && maxY > 0) {
+      const zeroIndex = Math.floor(ticks.map((tick) => {return tick.data;}).indexOf(0));
+      const yLength = Math.floor(ticks.length);
+      const yIndex = Math.floor(yLength - zeroIndex);
+
+      console.log(zeroIndex);
+
+      xAxisPosition = ((dimensions.height/yLength) * yIndex) - 6.5;
+    } else {
+      yScaleDomain = d3.extent(data, function (d) {return d.y;});
+      xAxisPosition = 0;
+    }
 
     this.svg.append('g')
       .attr('class', 'axis')
-      .attr('transform', 'translate(' + dimensions.width/2 + ',0)')
-      .call(yAxis);}
+      .attr('transform', 'translate(0,' + xAxisPosition + ')')
+      .call(xAxis);
+  }
 
   componentDidUpdate() {
     this.queueMathJax();
