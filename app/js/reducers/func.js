@@ -1,7 +1,7 @@
 import { SET_EXPRESSION } from "../constants";
 
 const initialState = {
-  expression: 'x'
+  expression: 'sin(x)'
 };
 
 export default function update(state = initialState, action = {}) {
