@@ -2,7 +2,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var bower_dir = path.join(__dirname, '/bower_components');
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var config = {
 	addVendor: function(name, path){

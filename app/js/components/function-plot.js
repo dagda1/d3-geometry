@@ -136,6 +136,7 @@ export default class FunctionPlot extends Component {
       .call(yAxis);
 
     const ticks = [];
+    let zeroTick;
 
     this.svg.selectAll(".tick").each(function(data) {
       var tick = d3.select(this);
@@ -143,22 +144,18 @@ export default class FunctionPlot extends Component {
 
       const val = {tick: tick, transform: transform, data: data};
 
+      if(data === 0) {
+        zeroTick = val;
+      }
+
       ticks.push(val);
     });
-
-    console.log(ticks);
 
     if(minY >= 0 && maxY >= 0) {
       yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
       xAxisPosition = dimensions.height;
     } else if(minY < 0 && maxY > 0) {
-      const zeroIndex = Math.floor(ticks.map((tick) => {return tick.data;}).indexOf(0));
-      const yLength = Math.floor(ticks.length);
-      const yIndex = Math.floor(yLength - zeroIndex);
-
-      console.log(zeroIndex);
-
-      xAxisPosition = ((dimensions.height/yLength) * yIndex) - 6.5;
+      xAxisPosition = zeroTick.transform[1];
     } else {
       yScaleDomain = d3.extent(data, function (d) {return d.y;});
       xAxisPosition = 0;
