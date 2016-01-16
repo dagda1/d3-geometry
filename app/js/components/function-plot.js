@@ -50,7 +50,7 @@ export default class FunctionPlot extends Component {
 
     const data = this.getDataFromProps(this.props.expression);
 
-    this.drawAxis(data);
+    this.drawAxes(data);
 
     this.drawCurve(data);
 
@@ -70,7 +70,7 @@ export default class FunctionPlot extends Component {
 
     d3.selectAll('.axis').remove();
 
-    this.drawAxis(data);
+    this.drawAxes(data);
 
     this.drawCurve(data);
   }
@@ -83,7 +83,7 @@ export default class FunctionPlot extends Component {
       return expression.eval({x: x});
     };
 
-    return d3.range(-10, 11).map(function (d) {
+    return d3.range(-10, 11).map( (d) => {
       return {x:d, y:fn(d)};
     });
   }
@@ -96,8 +96,8 @@ export default class FunctionPlot extends Component {
 
     const line = d3.svg.line()
             .interpolate('basis')
-            .x(function (d) {return xScale(d.x);})
-            .y(function (d) {return yScale(d.y);});
+            .x( (d) => {return xScale(d.x);})
+            .y( (d) => {return yScale(d.y);});
 
     this.svg.append('path')
       .datum(data)
@@ -105,7 +105,7 @@ export default class FunctionPlot extends Component {
       .attr('d', line);
   }
 
-  drawAxis(data) {
+  drawAxes(data) {
     const xAxis = d3.svg.axis()
             .scale(this.xScale);
 
@@ -115,9 +115,7 @@ export default class FunctionPlot extends Component {
 
     const dimensions = this.getDimensions();
 
-    this.xScale.domain(d3.extent(data, function (d) {return d.x;}));
-
-    let yScaleDomain, xAxisPosition;
+    this.xScale.domain(d3.extent(data,  (d) => {return d.x;}));
 
     const minY = d3.min(data, (d) => { return d.y; });
     const maxY = d3.max(data, (d) => { return d.y; });
@@ -125,10 +123,12 @@ export default class FunctionPlot extends Component {
     const nonNegativeAxis = minY >= 0 && maxY >= 0;
     const positiveAndNegativeAxis = minY < 0 && maxY > 0;
 
+    let yScaleDomain, xAxisPosition;
+
     if(nonNegativeAxis) {
-      yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
+      yScaleDomain = [0, d3.max(data, (d) => {return d.y;})];
     }  else {
-      yScaleDomain = d3.extent(data, function (d) {return d.y;});
+      yScaleDomain = d3.extent(data, (d) => {return d.y;});
     }
 
     this.yScale.domain(yScaleDomain);
@@ -139,7 +139,7 @@ export default class FunctionPlot extends Component {
       .call(yAxis);
 
     if(nonNegativeAxis) {
-      yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
+      yScaleDomain = [0, d3.max(data, (d) => {return d.y;})];
       xAxisPosition = dimensions.height;
     } else if(positiveAndNegativeAxis) {
       xAxisPosition = this.svg.selectAll(".tick").filter((data) => {
@@ -148,7 +148,7 @@ export default class FunctionPlot extends Component {
         return d3.transform(d3.select(tick[0]).attr('transform')).translate[1];
       });
     } else {
-      yScaleDomain = d3.extent(data, function (d) {return d.y;});
+      yScaleDomain = d3.extent(data, (d) => {return d.y;});
       xAxisPosition = 0;
     }
 
