@@ -135,27 +135,15 @@ export default class FunctionPlot extends Component {
       .attr('transform', 'translate(' + dimensions.width/2 + ',0)')
       .call(yAxis);
 
-    const ticks = [];
-    let zeroTick;
-
-    this.svg.selectAll(".tick").each(function(data) {
-      var tick = d3.select(this);
-      var transform = d3.transform(tick.attr("transform")).translate;
-
-      const val = {tick: tick, transform: transform, data: data};
-
-      if(data === 0) {
-        zeroTick = val;
-      }
-
-      ticks.push(val);
-    });
-
     if(minY >= 0 && maxY >= 0) {
       yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
       xAxisPosition = dimensions.height;
     } else if(minY < 0 && maxY > 0) {
-      xAxisPosition = zeroTick.transform[1];
+      xAxisPosition = this.svg.selectAll(".tick").filter((data) => {
+        return data === 0;
+      }).map((tick) => {
+        return d3.transform(d3.select(tick[0]).attr('transform')).translate[1];
+      });
     } else {
       yScaleDomain = d3.extent(data, function (d) {return d.y;});
       xAxisPosition = 0;
