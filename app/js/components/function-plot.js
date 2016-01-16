@@ -122,7 +122,10 @@ export default class FunctionPlot extends Component {
     const minY = d3.min(data, (d) => { return d.y; });
     const maxY = d3.max(data, (d) => { return d.y; });
 
-    if(minY >= 0 && maxY >= 0) {
+    const nonNegativeAxis = minY >= 0 && maxY >= 0;
+    const positiveAndNegativeAxis = minY < 0 && maxY > 0;
+
+    if(nonNegativeAxis) {
       yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
     }  else {
       yScaleDomain = d3.extent(data, function (d) {return d.y;});
@@ -135,10 +138,10 @@ export default class FunctionPlot extends Component {
       .attr('transform', 'translate(' + dimensions.width/2 + ',0)')
       .call(yAxis);
 
-    if(minY >= 0 && maxY >= 0) {
+    if(nonNegativeAxis) {
       yScaleDomain = [0, d3.max(data, function (d) {return d.y;})];
       xAxisPosition = dimensions.height;
-    } else if(minY < 0 && maxY > 0) {
+    } else if(positiveAndNegativeAxis) {
       xAxisPosition = this.svg.selectAll(".tick").filter((data) => {
         return data === 0;
       }).map((tick) => {
