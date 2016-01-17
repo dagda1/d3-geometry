@@ -95,16 +95,31 @@ export default class FunctionPlot extends Component {
 
     const xScale = this.xScale;
     const yScale = this.yScale;
+    const svg = this.svg;
 
     const line = d3.svg.line()
             .interpolate('basis')
             .x( (d) => {return xScale(d.x);})
             .y( (d) => {return yScale(d.y);});
 
+    const mouseOver = function() {
+      const m = d3.mouse(this);
+      svg
+        .append('circle')
+        .attr('class', 'diff')
+        .attr('cx', m[0])
+        .attr('cy', m[1])
+        .attr('r', 5)
+        .style('fill', 'red');
+    };
+
+    d3.select('.curve').on('mouseover', null);
+
     this.svg.append('path')
       .datum(data)
       .attr('class', 'curve')
-      .attr('d', line);
+      .attr('d', line)
+      .on('mouseover', mouseOver);
   }
 
   drawAxes(data) {
