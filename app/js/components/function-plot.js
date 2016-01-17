@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 
 import math from 'mathjs';
 
+import "../plugins/mathdiff.js";
+
 require("../../css/functions.css");
 
 export default class FunctionPlot extends Component {
