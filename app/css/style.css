@@ -41,6 +41,11 @@
   }
 }
 
+.difflabel {
+  fill: red;
+  font-size: 1em;
+}
+
 .jumbotron {
   padding-top: 1px;
 }

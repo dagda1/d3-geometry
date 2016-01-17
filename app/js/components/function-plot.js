@@ -102,24 +102,59 @@ export default class FunctionPlot extends Component {
             .x( (d) => {return xScale(d.x);})
             .y( (d) => {return yScale(d.y);});
 
+    const me = this;
+
     const mouseOver = function() {
       const m = d3.mouse(this);
-      svg
-        .append('circle')
+      const x = m[0];
+      const y = m[1];
+
+      const g = svg.append('g');
+
+      g.append('circle')
         .attr('class', 'diff')
-        .attr('cx', m[0])
-        .attr('cy', m[1])
-        .attr('r', 5)
+        .attr('cx', x)
+        .attr('cy', y)
+        .attr('r', 7)
         .style('fill', 'red');
+
+      const xPos = Math.round(xScale.invert(x));
+      const yPos = Math.round(yScale.invert(y));
+
+      g.append('text')
+        .text( function() {
+          const xLabel = xPos;
+          const yLabel = yPos;
+
+          return `(${xLabel}, ${yLabel})`;
+        })
+        .attr('class', 'difflabel')
+        .attr('dx', x + 10)
+        .attr('dy', y + 8);
+
+      const derivative = math.diff(math.parse(me.props.expression), "x");
+
+      const gradient = Math.round(derivative.eval({x: xPos}));
+
+      console.log(`xPos = ${xPos}`);
+      console.log(`gradient = ${gradient}`);
     };
 
-    d3.select('.curve').on('mouseover', null);
+    const mouseOut = function() {
+      d3.selectAll('.diff').remove();
+      d3.selectAll('.difflabel').remove();
+    };
+
+    d3.select('.curve')
+      .on('mouseover', null)
+      .on('mouseout', null);
 
     this.svg.append('path')
       .datum(data)
       .attr('class', 'curve')
       .attr('d', line)
-      .on('mouseover', mouseOver);
+      .on('mouseover', mouseOver)
+      .on('mouseout', mouseOut);
   }
 
   drawAxes(data) {
