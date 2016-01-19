@@ -1,7 +1,7 @@
 import { SET_EXPRESSION } from "../constants";
 
 const initialState = {
-  expression: '-3x^2 + 2'
+  expression: 'x^2 - 20'
 };
 
 export default function update(state = initialState, action = {}) {

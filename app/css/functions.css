@@ -24,3 +24,7 @@
 .MJXc-display {
   text-align: left !IMPORTANT;
 }
+
+.curve {
+  stroke-width: 2.5;
+}

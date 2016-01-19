@@ -5,6 +5,11 @@ import math from 'mathjs';
 
 import "../plugins/mathdiff.js";
 
+import {
+  getYIntercept
+} from "../utils/line";
+
+
 require("../../css/functions.css");
 
 export default class FunctionPlot extends Component {
@@ -118,13 +123,15 @@ export default class FunctionPlot extends Component {
         .attr('r', 7)
         .style('fill', 'red');
 
-      const xPos = Math.round(xScale.invert(x));
-      const yPos = Math.round(yScale.invert(y));
+      const point = {
+        x: xScale.invert(x),
+        y: yScale.invert(y)
+      };
 
       g.append('text')
         .text( function() {
-          const xLabel = xPos;
-          const yLabel = yPos;
+          const xLabel = Math.round(point.x);
+          const yLabel = Math.round(point.y);
 
           return `(${xLabel}, ${yLabel})`;
         })
@@ -134,15 +141,46 @@ export default class FunctionPlot extends Component {
 
       const derivative = math.diff(math.parse(me.props.expression), "x");
 
-      const gradient = Math.round(derivative.eval({x: xPos}));
+      const gradient = derivative.eval({x: point.x});
 
-      console.log(`xPos = ${xPos}`);
-      console.log(`gradient = ${gradient}`);
+      const yIntercept = getYIntercept(point, gradient);
+
+      const lineEquation = math.parse("m * x + c");
+
+
+      const getTangentPoint = (delta) => {
+        const deltaX = xScale.invert(x + delta);
+
+        const tangentPoint = {
+          x: deltaX,
+          y: lineEquation.eval({
+            m: gradient,
+            x: deltaX,
+            c: yIntercept
+          })
+        };
+
+        return tangentPoint;
+      };
+
+      const length = xScale(200);
+
+      const tangentPoint1 = getTangentPoint(+ length);
+      const tangentPoint2 = getTangentPoint(- length);
+
+      g.append('line')
+        .style('stroke', 'red')
+        .attr('class', 'tangent')
+        .attr('x1', xScale(tangentPoint1.x))
+        .attr('y1', yScale(tangentPoint1.y))
+        .attr('x2', xScale(tangentPoint2.x))
+        .attr('y2', yScale(tangentPoint2.y));
     };
 
     const mouseOut = function() {
       d3.selectAll('.diff').remove();
       d3.selectAll('.difflabel').remove();
+      d3.selectAll('.tangent').remove();
     };
 
     d3.select('.curve')
@@ -216,6 +254,13 @@ export default class FunctionPlot extends Component {
 
   queueMathJax() {
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.refs.expr]);
+  }
+
+  convertPoint(point) {
+    return {
+      x: this.xScale.invert(point.x),
+      y: this.yScale.invert(point.y)
+    };
   }
 
   render() {
