@@ -109,33 +109,51 @@ export default class FunctionPlot extends Component {
 
     const me = this;
 
-    const mouseOver = function() {
+    const g = svg.append('g');
+
+    g.append('circle')
+      .attr('class', 'diff')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', 7)
+      .style('fill', 'red')
+      .style('display', 'none');
+
+    g.append('text')
+      .attr('class', 'difflabel')
+      .style('display', 'none');
+
+
+    g.append('line')
+      .style('stroke', 'red')
+      .attr('class', 'tangent')
+      .attr('x1', xScale(0))
+      .attr('y1', yScale(0))
+      .attr('x2', xScale(0))
+      .attr('y2', yScale(0))
+      .style('display', 'none');
+
+    const mouseMove = function() {
       const m = d3.mouse(this);
       const x = m[0];
       const y = m[1];
 
-      const g = svg.append('g');
-
-      g.append('circle')
-        .attr('class', 'diff')
+      g.select('.diff')
         .attr('cx', x)
-        .attr('cy', y)
-        .attr('r', 7)
-        .style('fill', 'red');
+        .attr('cy', y);
 
       const point = {
         x: xScale.invert(x),
         y: yScale.invert(y)
       };
 
-      g.append('text')
+      g.select('.difflabel')
         .text( function() {
           const xLabel = Math.round(point.x);
           const yLabel = Math.round(point.y);
 
           return `(${xLabel}, ${yLabel})`;
         })
-        .attr('class', 'difflabel')
         .attr('dx', x + 10)
         .attr('dy', y + 8);
 
@@ -168,19 +186,23 @@ export default class FunctionPlot extends Component {
       const tangentPoint1 = getTangentPoint(+ length);
       const tangentPoint2 = getTangentPoint(- length);
 
-      g.append('line')
-        .style('stroke', 'red')
-        .attr('class', 'tangent')
+      g.select('.tangent')
         .attr('x1', xScale(tangentPoint1.x))
         .attr('y1', yScale(tangentPoint1.y))
         .attr('x2', xScale(tangentPoint2.x))
         .attr('y2', yScale(tangentPoint2.y));
     };
 
+    const mouseOver = function() {
+      d3.select('.diff').style('display', 'block');
+      d3.select('.difflabel').style('display', 'block');
+      d3.select('.tangent').style('display', 'block');
+    };
+
     const mouseOut = function() {
-      d3.selectAll('.diff').remove();
-      d3.selectAll('.difflabel').remove();
-      d3.selectAll('.tangent').remove();
+      d3.select('.diff').style('display', 'none');
+      d3.select('.difflabel').style('display', 'none');
+      d3.select('.tangent').style('display', 'none');
     };
 
     d3.select('.curve')
@@ -191,6 +213,7 @@ export default class FunctionPlot extends Component {
       .datum(data)
       .attr('class', 'curve')
       .attr('d', line)
+      .on('mousemove', mouseMove)
       .on('mouseover', mouseOver)
       .on('mouseout', mouseOut);
   }
