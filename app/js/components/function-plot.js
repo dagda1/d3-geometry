@@ -116,13 +116,10 @@ export default class FunctionPlot extends Component {
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', 7)
-      .style('fill', 'red')
-      .style('display', 'none');
+      .style('fill', 'red');
 
     g.append('text')
-      .attr('class', 'difflabel')
-      .style('display', 'none');
-
+      .attr('class', 'difflabel');
 
     g.append('line')
       .style('stroke', 'red')
@@ -130,22 +127,25 @@ export default class FunctionPlot extends Component {
       .attr('x1', xScale(0))
       .attr('y1', yScale(0))
       .attr('x2', xScale(0))
-      .attr('y2', yScale(0))
-      .style('display', 'none');
+      .attr('y2', yScale(0));
 
     const mouseMove = function() {
       const m = d3.mouse(this);
-      const x = m[0];
-      const y = m[1];
 
-      g.select('.diff')
-        .attr('cx', x)
-        .attr('cy', y);
+      const x = m[0];
+
+      const y = yScale(math.parse(me.props.expression).eval({
+        x: xScale.invert(x)
+      }));
 
       const point = {
         x: xScale.invert(x),
         y: yScale.invert(y)
       };
+
+      g.select('.diff')
+        .attr('cx', x)
+        .attr('cy', y);
 
       g.select('.difflabel')
         .text( function() {
@@ -164,7 +164,6 @@ export default class FunctionPlot extends Component {
       const yIntercept = getYIntercept(point, gradient);
 
       const lineEquation = math.parse("m * x + c");
-
 
       const getTangentPoint = (delta) => {
         const deltaX = xScale.invert(x + delta);
@@ -193,29 +192,12 @@ export default class FunctionPlot extends Component {
         .attr('y2', yScale(tangentPoint2.y));
     };
 
-    const mouseOver = function() {
-      d3.select('.diff').style('display', 'block');
-      d3.select('.difflabel').style('display', 'block');
-      d3.select('.tangent').style('display', 'block');
-    };
-
-    const mouseOut = function() {
-      d3.select('.diff').style('display', 'none');
-      d3.select('.difflabel').style('display', 'none');
-      d3.select('.tangent').style('display', 'none');
-    };
-
-    d3.select('.curve')
-      .on('mouseover', null)
-      .on('mouseout', null);
-
     this.svg.append('path')
       .datum(data)
       .attr('class', 'curve')
-      .attr('d', line)
-      .on('mousemove', mouseMove)
-      .on('mouseover', mouseOver)
-      .on('mouseout', mouseOut);
+      .attr('d', line);
+
+    d3.selectAll('svg').on('mousemove', mouseMove);
   }
 
   drawAxes(data) {
