@@ -129,12 +129,15 @@ export default class FunctionPlot extends Component {
       .attr('x2', xScale(0))
       .attr('y2', yScale(0));
 
+    const maxX = d3.max(data, (d) => { return d.x; });
+    const maxY = d3.max(data, (d) => { return d.y; });
+
     const mouseMove = function() {
       const m = d3.mouse(this);
 
-      const x = m[0];
+      let x = m[0];
 
-      const y = yScale(math.parse(me.props.expression).eval({
+      let y = yScale(math.parse(me.props.expression).eval({
         x: xScale.invert(x)
       }));
 
@@ -142,6 +145,14 @@ export default class FunctionPlot extends Component {
         x: xScale.invert(x),
         y: yScale.invert(y)
       };
+
+      if(point.x > maxX) {
+        point.x = maxX;
+        point.y = maxY;
+
+        x = xScale(maxX);
+        y = yScale(maxY);
+      }
 
       g.select('.diff')
         .attr('cx', x)
