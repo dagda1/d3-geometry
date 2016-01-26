@@ -149,6 +149,8 @@ export default class FunctionPlot extends Component {
         y: yScale.invert(y)
       };
 
+      console.log(xScale.invert(x));
+
       if(point.x > maxX) {
         point.x = maxX;
         point.y = maxY;
