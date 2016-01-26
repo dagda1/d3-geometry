@@ -136,7 +136,7 @@ export default class FunctionPlot extends Component {
     const maxY = d3.max(data, (d) => { return d.y; });
 
     const mouseMove = function() {
-      const m = d3.mouse(this);
+      const m = d3.mouse(d3.select('.curve').node());
 
       let x = m[0];
 
@@ -213,7 +213,7 @@ export default class FunctionPlot extends Component {
       .attr('class', 'curve')
       .attr('d', line);
 
-    d3.selectAll('svg').on('mousemove', mouseMove);
+    d3.select('svg').on('mousemove', mouseMove);
   }
 
   drawAxes(data) {
