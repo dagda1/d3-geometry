@@ -97,6 +97,9 @@ export default class FunctionPlot extends Component {
 
   drawCurve(data) {
     d3.select('.curve').remove();
+    d3.select('.diff').remove();
+    d3.select('.difflabel').remove();
+    d3.select('.tangent').remove();
 
     const xScale = this.xScale;
     const yScale = this.yScale;
