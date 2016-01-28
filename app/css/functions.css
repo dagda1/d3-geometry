@@ -28,3 +28,26 @@
 .curve {
   stroke-width: 1;
 }
+
+.function-curve {
+  margin-right: 60px;
+}
+
+.function-dashboard {
+  margin-left: 10px;
+}
+
+.window {
+  text-align: center;
+}
+
+.window label {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+
+.limits {
+  width: 80px;
+  display: inline;
+}

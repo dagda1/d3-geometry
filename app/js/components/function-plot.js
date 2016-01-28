@@ -149,8 +149,6 @@ export default class FunctionPlot extends Component {
         y: yScale.invert(y)
       };
 
-      console.log(xScale.invert(x));
-
       if(point.x > maxX) {
         point.x = maxX;
         point.y = maxY;
@@ -288,24 +286,45 @@ export default class FunctionPlot extends Component {
     const latextExpression = '$$ f(x) = ' + math.parse(this.props.expression).toTex() + '$$';
 
     return (
-      <div className="plotter">
-        <h2 ref="expr" className="col-xs-offset-3 col-md-offset-1">{latextExpression}</h2>
-        <div ref="curve"></div>
-        <div className="form-horizontal">
-          <div className="form-group">
-             <fieldset className="field-set col-xs-12 col-md-4 col-xs-offset-1">
-              <legend>Enter Expression</legend>
-              <div className="expression col-xs-10 col-md-10">
-                <input type="text"
-                    className="form-control input-md"
-                    defaultValue={this.props.expression}
-                    onKeyDown={this.handleSubmit.bind(this)}
-                    onBlur={this.handleBlur.bind(this)}
-                    ref="expressionInput"
-                />
+      <div className="plotter row">
+        <div className="row">
+          <h2 ref="expr" className="col-xs-offset-3 col-md-offset-1">{latextExpression}</h2>
+          <div className="col-lg-4 col-md-6 col-xs-12 function-curve">
+            <div ref="curve"></div>
+          </div>
+          <div className="function-dashboard col-lg-3 col-md-5 col-xs-9">
+            <div className="form-horizontal">
+              <div className="form-group">
+                <fieldset className="field-set">
+                  <legend>Enter Expression</legend>
+                  <div className="expression col-xs-10 col-md-10">
+                    <input type="text"
+                      className="form-control input-md"
+                      defaultValue={this.props.expression}
+                      onKeyDown={this.handleSubmit.bind(this)}
+                      onBlur={this.handleBlur.bind(this)}
+                      ref="expressionInput"
+                    />
+                  </div>
+                  <button className="btn btn-primary btn-responsive" onClick={this.setExpression.bind(this)}>Go</button>
+                </fieldset>
+                <fieldset className="field-set window">
+                  <legend>Window</legend>
+                    <input type="text"
+                      className="form-control input-md limits"
+
+                      ref="lowerX"
+                     />
+
+                    <label>&lt; x &lt;</label>
+
+                    <input type="text"
+                      className="form-control input-md limits"
+                      ref="upperX"
+                     />
+                </fieldset>
               </div>
-              <button className="btn btn-primary btn-responsive" onClick={this.setExpression.bind(this)}>Go</button>
-            </fieldset>
+            </div>
           </div>
         </div>
       </div>
