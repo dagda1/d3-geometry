@@ -313,17 +313,15 @@ export default class FunctionPlot extends Component {
                 </fieldset>
                 <fieldset className="field-set window">
                   <legend>Window</legend>
-                     <span className="minus">-</span>
                      <input type="text"
                       className="form-control input-md limits"
-                      defaultValue={Math.abs(this.props.minX)}
+                      defaultValue={this.props.minX}
                       onBlur={this.handleScaleBlur.bind(this)}
                       ref="lowerX"
                      />
 
                     <label>&lt; x &lt;</label>
 
-                    <span className="plus">+</span>
                     <input type="text"
                       className="form-control input-md limits"
                       defaultValue={this.props.maxX}

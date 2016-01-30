@@ -8,7 +8,7 @@ export function setExpression(expression) {
 };
 
 export function changeScale(min, max) {
-  const minX = isNaN(parseInt(min)) ? -10 : 0 - parseInt(min);
+  const minX = isNaN(parseInt(min)) ? -10 : parseInt(min);
   const maxX = isNaN(parseInt(max)) ? 11 : parseInt(max);
 
   return {
