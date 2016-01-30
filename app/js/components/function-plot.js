@@ -21,12 +21,19 @@ export default class FunctionPlot extends Component {
     this.setExpression();
   }
 
-  handleBlur() {
+  handleExpressionBlur() {
     this.setExpression();
   }
 
   setExpression() {
     this.props.setExpression(this.refs.expressionInput.value);
+  }
+
+  handleScaleBlur() {
+    const minX = this.refs.lowerX.value;
+    const maxX = this.refs.upperX.value;
+
+    this.props.changeScale(minX, maxX);
   }
 
   getDimensions() {
@@ -55,7 +62,7 @@ export default class FunctionPlot extends Component {
     this.yScale = d3.scale.linear()
           .range([dimensions.height, 0]);
 
-    const data = this.getDataFromProps(this.props.expression);
+    const data = this.getDataFromProps(this.props);
 
     this.drawAxes(data);
 
@@ -69,11 +76,7 @@ export default class FunctionPlot extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.expression === this.props.expression) {
-      return;
-    }
-
-    const data = this.getDataFromProps(nextProps.expression);
+    const data = this.getDataFromProps(nextProps);
 
     d3.selectAll('.axis').remove();
 
@@ -82,15 +85,15 @@ export default class FunctionPlot extends Component {
     this.drawCurve(data);
   }
 
-  getDataFromProps(expr) {
-    const expression = math.parse(expr);
+  getDataFromProps(state) {
+    const expression = math.parse(state.expression);
 
 
     const fn = (x) => {
       return expression.eval({x: x});
     };
 
-    return d3.range(-10, 11).map( (d) => {
+    return d3.range(state.minX, state.maxX).map( (d) => {
       return {x:d, y:fn(d)};
     });
   }
@@ -302,7 +305,7 @@ export default class FunctionPlot extends Component {
                       className="form-control input-md"
                       defaultValue={this.props.expression}
                       onKeyDown={this.handleSubmit.bind(this)}
-                      onBlur={this.handleBlur.bind(this)}
+                      onBlur={this.handleExpressionBlur.bind(this)}
                       ref="expressionInput"
                     />
                   </div>
@@ -310,16 +313,21 @@ export default class FunctionPlot extends Component {
                 </fieldset>
                 <fieldset className="field-set window">
                   <legend>Window</legend>
-                    <input type="text"
+                     <span className="minus">-</span>
+                     <input type="text"
                       className="form-control input-md limits"
-
+                      defaultValue={Math.abs(this.props.minX)}
+                      onBlur={this.handleScaleBlur.bind(this)}
                       ref="lowerX"
                      />
 
                     <label>&lt; x &lt;</label>
 
+                    <span className="plus">+</span>
                     <input type="text"
                       className="form-control input-md limits"
+                      defaultValue={this.props.maxX}
+                      onBlur={this.handleScaleBlur.bind(this)}
                       ref="upperX"
                      />
                 </fieldset>

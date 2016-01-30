@@ -1,1 +1,2 @@
 export const SET_EXPRESSION = "SET_EXPRESSION";
+export const CHANGE_SCALE = "CHANGE_SCALE";
