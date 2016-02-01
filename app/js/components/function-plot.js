@@ -13,12 +13,12 @@ import {
 require("../../css/functions.css");
 
 export default class FunctionPlot extends Component {
-  handleSubmit(e) {
+  handleSubmit(fn, e) {
     if(e.which !== 13) {
       return;
     }
 
-    this.setExpression();
+    fn();
   }
 
   handleExpressionBlur() {
@@ -29,7 +29,11 @@ export default class FunctionPlot extends Component {
     this.props.setExpression(this.refs.expressionInput.value);
   }
 
-  handleScaleBlur() {
+  handleXScaleBlur() {
+    this.setXRange();
+  }
+
+  setXRange() {
     const minX = this.refs.lowerX.value;
     const maxX = this.refs.upperX.value;
 
@@ -42,8 +46,7 @@ export default class FunctionPlot extends Component {
     const width = 500 - margin.left - margin.right;
     const height = 380 - margin.top - margin.bottom;
 
-    return {margin: margin, height: height, width: width};
-  }
+    return {margin: margin, height: height, width: width};}
 
   componentDidMount() {
     const el = this.refs.curve;
@@ -332,7 +335,7 @@ export default class FunctionPlot extends Component {
                     <input type="text"
                       className="form-control input-md"
                       defaultValue={this.props.expression}
-                      onKeyDown={this.handleSubmit.bind(this)}
+                      onKeyDown={this.handleSubmit.bind(this, this.setExpression.bind(this))}
                       onBlur={this.handleExpressionBlur.bind(this)}
                       ref="expressionInput"
                     />
@@ -344,7 +347,8 @@ export default class FunctionPlot extends Component {
                      <input type="text"
                       className="form-control input-md limits"
                       defaultValue={this.props.minX}
-                      onBlur={this.handleScaleBlur.bind(this)}
+                      onBlur={this.handleXScaleBlur.bind(this)}
+                      onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
                       ref="lowerX"
                      />
 
@@ -353,7 +357,8 @@ export default class FunctionPlot extends Component {
                     <input type="text"
                       className="form-control input-md limits"
                       defaultValue={this.props.maxX}
-                      onBlur={this.handleScaleBlur.bind(this)}
+                      onBlur={this.handleXScaleBlur.bind(this)}
+                      onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
                       ref="upperX"
                      />
                 </fieldset>
