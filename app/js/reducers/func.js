@@ -2,8 +2,8 @@ import { SET_EXPRESSION, CHANGE_SCALE } from "../constants";
 
 const initialState = {
   expression: 'x^2 - 20',
-  minX: -300,
-  maxX: 110
+  minX: -10,
+  maxX: 11
 };
 
 export default function update(state = initialState, action = {}) {

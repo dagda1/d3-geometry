@@ -253,33 +253,9 @@ export default class FunctionPlot extends Component {
       return data === 0;
     };
 
-    const minX = d3.min(data, (d) => d.x);
-    const maxX = d3.max(data, (d) => d.y);
-
-    const positiveXOnly = minX > 0 && maxX > 0;
-    const negativeXOnly = minX < 0 && maxX < 0;
-
-    let yPosition;
-
-    if(positiveXOnly) {
-      yPosition = 0;
-    } else if(negativeXOnly) {
-      yPosition = dimensions.width;
-    } else {
-      const zeroIndex = _.findIndex(data, (d) => {
-        return d.x === 0;
-      });
-
-      if(zeroIndex > 0) {
-        yPosition = (dimensions.width / (data.length / zeroIndex));
-      } else {
-        yPosition = 0;
-      }
-    }
-
     this.svg.append('g')
       .attr('class', 'axis y-axis')
-      .attr('transform', 'translate(' + yPosition + ',0)')
+      .style('visibility', 'hidden')
       .call(yAxis);
 
     if(nonNegativeXAxis) {
@@ -295,9 +271,34 @@ export default class FunctionPlot extends Component {
     }
 
     this.svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', 'translate(0,' + xAxisPosition + ')')
+      .attr('class', 'axis x-axis')
+      .attr('transform', `translate(0, ${xAxisPosition})`)
       .call(xAxis);
+
+    d3.select('.y-axis').remove();
+
+    const minX = d3.min(data, (d) => d.x);
+    const maxX = d3.max(data, (d) => d.y);
+
+    const positiveXOnly = minX > 0 && maxX > 0;
+    const negativeXOnly = minX < 0 && maxX < 0;
+
+    let yAxisPosition;
+
+    if(positiveXOnly) {
+      yAxisPosition = 0;
+    } else if(negativeXOnly) {
+      yAxisPosition = dimensions.width;
+    } else {
+      yAxisPosition = this.svg.selectAll(".x-axis .tick").filter(findZeroTick).map((tick) => {
+        return d3.transform(d3.select(tick[0]).attr('transform')).translate[0];
+      });
+    }
+
+    this.svg.append('g')
+      .attr('class', 'axis y-axis')
+      .attr('transform', `translate(${yAxisPosition}, 0)`)
+      .call(yAxis);
   }
 
   componentDidUpdate() {
