@@ -138,7 +138,7 @@ export default class FunctionPlot extends Component {
       .attr('x2', xScale(0))
       .attr('y2', yScale(0));
 
-    const maxX = d3.max(data, (d) => { return d.x; });
+    const maxX = d3.max(data, (d) => d.x);
 
     const mouseMove = function() {
       const m = d3.mouse(d3.select('.curve').node());
@@ -231,10 +231,10 @@ export default class FunctionPlot extends Component {
 
     const dimensions = this.getDimensions();
 
-    this.xScale.domain(d3.extent(data,  (d) => {return d.x;}));
+    this.xScale.domain(d3.extent(data, (d) => d.x));
 
-    const minY = d3.min(data, (d) => { return d.y; });
-    const maxY = d3.max(data, (d) => { return d.y; });
+    const minY = d3.min(data, (d) => d.y);
+    const maxY = d3.max(data, (d) => d.y);
 
     const nonNegativeXAxis = minY >= 0 && maxY >= 0;
     const positiveAndNegativeXAxis = minY < 0 && maxY > 0;
@@ -242,9 +242,9 @@ export default class FunctionPlot extends Component {
     let yScaleDomain, xAxisPosition;
 
     if(nonNegativeXAxis) {
-      yScaleDomain = [0, d3.max(data, (d) => {return d.y;})];
+      yScaleDomain = [0, d3.max(data, (d) => d.y)];
     }  else {
-      yScaleDomain = d3.extent(data, (d) => {return d.y;});
+      yScaleDomain = d3.extent(data, (d) => d.y);
     }
 
     this.yScale.domain(yScaleDomain);
@@ -253,8 +253,8 @@ export default class FunctionPlot extends Component {
       return data === 0;
     };
 
-    const minX = d3.min(data, (d) => { return d.x; });
-    const maxX = d3.max(data, (d) => { return d.y; });
+    const minX = d3.min(data, (d) => d.x);
+    const maxX = d3.max(data, (d) => d.y);
 
     const positiveXOnly = minX > 0 && maxX > 0;
     const negativeXOnly = minX < 0 && maxX < 0;
@@ -283,14 +283,14 @@ export default class FunctionPlot extends Component {
       .call(yAxis);
 
     if(nonNegativeXAxis) {
-      yScaleDomain = [0, d3.max(data, (d) => {return d.y;})];
+      yScaleDomain = [0, d3.max(data, (d) => d.y)];
       xAxisPosition = dimensions.height;
     } else if(positiveAndNegativeXAxis) {
       xAxisPosition = this.svg.selectAll(".tick").filter(findZeroTick).map((tick) => {
         return d3.transform(d3.select(tick[0]).attr('transform')).translate[1];
       });
     } else {
-      yScaleDomain = d3.extent(data, (d) => {return d.y;});
+      yScaleDomain = d3.extent(data, (d) => d.y);
       xAxisPosition = 0;
     }
 
