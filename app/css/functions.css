@@ -41,6 +41,10 @@
   text-align: center;
 }
 
+.window legend {
+  text-align: left;
+}
+
 .window label {
   margin-right: 10px;
   margin-left: 10px;

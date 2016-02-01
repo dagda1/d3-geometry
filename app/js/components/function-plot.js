@@ -232,12 +232,12 @@ export default class FunctionPlot extends Component {
     const minY = d3.min(data, (d) => { return d.y; });
     const maxY = d3.max(data, (d) => { return d.y; });
 
-    const nonNegativeAxis = minY >= 0 && maxY >= 0;
-    const positiveAndNegativeAxis = minY < 0 && maxY > 0;
+    const nonNegativeXAxis = minY >= 0 && maxY >= 0;
+    const positiveAndNegativeXAxis = minY < 0 && maxY > 0;
 
     let yScaleDomain, xAxisPosition;
 
-    if(nonNegativeAxis) {
+    if(nonNegativeXAxis) {
       yScaleDomain = [0, d3.max(data, (d) => {return d.y;})];
     }  else {
       yScaleDomain = d3.extent(data, (d) => {return d.y;});
@@ -245,18 +245,46 @@ export default class FunctionPlot extends Component {
 
     this.yScale.domain(yScaleDomain);
 
+    const findZeroTick = (data) => {
+      return data === 0;
+    };
+
+    const minX = d3.min(data, (d) => { return d.x; });
+    const maxX = d3.max(data, (d) => { return d.y; });
+
+    const positiveXOnly = minX > 0 && maxX > 0;
+    const negativeXOnly = minX < 0 && maxX < 0;
+
+    let yPosition;
+
+    if(positiveXOnly) {
+      yPosition = 0;
+    } else if(negativeXOnly) {
+      yPosition = dimensions.width;
+    } else {
+      const zeroIndex = _.findIndex(data, (d) => {
+        return d.x === 0;
+      });
+
+      if(zeroIndex > 0) {
+        console.log(data.length);
+        console.log(zeroIndex);
+        yPosition = (dimensions.width / (data.length / zeroIndex));
+      } else {
+        yPosition = 0;
+      }
+    }
+
     this.svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', 'translate(' + dimensions.width/2 + ',0)')
+      .attr('class', 'axis y-axis')
+      .attr('transform', 'translate(' + yPosition + ',0)')
       .call(yAxis);
 
-    if(nonNegativeAxis) {
+    if(nonNegativeXAxis) {
       yScaleDomain = [0, d3.max(data, (d) => {return d.y;})];
       xAxisPosition = dimensions.height;
-    } else if(positiveAndNegativeAxis) {
-      xAxisPosition = this.svg.selectAll(".tick").filter((data) => {
-        return data === 0;
-      }).map((tick) => {
+    } else if(positiveAndNegativeXAxis) {
+      xAxisPosition = this.svg.selectAll(".tick").filter(findZeroTick).map((tick) => {
         return d3.transform(d3.select(tick[0]).attr('transform')).translate[1];
       });
     } else {
@@ -312,7 +340,7 @@ export default class FunctionPlot extends Component {
                   <button className="btn btn-primary btn-responsive" onClick={this.setExpression.bind(this)}>Go</button>
                 </fieldset>
                 <fieldset className="field-set window">
-                  <legend>Window</legend>
+                  <legend>X Range</legend>
                      <input type="text"
                       className="form-control input-md limits"
                       defaultValue={this.props.minX}
