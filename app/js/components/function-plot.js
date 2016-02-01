@@ -139,7 +139,6 @@ export default class FunctionPlot extends Component {
       .attr('y2', yScale(0));
 
     const maxX = d3.max(data, (d) => { return d.x; });
-    const maxY = d3.max(data, (d) => { return d.y; });
 
     const mouseMove = function() {
       const m = d3.mouse(d3.select('.curve').node());
@@ -156,6 +155,8 @@ export default class FunctionPlot extends Component {
       };
 
       if(point.x > maxX) {
+        const maxY = _.find(data, (d) => d.x === maxX).y;
+
         point.x = maxX;
         point.y = maxY;
 
@@ -270,8 +271,6 @@ export default class FunctionPlot extends Component {
       });
 
       if(zeroIndex > 0) {
-        console.log(data.length);
-        console.log(zeroIndex);
         yPosition = (dimensions.width / (data.length / zeroIndex));
       } else {
         yPosition = 0;
