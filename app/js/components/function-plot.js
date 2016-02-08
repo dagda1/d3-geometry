@@ -299,6 +299,32 @@ export default class FunctionPlot extends Component {
       .attr('class', 'axis y-axis')
       .attr('transform', `translate(${yAxisPosition}, 0)`)
       .call(yAxis);
+
+    const expression = this.props.expression;
+
+    const svg = this.svg;
+    const xScale = this.xScale;
+    const yScale = this.yScale;
+
+    const clickable = function (data){
+      const tick = d3.select(this);
+
+      const transform = d3.transform(tick.attr("transform")).translate;
+
+      const fn = (x) => {
+        return math.parse(expression).eval({x: x});
+      };
+
+      const y = fn(data);
+
+      svg.append('line')
+        .attr('x1', xScale(data))
+        .attr('y1', yScale(0))
+        .attr('x2', xScale(data))
+        .attr('y2', yScale(y));
+    };
+
+    d3.selectAll('.x-axis .tick').on('click', clickable);
   }
 
   componentDidUpdate() {
@@ -314,6 +340,11 @@ export default class FunctionPlot extends Component {
       x: this.xScale.invert(point.x),
       y: this.yScale.invert(point.y)
     };
+  }
+
+  componentWillUnmount() {
+    d3.select('.x-axis').on('click', null);
+    d3.select('svg').on('mousemove', null);
   }
 
   render() {
