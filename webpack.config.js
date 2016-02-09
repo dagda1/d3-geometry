@@ -47,7 +47,16 @@ var config = {
 		alias: {},
     root: [path.join(__dirname, "app/css"), path.join(__dirname, "app/js")]
 	},
+  devServer: {
+    contentBase: path.resolve(ROOT_PATH, 'build'),
+    historyApiFallback: true,
+    hot: true,
+    inline: true,
+    progress: true,
+    port: '3030'
+  },
 	plugins: [
+    new webpack.HotModuleReplacementPlugin(),
 		// This plugin makes a module available as variable in every module
 		new webpack.ProvidePlugin({
 			d3: "d3",
