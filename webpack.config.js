@@ -3,6 +3,7 @@ var path = require('path');
 var webpack = require('webpack');
 var bower_dir = path.join(__dirname, '/bower_components');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ROOT_PATH = path.resolve(__dirname);
 
 var config = {
 	addVendor: function(name, path){
@@ -10,11 +11,11 @@ var config = {
 		this.module.noParse.push(path);
 	},
 	entry: {
-		app: ["./app/js/index.js"],
+		app: ['babel-polyfill', "./app/js/index.js"],
 		vendors: ["d3", "_"]
 	},
 	output: {
-		"path": process.env.NODE_ENV === 'production' ? './dist' : './build',
+    path: process.env.NODE_ENV === 'production' ? path.resolve(ROOT_PATH, 'app/dist') : path.resolve(ROOT_PATH, 'app/build'),
 		"filename": "bundle.js"
 	},
 	module: {
