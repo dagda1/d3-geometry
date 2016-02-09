@@ -21,7 +21,22 @@ var config = {
 		noParse: [],
 		loaders: [
       { test: /\.css$/, loader: "style-loader!css-loader?root=." },
-      { test: /\.js?$/, exclude: /(node_modules|bower_components)/, loader: 'babel' },
+      { loader: "babel-loader",
+
+        // Skip any files outside of your project's `src` directory
+        include: [
+          path.resolve(__dirname, "app/js"),
+        ],
+
+        // Only run `.js` and `.jsx` files through Babel
+        test: /\.jsx?$/,
+
+        // Options to configure babel with
+        query: {
+          plugins: ['transform-runtime'],
+          presets: ['es2015', 'stage-0', 'react']
+        }
+      },
       { test: /\.gif$/, loader: "url-loader?mimetype=image/png" },
       // { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
       { test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/, loader: 'url-loader?limit=100000' }
