@@ -91,7 +91,6 @@ export default class FunctionPlot extends Component {
   getDataFromProps(state) {
     const expression = math.parse(state.expression);
 
-
     const fn = (x) => {
       return expression.eval({x: x});
     };
