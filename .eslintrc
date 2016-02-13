@@ -1,5 +1,8 @@
 {
   "extends": "eslint-config-airbnb",
+  "ecmaFeatures": {
+  	"generators": true
+  },
   "parser": "babel-eslint",
   "env": {
     "browser": true,
