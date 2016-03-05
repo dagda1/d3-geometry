@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev": "`npm bin`/webpack-dev-server",
-    "start-api": "node api/src/server.js",
+    "start-api": "node api/server.js",
     "deploy": "NODE_ENV=production webpack -p && gulp deploy",
     "clean": "rm -rf app/dist app/build"
   },
