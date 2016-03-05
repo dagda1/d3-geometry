@@ -15,7 +15,7 @@ import Triangles from './components/triangles';
 import LineEquation from './components/equation-of-a-line';
 import FunctionContainer from "./components/functions-container";
 
-require("../css/style.css");
+require("../public/css/style.css");
 
 const reducer = combineReducers(Object.assign({}, reducers, {
   routing: routeReducer

@@ -10,7 +10,7 @@ import {
 } from "../utils/line";
 
 
-require("../../css/functions.css");
+require("../../public/css/functions.css");
 
 export default class FunctionPlot extends Component {
   handleSubmit(fn, e) {

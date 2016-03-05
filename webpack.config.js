@@ -11,7 +11,7 @@ var config = {
 		this.module.noParse.push(path);
 	},
 	entry: {
-		app: ['babel-polyfill', "./app/js/index.js"],
+		app: ['babel-polyfill', "./client/app/index.js"],
 		vendors: ["d3", "_"]
 	},
 	output: {
@@ -26,7 +26,7 @@ var config = {
 
         // Skip any files outside of your project's `src` directory
         include: [
-          path.resolve(__dirname, "app/js"),
+          path.resolve(__dirname, "client/app"),
         ],
 
         // Only run `.js` and `.jsx` files through Babel
