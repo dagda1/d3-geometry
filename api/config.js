@@ -9,6 +9,10 @@ case 'development':
     user: 'paulcowan',
     database: 'managers'
   };
+
+  config.site = {
+    port: 5000
+  };
 };
 
 module.exports.config = config;
