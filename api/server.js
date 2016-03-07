@@ -9,6 +9,7 @@ const koaBody = require('koa-bodyparser');
 const helmet = require('koa-helmet');
 const config = require('./config.js').config;
 const router = require('./routes/index');
+const Models = require('./models/index');
 
 const app = koa();
 

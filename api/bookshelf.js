@@ -1,4 +1,4 @@
-import config from 'config';
+const config = require('./config').config;
 
 const knex = require('knex')({
   client: 'postgresql',
@@ -14,8 +14,11 @@ const knex = require('knex')({
   }
 });
 
-const bookshelf = require('knex')(knex);
+const bookshelf = require('bookshelf')(knex);
+const ModelBase = require('bookshelf-modelbase')(bookshelf);
 
 bookshelf.plugin(['registry', 'bookshelf-camelcase']);
 
-module.exports = bookshelf;
+module.exports.Bookshelf = bookshelf;
+
+module.exports.ModelBase = ModelBase;

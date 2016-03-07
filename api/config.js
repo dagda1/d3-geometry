@@ -5,7 +5,7 @@ switch(env) {
 case 'development':
   config.database = {
     host: '127.0.0.1',
-    port: 3307,
+    port: 5432,
     user: 'paulcowan',
     database: 'managers'
   };
