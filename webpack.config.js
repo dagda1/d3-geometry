@@ -1,7 +1,7 @@
 "use strict";
 var path = require('path');
 var webpack = require('webpack');
-var bower_dir = path.join(__dirname, '/bower_components');
+var npm_dir = path.join(__dirname, '/node_modules');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ROOT_PATH = path.resolve(__dirname);
 
@@ -73,7 +73,7 @@ var config = {
 
 };
 
-config.addVendor('d3', bower_dir + '/d3/d3.min.js');
-config.addVendor('_', bower_dir + '/lodash/lodash.min.js');
+config.addVendor('d3', npm_dir + '/d3/d3.min.js');
+config.addVendor('_', npm_dir + '/lodash/lodash.min.js');
 
 module.exports = config;
