@@ -1,3 +1,7 @@
+body {
+  background-color: #f5f5f5;
+}
+
 .chart {
   background: #fff;
   font: 10px sans-serif;
@@ -48,6 +52,7 @@
 
 .jumbotron {
   padding-top: 1px;
+  background-color: transparent;
 }
 
 .field-set {
