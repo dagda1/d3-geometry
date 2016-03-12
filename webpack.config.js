@@ -1,3 +1,4 @@
+
 "use strict";
 var path = require('path');
 var webpack = require('webpack');
@@ -15,7 +16,7 @@ var config = {
 		vendors: ["d3", "_"]
 	},
 	output: {
-    path: process.env.NODE_ENV === 'production' ? path.resolve(ROOT_PATH, 'app/dist') : path.resolve(ROOT_PATH, 'app/build'),
+    path: process.env.NODE_ENV === 'production' ? path.resolve(ROOT_PATH, 'dist') : path.resolve(ROOT_PATH, 'app/build'),
 		"filename": "bundle.js"
 	},
 	module: {
