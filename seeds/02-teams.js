@@ -1,6 +1,7 @@
 
 exports.seed = function(knex, Promise) {
   return Promise.join(
+    knex('teams').del(),
     knex('teams').insert({name: 'West Bromwich Albion'}),
     knex('teams').insert({name: 'Manchester City'}),
     knex('teams').insert({name: 'Arsenal'}),
