@@ -23,6 +23,7 @@ var config = {
 		noParse: [],
 		loaders: [
       { test: /\.css$/, loader: "style-loader!css-loader?root=." },
+      { test: /\.scss$/, loaders: ['style', 'css?sourceMap', 'sass?sourceMap']},
       { loader: "babel-loader",
 
         // Skip any files outside of your project's `src` directory
@@ -40,13 +41,12 @@ var config = {
         }
       },
       { test: /\.gif$/, loader: "url-loader?mimetype=image/png" },
-      // { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
       { test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/, loader: 'url-loader?limit=100000' }
 		]
 	},
 	resolve: {
 		alias: {},
-    root: [path.join(__dirname, "app/css"), path.join(__dirname, "app/js")]
+    root: [path.join(__dirname, "client/app")]
 	},
   devServer: {
     contentBase: path.resolve(ROOT_PATH, 'build'),
