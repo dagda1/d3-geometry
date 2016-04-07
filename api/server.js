@@ -11,7 +11,7 @@ const config = require('./config.js').config;
 const router = require('./routes/index');
 const Models = require('./models/index');
 
-const app = koa();
+const app = module.exports = koa();
 
 app.use(compress({
   filter: contentType => /text/i.test(contentType)
@@ -28,5 +28,3 @@ app.use(mount('/api', cors()));
 app.use(router.routes());
 
 app.listen(config.site.port);
-
-module.exports.app;

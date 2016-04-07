@@ -3,6 +3,7 @@ const config = {};
 
 switch(env) {
 case 'development':
+case 'test':
   config.database = {
     host: '127.0.0.1',
     port: 5432,

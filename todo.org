@@ -1,0 +1,7 @@
+*  Next Actions
+   - [ ] Create and test api
+   - [ ] Client side tess
+   - [ ] ImmutableJs
+   - [ ] Line graph of Brendan Rodgers result
+   - [ ] Line graph of Klopp
+   - [ ] Secure api
