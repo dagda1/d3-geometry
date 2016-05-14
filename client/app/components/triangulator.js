@@ -215,7 +215,7 @@ export default class Triangulator {
     const ac = this.perpendicularBisector(area, this.convertPoint(area, 'a'), this.convertPoint(area, 'c'));
     this.perpendicularBisector(area, this.convertPoint(area, 'b'), this.convertPoint(area, 'c'));
 
-    this.drawCirumCircle(area, ab, ac);
+    this.drawCircumCircle(area, ab, ac);
   }
 
   perpendicularBisector(area, a, b) {
@@ -265,7 +265,7 @@ export default class Triangulator {
     return {vertex: midPoint, slope: slope};
   }
 
-  drawCirumCircle(area, lineA, lineB) {
+  drawCircumCircle(area, lineA, lineB) {
     if(!lineA || !lineB) {
       return;
     }
