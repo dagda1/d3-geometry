@@ -17,35 +17,50 @@ export default class SineWave extends Component {
             .domain([0, 20])
             .range([dimensions.height, 0]);
 
-    this.svg = d3.select(el).append("svg")
+    const svg = d3.select(el).append("svg")
       .attr("width", dimensions.width)
-      .attr("height", dimensions.height)
-      .attr("transform", `translate(${dimensions.margin.left}, ${dimensions.margin.top})`);
+      .attr("height", dimensions.height);
 
-    const g = this.svg.append("g");
+    this.addCircleGroup(svg, xScale, yScale);
+  }
 
-    const circle = {x: xScale(18), y: yScale(5), radius: 90};
+  addCircleGroup(container, xScale, yScale) {
+    const x = xScale(18);
+    const y = yScale(5);
+    const radius = 90;
 
-    g.append('circle')
-      .attr('cx', circle.x)
-      .attr('cy', circle.y)
-      .attr('r', 90)
-      .attr('fill-opacity', 0.0)
-      .style('stroke', 'black');
+    const circleGroup = container.append("g")
+            .attr("class", "circle-container")
+            .attr('transform', `translate(${x}, ${y})`);
 
-    const line = {
-      start: circle,
-      finish: {x: circle.x, y: circle.y + 90}
+    function rotate() {
+      circleGroup.transition()
+        .duration(10000)
+        .ease('linear')
+        .attrTween("transform", function(d, i , a) {
+          return function(t) {
+            const rotation = t * 360;
+            return `translate(${x}, ${y}) rotate(${String(rotation)})`;
+          };
+        }).each("end", rotate);
     };
 
-    g.append('line')
-      .style('stroke', 'blue')
-      .attr('class', 'line')
-      .attr('x1', line.start.x)
-      .attr('y1', line.start.y)
-      .attr('x2', line.finish.x)
-      .attr('y2', line.finish.y);
+    rotate();
 
+    circleGroup.append('circle')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', radius)
+      .style('fill', 'none')
+      .style('stroke', 'steelblue');
+
+    circleGroup.append('line')
+      .style('stroke', 'steelblue')
+      .attr('class', 'line')
+      .attr('x1', 0)
+      .attr('y1', 0)
+      .attr('x2', radius)
+      .attr('y2', 0);
   }
 
   render(el, props){
