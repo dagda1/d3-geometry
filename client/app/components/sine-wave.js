@@ -24,12 +24,28 @@ export default class SineWave extends Component {
 
     const g = this.svg.append("g");
 
+    const circle = {x: xScale(18), y: yScale(5), radius: 90};
+
     g.append('circle')
-      .attr('cx', xScale(18))
-      .attr('cy', yScale(5))
+      .attr('cx', circle.x)
+      .attr('cy', circle.y)
       .attr('r', 90)
       .attr('fill-opacity', 0.0)
       .style('stroke', 'black');
+
+    const line = {
+      start: circle,
+      finish: {x: circle.x, y: circle.y + 90}
+    };
+
+    g.append('line')
+      .style('stroke', 'blue')
+      .attr('class', 'line')
+      .attr('x1', line.start.x)
+      .attr('y1', line.start.y)
+      .attr('x2', line.finish.x)
+      .attr('y2', line.finish.y);
+
   }
 
   render(el, props){
