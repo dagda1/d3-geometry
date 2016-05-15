@@ -21,12 +21,38 @@ export default class SineWave extends Component {
       .attr("width", dimensions.width)
       .attr("height", dimensions.height);
 
-    this.addCircleGroup(svg, xScale, yScale);
+    const sineGroup = this.addSineWave(svg, xScale, yScale);
+    const circleGroup = this.addCircleGroup(svg, xScale, yScale);
+  }
+
+  addSineWave(container, xScale, yScale) {
+    const x = xScale(8);
+    const y = yScale(19);
+
+    const sineWaveGroup = container.append('g')
+            .attr('class', 'sine-wave')
+            .attr('transform', `translate(${x}, ${y})`);
+
+    sineWaveGroup.append('line')
+      .attr('x1', 0)
+      .attr('y1', 0)
+      .attr('x2', 0)
+      .attr('y2', 180)
+      .attr('class', 'outside-line');
+
+    sineWaveGroup.append('line')
+      .attr('x1', 0)
+      .attr('y1', 20)
+      .attr('x2', 0)
+      .attr('y2', 200)
+      .attr('class', 'joining-line');
+
+    return sineWaveGroup;
   }
 
   addCircleGroup(container, xScale, yScale) {
-    const x = xScale(18);
-    const y = yScale(5);
+    const x = xScale(12);
+    const y = yScale(15);
     const radius = 90;
 
     const circleGroup = container.append("g")
@@ -39,33 +65,74 @@ export default class SineWave extends Component {
         .ease('linear')
         .attrTween("transform", function(d, i , a) {
           return function(t) {
+            const guide = d3.select('.circle-guide');
+
             const rotation = t * 360;
             return `translate(${x}, ${y}) rotate(${String(rotation)})`;
           };
         }).each("end", rotate);
     };
 
-    rotate();
+    //rotate();
 
     circleGroup.append('circle')
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', radius)
-      .style('fill', 'none')
-      .style('stroke', 'steelblue');
+      .attr('class', 'outer-circle')
+      .style('fill', 'none');
 
-    circleGroup.append('line')
-      .style('stroke', 'steelblue')
+    const guideLine = circleGroup.append('line')
       .attr('class', 'line')
       .attr('x1', 0)
       .attr('y1', 0)
       .attr('x2', radius)
       .attr('y2', 0);
+
+    const dot = circleGroup.append('circle')
+            .attr('cx', radius)
+            .attr('cy', 0)
+            .attr('r', 5)
+            .attr('class', 'circle-guide');
+
+    const verticalDot = circleGroup.append('circle')
+            .attr('cx', 0)
+            .attr('cy', 0)
+            .attr('r', 5)
+            .attr('class', 'vertical-guide');
+
+    let angle = 0;
+
+    function rotateDot() {
+      const increase = ((Math.PI * 2) / 360);
+
+      angle += increase;
+
+      const newX = radius * Math.cos(angle);
+      const newY = radius * Math.sin(angle);
+
+      dot
+        .attr('cx', newX)
+        .attr('cy', newY);
+
+      guideLine
+        .attr('x2', newX)
+        .attr('y2', newY);
+
+      verticalDot
+        .attr('cy', newY);
+
+      setTimeout(rotateDot, 35);
+    };
+
+    rotateDot();
+
+    return circleGroup;
   }
 
   render(el, props){
     return (
-        <div id="sineWave" className="row">
+        <div className="row">
           <div className="row">
             <div ref="sine">
             </div>
