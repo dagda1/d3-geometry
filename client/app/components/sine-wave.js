@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 
 require("../styles/sine.scss");
 
+const radius = 90;
+
 export default class SineWave extends Component {
   componentDidMount() {
     const el = this.refs.sine;
@@ -21,59 +23,52 @@ export default class SineWave extends Component {
       .attr("width", dimensions.width)
       .attr("height", dimensions.height);
 
-    const sineGroup = this.addSineWave(svg, xScale, yScale);
     const circleGroup = this.addCircleGroup(svg, xScale, yScale);
-  }
-
-  addSineWave(container, xScale, yScale) {
-    const x = xScale(8);
-    const y = yScale(19);
-
-    const sineWaveGroup = container.append('g')
-            .attr('class', 'sine-wave')
-            .attr('transform', `translate(${x}, ${y})`);
-
-    sineWaveGroup.append('line')
-      .attr('x1', 0)
-      .attr('y1', 0)
-      .attr('x2', 0)
-      .attr('y2', 180)
-      .attr('class', 'outside-line');
-
-    sineWaveGroup.append('line')
-      .attr('x1', 0)
-      .attr('y1', 20)
-      .attr('x2', 0)
-      .attr('y2', 200)
-      .attr('class', 'joining-line');
-
-    return sineWaveGroup;
   }
 
   addCircleGroup(container, xScale, yScale) {
     const x = xScale(12);
     const y = yScale(15);
-    const radius = 90;
 
     const circleGroup = container.append("g")
             .attr("class", "circle-container")
             .attr('transform', `translate(${x}, ${y})`);
 
-    function rotate() {
-      circleGroup.transition()
-        .duration(10000)
-        .ease('linear')
-        .attrTween("transform", function(d, i , a) {
-          return function(t) {
-            const guide = d3.select('.circle-guide');
+    const yScaleAxis = d3.scale.linear()
+            .domain([-1, 1])
+            .range([radius, -radius]);
 
-            const rotation = t * 360;
-            return `translate(${x}, ${y}) rotate(${String(rotation)})`;
-          };
-        }).each("end", rotate);
-    };
+    const yAxis = d3.svg.axis()
+            .orient('left')
+            .tickValues([-1, 0, 1])
+            .scale(yScaleAxis);
 
-    //rotate();
+    circleGroup
+      .append('g')
+      .attr('class', 'y axis')
+      .call(yAxis);
+
+    const firstAxisXCoord = -(radius * 1.5);
+
+    circleGroup
+      .append('g')
+      .attr('class', 'y axis')
+      .attr("transform", `translate(${firstAxisXCoord}, 0)`)
+      .call(yAxis);
+
+    const xScaleAxis = d3.scale.linear()
+            .domain([0, 10])
+            .range([firstAxisXCoord, -x]);
+
+    const xAxis = d3.svg.axis()
+            .orient('bottom')
+            .tickFormat("")
+            .scale(xScaleAxis);
+
+    circleGroup
+      .append('g')
+      .attr('class', 'x axis')
+      .call(xAxis);
 
     circleGroup.append('circle')
       .attr('cx', 0)
@@ -107,13 +102,22 @@ export default class SineWave extends Component {
             .attr('cx', radius)
             .attr('cy', 0)
             .attr('r', 5)
-            .attr('class', 'circle-guide');
+            .attr('class', 'circle-guide')
+            .attr('fill-opacity', 0.1);
 
     const verticalDot = circleGroup.append('circle')
             .attr('cx', 0)
             .attr('cy', 0)
             .attr('r', 5)
-            .attr('class', 'vertical-guide');
+            .attr('class', 'vertical-guide')
+            .attr('fill-opacity', 0.1);
+
+    const joiningLine = circleGroup.append('line')
+            .attr('class', 'line joining-line')
+            .attr('x1', firstAxisXCoord)
+            .attr('y1', 0)
+            .attr('x2', 0)
+            .attr('y2', 0);
 
     let angle = 0;
 
@@ -142,6 +146,11 @@ export default class SineWave extends Component {
       adjacent
         .attr('x1', verticalDot.attr('cx'))
         .attr('y1', verticalDot.attr('cy'))
+        .attr('x2', dot.attr('cx'))
+        .attr('y2', dot.attr('cy'));
+
+      joiningLine
+        .attr('y1', dot.attr('cy'))
         .attr('x2', dot.attr('cx'))
         .attr('y2', dot.attr('cy'));
 
