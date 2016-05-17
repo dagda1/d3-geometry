@@ -83,11 +83,25 @@ export default class SineWave extends Component {
       .style('fill', 'none');
 
     const guideLine = circleGroup.append('line')
-      .attr('class', 'line')
-      .attr('x1', 0)
-      .attr('y1', 0)
-      .attr('x2', radius)
-      .attr('y2', 0);
+            .attr('class', 'line')
+            .attr('x1', 0)
+            .attr('y1', 0)
+            .attr('x2', radius)
+            .attr('y2', 0);
+
+    const opposite = circleGroup.append('line')
+            .attr('class', 'line')
+            .attr('x1', 0)
+            .attr('y1', 0)
+            .attr('x2', 0)
+            .attr('y2', 0);
+
+    const adjacent = circleGroup.append('line')
+            .attr('class', 'line')
+            .attr('x1', 0)
+            .attr('y1', 0)
+            .attr('x2', 0)
+            .attr('y2', 0);
 
     const dot = circleGroup.append('circle')
             .attr('cx', radius)
@@ -119,8 +133,17 @@ export default class SineWave extends Component {
         .attr('x2', newX)
         .attr('y2', newY);
 
+      opposite
+        .attr('y1', newY);
+
       verticalDot
         .attr('cy', newY);
+
+      adjacent
+        .attr('x1', verticalDot.attr('cx'))
+        .attr('y1', verticalDot.attr('cy'))
+        .attr('x2', dot.attr('cx'))
+        .attr('y2', dot.attr('cy'));
 
       setTimeout(rotateDot, 35);
     };
