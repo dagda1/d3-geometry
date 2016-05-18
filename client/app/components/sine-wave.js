@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+import {
+  viewPortFromElement
+} from "../utils/dom";
+
+
 require("../styles/sine.scss");
 
 const radius = 90;
@@ -20,10 +25,19 @@ export default class SineWave extends Component {
             .range([dimensions.height, 0]);
 
     const svg = d3.select(el).append("svg")
-      .attr("width", dimensions.width)
-      .attr("height", dimensions.height);
+            .attr('class', 'svg-container')
+            .attr("width", dimensions.width)
+            .attr("height", dimensions.height);
 
     const circleGroup = this.addCircleGroup(svg, xScale, yScale);
+  }
+
+  resize() {
+    const dimensions = this.getDimensions();
+
+    d3.select('svg-container')
+      .attr('width', dimensions.width)
+      .attr('height', dimensions.height);
   }
 
   addCircleGroup(container, xScale, yScale) {
@@ -57,12 +71,31 @@ export default class SineWave extends Component {
       .call(yAxis);
 
     const xScaleAxis = d3.scale.linear()
-            .domain([0, 10])
-            .range([firstAxisXCoord, -x]);
+            .domain([0, (Math.PI * 2)])
+            .range([firstAxisXCoord, -x + 20]);
+
+    const xValues = [0, 1.57, 3.14, 4.71, 6.28];
+
+    const sineData = xValues.map((x) => {
+      console.log(Math.sin(x));
+      return {x: x, y: Math.sin(x)};
+    });
+
+    const sine = d3.svg.line()
+            .interpolate('monotone')
+            .x( (d) => {return xScaleAxis(d.x);})
+            .y( (d) => {return yScaleAxis(d.y);});
+
+
+    circleGroup.append('path')
+      .datum(sineData)
+      .attr('class', 'sine-curve')
+      .attr('d', sine);
 
     const xAxis = d3.svg.axis()
             .orient('bottom')
-            .tickFormat("")
+            .tickValues(xValues)
+            .tickFormat(d3.format('.2f'))
             .scale(xScaleAxis);
 
     circleGroup
@@ -121,7 +154,7 @@ export default class SineWave extends Component {
 
     let angle = 0;
 
-    function rotateDot() {
+    function drawGraph() {
       const increase = ((Math.PI * 2) / 360);
 
       angle += increase;
@@ -154,10 +187,10 @@ export default class SineWave extends Component {
         .attr('x2', dot.attr('cx'))
         .attr('y2', dot.attr('cy'));
 
-      setTimeout(rotateDot, 35);
+      requestAnimationFrame(drawGraph);
     };
 
-    rotateDot();
+    drawGraph();
 
     return circleGroup;
   }
@@ -166,7 +199,7 @@ export default class SineWave extends Component {
     return (
         <div className="row">
           <div className="row">
-            <div ref="sine">
+            <div id="sine-wave" ref="sine">
             </div>
           </div>
         </div>
@@ -174,8 +207,6 @@ export default class SineWave extends Component {
   }
 
   getDimensions() {
-    const minWidth = window.innerWidth;
-
     const margin = {
       top: 20,
       right: 50,
@@ -183,9 +214,8 @@ export default class SineWave extends Component {
       bottom: 50
     };
 
-    const width = minWidth - margin.left - margin.right;
-
-    const height = 500 - margin.top - margin.bottom;
+    const width = parseInt(d3.select("#sine-wave").style("width"));
+    const height =  Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
     return {
       margin,
