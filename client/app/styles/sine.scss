@@ -1,3 +1,7 @@
+.x.axis .tick:first-child, .y.axis .tick:nth-child(2) {
+  display: none;
+}
+
 .outer-circle,
 .line,
 .circle-guide,

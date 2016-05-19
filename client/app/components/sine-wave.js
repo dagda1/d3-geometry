@@ -48,6 +48,8 @@ export default class SineWave extends Component {
             .attr("class", "circle-container")
             .attr('transform', `translate(${x}, ${y})`);
 
+    const intTickFormat = d3.format('d');
+
     const yScaleAxis = d3.scale.linear()
             .domain([-1, 1])
             .range([radius, -radius]);
@@ -55,6 +57,7 @@ export default class SineWave extends Component {
     const yAxis = d3.svg.axis()
             .orient('left')
             .tickValues([-1, 0, 1])
+            .tickFormat(intTickFormat)
             .scale(yScaleAxis);
 
     circleGroup
@@ -66,7 +69,7 @@ export default class SineWave extends Component {
 
     circleGroup
       .append('g')
-      .attr('class', 'y axis')
+      .attr('class', 'y axis left')
       .attr("transform", `translate(${firstAxisXCoord}, 0)`)
       .call(yAxis);
 
@@ -74,33 +77,17 @@ export default class SineWave extends Component {
             .domain([0, (Math.PI * 2)])
             .range([firstAxisXCoord, -x + 20]);
 
-    const xValues = [0, 1.57, 3.14, 4.71, 6.28];
-
-    const sineData = xValues.map((x) => {
-      console.log(Math.sin(x));
-      return {x: x, y: Math.sin(x)};
-    });
-
-    const sine = d3.svg.line()
-            .interpolate('monotone')
-            .x( (d) => {return xScaleAxis(d.x);})
-            .y( (d) => {return yScaleAxis(d.y);});
-
-
-    circleGroup.append('path')
-      .datum(sineData)
-      .attr('class', 'sine-curve')
-      .attr('d', sine);
+    const xTickValues = [0, 1.57, 3.14, 4.71, 6.28];
 
     const xAxis = d3.svg.axis()
             .orient('bottom')
-            .tickValues(xValues)
+            .tickValues(xTickValues)
             .tickFormat(d3.format('.2f'))
             .scale(xScaleAxis);
 
     circleGroup
       .append('g')
-      .attr('class', 'x axis')
+      .attr('class', 'x axis left')
       .call(xAxis);
 
     circleGroup.append('circle')
@@ -155,6 +142,8 @@ export default class SineWave extends Component {
     let angle = 0;
 
     function drawGraph() {
+      this.drawSineWave(circleGroup, xTickValues, xScaleAxis, yScaleAxis, angle);
+
       const increase = ((Math.PI * 2) / 360);
 
       angle += increase;
@@ -187,12 +176,32 @@ export default class SineWave extends Component {
         .attr('x2', dot.attr('cx'))
         .attr('y2', dot.attr('cy'));
 
-      requestAnimationFrame(drawGraph);
+      setTimeout(drawGraph.bind(this), 35);
     };
 
-    drawGraph();
+    drawGraph.call(this);
+
 
     return circleGroup;
+  }
+
+  drawSineWave(container, xTickValues, xScale, yScale, t) {
+    const xValues = xTickValues.map(x => x);
+
+    const sineData = xValues.map((x) => {
+      return {x: x, y: Math.sin(x)};
+    });
+
+    const sine = d3.svg.line()
+            .interpolate('monotone')
+            .x( (d) => {return xScale(d.x);})
+            .y( (d) => {return yScale(d.y);});
+
+    container.append('path')
+      .datum(sineData)
+      .attr('class', 'sine-curve')
+      .attr('d', sine);
+
   }
 
   render(el, props){
