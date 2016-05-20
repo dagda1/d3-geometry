@@ -186,10 +186,12 @@ export default class SineWave extends Component {
   }
 
   drawSineWave(container, xTickValues, xScale, yScale, t) {
+    d3.select('.sine-curve').remove();
+
     const xValues = xTickValues.map(x => x);
 
     const sineData = xValues.map((x) => {
-      return {x: x, y: Math.sin(x)};
+      return {x: x, y: Math.sin(x - t)};
     });
 
     const sine = d3.svg.line()
