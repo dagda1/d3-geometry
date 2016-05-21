@@ -142,11 +142,11 @@ export default class SineWave extends Component {
     let angle = 0;
 
     function drawGraph() {
-      this.drawSineWave(circleGroup, xTickValues, xScaleAxis, yScaleAxis, angle);
-
       const increase = ((Math.PI * 2) / 360);
 
       angle += increase;
+
+      this.drawSineWave(circleGroup, xTickValues, xScaleAxis, yScaleAxis, angle);
 
       const newX = radius * Math.cos(angle);
       const newY = radius * Math.sin(angle);
@@ -176,7 +176,7 @@ export default class SineWave extends Component {
         .attr('x2', dot.attr('cx'))
         .attr('y2', dot.attr('cy'));
 
-      setTimeout(drawGraph.bind(this), 35);
+      requestAnimationFrame(drawGraph.bind(this));
     };
 
     drawGraph.call(this);
@@ -188,7 +188,7 @@ export default class SineWave extends Component {
   drawSineWave(container, xTickValues, xScale, yScale, t) {
     d3.select('.sine-curve').remove();
 
-    const xValues = xTickValues.map(x => x);
+    const xValues = d3.range(0, 83).map(x => x * 10 /84);
 
     const sineData = xValues.map((x) => {
       return {x: x, y: Math.sin(x - t)};
@@ -203,7 +203,6 @@ export default class SineWave extends Component {
       .datum(sineData)
       .attr('class', 'sine-curve')
       .attr('d', sine);
-
   }
 
   render(el, props){
