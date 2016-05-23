@@ -16,6 +16,8 @@ import LineEquation from './components/equation-of-a-line';
 import FunctionContainer from "./components/functions-container";
 import SineContainer from "./components/sine-container";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 require("../app/styles/style.scss");
 
 const reducer = combineReducers(Object.assign({}, reducers, {

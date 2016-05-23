@@ -16,3 +16,14 @@
   stroke-width: 1;
 	fill: none;
 }
+
+.axis {
+  font: 15pt sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}

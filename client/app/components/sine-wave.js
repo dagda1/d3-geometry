@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+import math from 'mathjs';
+
 import {
   viewPortFromElement
 } from "../utils/dom";
@@ -30,6 +32,31 @@ export default class SineWave extends Component {
             .attr("height", dimensions.height);
 
     const circleGroup = this.addCircleGroup(svg, xScale, yScale);
+
+    setTimeout(() => {
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+
+      MathJax.Hub.Register.StartupHook("End", function() {
+        setTimeout(() => {
+          svg.selectAll('.x.left>.tick').each(function(){
+            var self = d3.select(this),
+                g = self.select('text svg');
+
+            g.remove();
+            self.append(function(){
+              return g.node();
+            });
+          });
+        }, 500);
+      });
+
+  MathJax.Hub.Queue(["Typeset", MathJax.Hub, svg.node()]);
+    }, 500);
   }
 
   resize() {
@@ -79,10 +106,14 @@ export default class SineWave extends Component {
 
     const xTickValues = [0, 1.57, 3.14, 4.71, 6.28];
 
+    const piMap = {'0': '0', '1.57': '\\pi\\over 2', '3.14': '\\pi', '4.71': '3\\pi\\over 2', '6.28': '2\\pi'};
+
     const xAxis = d3.svg.axis()
             .orient('bottom')
             .tickValues(xTickValues)
-            .tickFormat(d3.format('.2f'))
+            .innerTickSize(0)
+            .outerTickSize(0)
+            .tickFormat((x) => `$${piMap[x]}$`)
             .scale(xScaleAxis);
 
     circleGroup
@@ -146,7 +177,7 @@ export default class SineWave extends Component {
 
       angle += increase;
 
-      this.drawSineWave(circleGroup, xTickValues, xScaleAxis, yScaleAxis, angle);
+      this.drawSineWave(circleGroup, xScaleAxis, yScaleAxis, angle);
 
       const newX = radius * Math.cos(angle);
       const newY = radius * Math.sin(angle);
@@ -185,10 +216,10 @@ export default class SineWave extends Component {
     return circleGroup;
   }
 
-  drawSineWave(container, xTickValues, xScale, yScale, t) {
+  drawSineWave(container, xScale, yScale, t) {
     d3.select('.sine-curve').remove();
 
-    const xValues = d3.range(0, 83).map(x => x * 10 /84);
+    const xValues = d3.range(0, 84).map(x => x * 10 /100);
 
     const sineData = xValues.map((x) => {
       return {x: x, y: Math.sin(x - t)};
