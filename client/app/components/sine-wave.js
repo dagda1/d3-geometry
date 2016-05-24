@@ -31,7 +31,9 @@ export default class SineWave extends Component {
             .attr("width", dimensions.width)
             .attr("height", dimensions.height);
 
-    const circleGroup = this.addCircleGroup(svg, xScale, yScale);
+    const state = this.addCircleGroup(svg, xScale, yScale);
+
+    this.addSineAxis(state);
 
     setTimeout(() => {
       MathJax.Hub.Config({
@@ -43,19 +45,21 @@ export default class SineWave extends Component {
 
       MathJax.Hub.Register.StartupHook("End", function() {
         setTimeout(() => {
-          svg.selectAll('.x.left>.tick').each(function(){
+          svg.selectAll('.tick').each(function(){
             var self = d3.select(this),
-                g = self.select('text svg');
+                 g = self.select('text>span>svg');
 
-            g.remove();
-            self.append(function(){
-              return g.node();
-            });
+            if(g[0][0] && g[0][0].tagName === 'svg') {
+              g.remove();
+              self.append(function(){
+                return g.node();
+              });
+            }
           });
         }, 500);
       });
 
-  MathJax.Hub.Queue(["Typeset", MathJax.Hub, svg.node()]);
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub, svg.node()]);
     }, 500);
   }
 
@@ -67,42 +71,20 @@ export default class SineWave extends Component {
       .attr('height', dimensions.height);
   }
 
-  addCircleGroup(container, xScale, yScale) {
-    const x = xScale(12);
-    const y = yScale(15);
-
-    const circleGroup = container.append("g")
-            .attr("class", "circle-container")
-            .attr('transform', `translate(${x}, ${y})`);
-
+  addSineAxis(state) {
     const intTickFormat = d3.format('d');
-
-    const yScaleAxis = d3.scale.linear()
-            .domain([-1, 1])
-            .range([radius, -radius]);
 
     const yAxis = d3.svg.axis()
             .orient('left')
             .tickValues([-1, 0, 1])
             .tickFormat(intTickFormat)
-            .scale(yScaleAxis);
+            .scale(state.yScaleAxis);
 
-    circleGroup
-      .append('g')
-      .attr('class', 'y axis')
-      .call(yAxis);
-
-    const firstAxisXCoord = -(radius * 1.5);
-
-    circleGroup
+    state.circleGroup
       .append('g')
       .attr('class', 'y axis left')
-      .attr("transform", `translate(${firstAxisXCoord}, 0)`)
+      .attr("transform", `translate(${state.firstAxisXCoord}, 0)`)
       .call(yAxis);
-
-    const xScaleAxis = d3.scale.linear()
-            .domain([0, (Math.PI * 2)])
-            .range([firstAxisXCoord, -x + 20]);
 
     const xTickValues = [0, 1.57, 3.14, 4.71, 6.28];
 
@@ -114,12 +96,23 @@ export default class SineWave extends Component {
             .innerTickSize(0)
             .outerTickSize(0)
             .tickFormat((x) => `$${piMap[x]}$`)
-            .scale(xScaleAxis);
+            .scale(state.xScaleAxis);
 
-    circleGroup
+    state.circleGroup
       .append('g')
       .attr('class', 'x axis left')
       .call(xAxis);
+  }
+
+  addCircleGroup(container, xScale, yScale) {
+    const initialX = xScale(12);
+    const initialY = yScale(15);
+
+    const firstAxisXCoord = -(radius * 1.5);
+
+    const circleGroup = container.append("g")
+            .attr("class", "circle-container")
+            .attr('transform', `translate(${initialX}, ${initialY})`);
 
     circleGroup.append('circle')
       .attr('cx', 0)
@@ -127,6 +120,32 @@ export default class SineWave extends Component {
       .attr('r', radius)
       .attr('class', 'outer-circle')
       .style('fill', 'none');
+
+    [
+      {val: Math.PI/4, label: "$\\frac" + "{\\pi}4$"},
+      {val: Math.PI/2, label: "$\\frac" + "{\\pi}2$"},
+      {val: (3 * Math.PI) / 4, label: "$\\frac" + "{3\\pi}4$"},
+      {val: Math.PI, label: "$\\pi$"},
+      {val: (5 * Math.PI) / 4, label: "$\\frac" + "{5\\pi}4$"},
+      {val: (3 * Math.PI) / 2, label: "$\\frac" + "{3\\pi}2$"},
+      {val: (7 * Math.PI) / 4, label: "$\\frac" + "{7\\pi}4$"},
+      {val: (2 * Math.PI), label: "${2\\pi}$"},
+    ].forEach((ray) => {
+      const cosX = radius * Math.cos(ray.val);
+      const sinY = radius * -Math.sin(ray.val);
+
+      circleGroup.append('g')
+        .attr('class', 'tick')
+        .attr('transform', `translate(${cosX}, ${sinY})`)
+        .append('text')
+        .text(() => ray.label);
+
+      circleGroup.append('line')
+        .attr('x1', 0)
+        .attr('y1', 0)
+        .attr('x2', cosX)
+        .attr('y2', sinY);
+    });
 
     const guideLine = circleGroup.append('line')
             .attr('class', 'line')
@@ -170,7 +189,24 @@ export default class SineWave extends Component {
             .attr('x2', 0)
             .attr('y2', 0);
 
+    const yScaleAxis = d3.scale.linear()
+            .domain([-1, 1])
+            .range([radius, -radius]);
+
+    const xScaleAxis = d3.scale.linear()
+            .domain([0, (Math.PI * 2)])
+            .range([firstAxisXCoord, -initialX + 20]);
+
     let angle = 0;
+
+    const state = {
+      initialX: initialX,
+      initialY: initialY,
+      firstAxisXCoord: firstAxisXCoord,
+      circleGroup: circleGroup,
+      xScaleAxis: xScaleAxis,
+      yScaleAxis: yScaleAxis
+    };
 
     function drawGraph() {
       const increase = ((Math.PI * 2) / 360);
@@ -212,8 +248,7 @@ export default class SineWave extends Component {
 
     drawGraph.call(this);
 
-
-    return circleGroup;
+    return state;
   }
 
   drawSineWave(container, xScale, yScale, t) {
