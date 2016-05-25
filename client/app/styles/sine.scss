@@ -5,14 +5,19 @@
 .outer-circle,
 .line,
 .circle-guide,
-.outside-line,
-.vertical-guide,
-.joining-line{
+.vertical-guide{
   stroke: steelblue
 }
 
+.adjacent,
+.guide-line,
+.joining-line,
+.opposite {
+  stroke: red;
+}
+
 .sine-curve {
-  stroke: steelblue;
+  stroke: red;
   stroke-width: 1;
 	fill: none;
 }

@@ -148,21 +148,21 @@ export default class SineWave extends Component {
     });
 
     const guideLine = circleGroup.append('line')
-            .attr('class', 'line')
+            .attr('class', 'guide-line')
             .attr('x1', 0)
             .attr('y1', 0)
             .attr('x2', radius)
             .attr('y2', 0);
 
     const opposite = circleGroup.append('line')
-            .attr('class', 'line')
+            .attr('class', 'opposite')
             .attr('x1', 0)
             .attr('y1', 0)
             .attr('x2', 0)
             .attr('y2', 0);
 
     const adjacent = circleGroup.append('line')
-            .attr('class', 'line')
+            .attr('class', 'adjacent')
             .attr('x1', 0)
             .attr('y1', 0)
             .attr('x2', 0)
@@ -183,7 +183,7 @@ export default class SineWave extends Component {
             .attr('fill-opacity', 0.1);
 
     const joiningLine = circleGroup.append('line')
-            .attr('class', 'line joining-line')
+            .attr('class', 'joining-line')
             .attr('x1', firstAxisXCoord)
             .attr('y1', 0)
             .attr('x2', 0)
