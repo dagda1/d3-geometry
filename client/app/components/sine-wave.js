@@ -197,7 +197,7 @@ export default class SineWave extends Component {
             .domain([0, (Math.PI * 2)])
             .range([firstAxisXCoord, -initialX + 20]);
 
-    let angle = 0;
+    let time = 0;
 
     const state = {
       initialX: initialX,
@@ -211,12 +211,12 @@ export default class SineWave extends Component {
     function drawGraph() {
       const increase = ((Math.PI * 2) / 360);
 
-      angle += increase;
+      time += increase;
 
-      this.drawSineWave(circleGroup, xScaleAxis, yScaleAxis, angle);
+      this.drawSineWave(circleGroup, xScaleAxis, yScaleAxis, time);
 
-      const newX = radius * Math.cos(angle);
-      const newY = radius * Math.sin(angle);
+      const newX = radius * Math.cos(time);
+      const newY = radius * -Math.sin(time); // counter clockwise
 
       dot
         .attr('cx', newX)
@@ -254,10 +254,10 @@ export default class SineWave extends Component {
   drawSineWave(container, xScale, yScale, t) {
     d3.select('.sine-curve').remove();
 
-    const xValues = d3.range(0, 84).map(x => x * 10 /100);
+    const xValues = d3.range(0,84).map(x => x * 10 /100);
 
     const sineData = xValues.map((x) => {
-      return {x: x, y: Math.sin(x - t)};
+      return {x: x, y: - Math.sin(x - t)};
     });
 
     const sine = d3.svg.line()
