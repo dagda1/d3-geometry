@@ -7,7 +7,6 @@ import {
   viewPortFromElement
 } from "../utils/dom";
 
-
 require("../styles/sine.scss");
 
 const radius = 90;
@@ -31,7 +30,7 @@ export default class SineWave extends Component {
             .attr("width", dimensions.width)
             .attr("height", dimensions.height);
 
-    const state = this.addCircleGroup(svg, xScale, yScale);
+    const state = this.addGraphContainer(svg, xScale, yScale);
 
     this.addSineAxis(state);
 
@@ -80,7 +79,7 @@ export default class SineWave extends Component {
             .tickFormat(intTickFormat)
             .scale(state.yScaleAxis);
 
-    state.circleGroup
+    state.graphContainer
       .append('g')
       .attr('class', 'y axis left')
       .attr("transform", `translate(${state.firstAxisXCoord}, 0)`)
@@ -98,23 +97,23 @@ export default class SineWave extends Component {
             .tickFormat((x) => `$${piMap[x]}$`)
             .scale(state.xScaleAxis);
 
-    state.circleGroup
+    state.graphContainer
       .append('g')
       .attr('class', 'x axis left')
       .call(xAxis);
   }
 
-  addCircleGroup(container, xScale, yScale) {
+  addGraphContainer(container, xScale, yScale) {
     const initialX = xScale(12);
     const initialY = yScale(15);
 
     const firstAxisXCoord = -(radius * 1.5);
 
-    const circleGroup = container.append("g")
+    const graphContainer = container.append("g")
             .attr("class", "circle-container")
             .attr('transform', `translate(${initialX}, ${initialY})`);
 
-    circleGroup.append('circle')
+    graphContainer.append('circle')
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', radius)
@@ -134,55 +133,55 @@ export default class SineWave extends Component {
       const cosX = radius * Math.cos(ray.val);
       const sinY = radius * -Math.sin(ray.val);
 
-      circleGroup.append('g')
+      graphContainer.append('g')
         .attr('class', 'tick')
         .attr('transform', `translate(${cosX}, ${sinY})`)
         .append('text')
         .text(() => ray.label);
 
-      circleGroup.append('line')
+      graphContainer.append('line')
         .attr('x1', 0)
         .attr('y1', 0)
         .attr('x2', cosX)
         .attr('y2', sinY);
     });
 
-    const hypotenuse = circleGroup.append('line')
+    const hypotenuse = graphContainer.append('line')
             .attr('class', 'hypotenuse')
             .attr('x1', 0)
             .attr('y1', 0)
             .attr('x2', 0)
             .attr('y2', 0);
 
-    const opposite = circleGroup.append('line')
+    const opposite = graphContainer.append('line')
             .attr('class', 'opposite')
             .attr('x1', 0)
             .attr('y1', 0)
             .attr('x2', 0)
             .attr('y2', 0);
 
-    const adjacent = circleGroup.append('line')
+    const adjacent = graphContainer.append('line')
             .attr('class', 'adjacent')
             .attr('x1', 0)
             .attr('y1', 0)
             .attr('x2', 0)
             .attr('y2', 0);
 
-    const dot = circleGroup.append('circle')
+    const dot = graphContainer.append('circle')
             .attr('cx', radius)
             .attr('cy', 0)
             .attr('r', 5)
             .attr('class', 'circle-guide')
             .attr('fill-opacity', 0.1);
 
-    const verticalDot = circleGroup.append('circle')
+    const verticalDot = graphContainer.append('circle')
             .attr('cx', 0)
             .attr('cy', 0)
             .attr('r', 5)
             .attr('class', 'vertical-guide')
             .attr('fill-opacity', 0.1);
 
-    const joiningLine = circleGroup.append('line')
+    const joiningLine = graphContainer.append('line')
             .attr('class', 'joining-line')
             .attr('x1', firstAxisXCoord)
             .attr('y1', 0)
@@ -203,7 +202,7 @@ export default class SineWave extends Component {
       initialX: initialX,
       initialY: initialY,
       firstAxisXCoord: firstAxisXCoord,
-      circleGroup: circleGroup,
+      graphContainer: graphContainer,
       xScaleAxis: xScaleAxis,
       yScaleAxis: yScaleAxis,
       dot: dot,
@@ -273,7 +272,7 @@ export default class SineWave extends Component {
             .x( (d) => {return state.xScaleAxis(d.x);})
             .y( (d) => {return state.yScaleAxis(d.y);});
 
-    state.circleGroup.append('path')
+    state.graphContainer.append('path')
       .datum(sineData)
       .attr('class', 'sine-curve')
       .attr('d', sine);
