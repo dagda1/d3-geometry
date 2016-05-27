@@ -205,68 +205,75 @@ export default class SineWave extends Component {
       firstAxisXCoord: firstAxisXCoord,
       circleGroup: circleGroup,
       xScaleAxis: xScaleAxis,
-      yScaleAxis: yScaleAxis
+      yScaleAxis: yScaleAxis,
+      dot: dot,
+      opposite: opposite,
+      adjacent: adjacent,
+      hypotenuse: hypotenuse,
+      joiningLine, joiningLine,
+      verticalDot: verticalDot,
+      time: time
     };
 
-    function drawGraph() {
-      const increase = ((Math.PI * 2) / 360);
-
-      time += increase;
-
-      this.drawSineWave(circleGroup, xScaleAxis, yScaleAxis, time);
-
-      const dx = radius * Math.cos(time);
-      const dy = radius * -Math.sin(time); // counter clockwise
-
-      dot
-        .attr('cx', dx)
-        .attr('cy', dy);
-
-      hypotenuse
-        .attr('x2', dx)
-        .attr('y2', dy);
-
-      opposite
-        .attr('x1', dx)
-        .attr('y1', dy)
-        .attr('x2', dx)
-        .attr('y2', 0);
-
-      adjacent
-        .attr('x1', dx)
-        .attr('y1', 0);
-
-      verticalDot
-        .attr('cy', dy);
-
-      joiningLine
-        .attr('y1', dot.attr('cy'))
-        .attr('x2', dot.attr('cx'))
-        .attr('y2', dot.attr('cy'));
-
-      requestAnimationFrame(drawGraph.bind(this));
-    };
-
-    drawGraph.call(this);
+    this.drawGraph(state);
 
     return state;
   }
 
-  drawSineWave(container, xScale, yScale, t) {
+  drawGraph(state) {
+    const increase = ((Math.PI * 2) / 360);
+
+    state.time += increase;
+
+    this.drawSineWave(state);
+
+    const dx = radius * Math.cos(state.time);
+    const dy = radius * -Math.sin(state.time); // counter clockwise
+
+    state.dot
+      .attr('cx', dx)
+      .attr('cy', dy);
+
+    state.hypotenuse
+      .attr('x2', dx)
+      .attr('y2', dy);
+
+    state.opposite
+      .attr('x1', dx)
+      .attr('y1', dy)
+      .attr('x2', dx)
+      .attr('y2', 0);
+
+    state.adjacent
+      .attr('x1', dx)
+      .attr('y1', 0);
+
+    state.verticalDot
+      .attr('cy', dy);
+
+    state.joiningLine
+      .attr('y1', state.dot.attr('cy'))
+      .attr('x2', state.dot.attr('cx'))
+      .attr('y2', state.dot.attr('cy'));
+
+    requestAnimationFrame(this.drawGraph.bind(this, state));
+  }
+
+  drawSineWave(state) {
     d3.select('.sine-curve').remove();
 
     const xValues = d3.range(0,84).map(x => x * 10 /100);
 
     const sineData = xValues.map((x) => {
-      return {x: x, y: - Math.sin(x - t)};
+      return {x: x, y: - Math.sin(x - state.time)};
     });
 
     const sine = d3.svg.line()
             .interpolate('monotone')
-            .x( (d) => {return xScale(d.x);})
-            .y( (d) => {return yScale(d.y);});
+            .x( (d) => {return state.xScaleAxis(d.x);})
+            .y( (d) => {return state.yScaleAxis(d.y);});
 
-    container.append('path')
+    state.circleGroup.append('path')
       .datum(sineData)
       .attr('class', 'sine-curve')
       .attr('d', sine);
