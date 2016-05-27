@@ -7,6 +7,10 @@ import {
   viewPortFromElement
 } from "../utils/dom";
 
+import {
+  wait
+} from "../utils/common";
+
 require("../styles/sine.scss");
 
 const radius = 90;
@@ -34,32 +38,7 @@ export default class SineWave extends Component {
 
     this.addSineAxis(state);
 
-    setTimeout(() => {
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-          processEscapes: true
-        }
-      });
-
-      MathJax.Hub.Register.StartupHook("End", function() {
-        setTimeout(() => {
-          svg.selectAll('.tick').each(function(){
-            var self = d3.select(this),
-                 g = self.select('text>span>svg');
-
-            if(g[0][0] && g[0][0].tagName === 'svg') {
-              g.remove();
-              self.append(function(){
-                return g.node();
-              });
-            }
-          });
-        }, 500);
-      });
-
-      MathJax.Hub.Queue(["Typeset", MathJax.Hub, svg.node()]);
-    }, 500);
+    this.addMathJax(svg);
   }
 
   resize() {
@@ -105,7 +84,7 @@ export default class SineWave extends Component {
 
   addGraphContainer(container, xScale, yScale) {
     const initialX = xScale(12);
-    const initialY = yScale(15);
+    const initialY = yScale(13);
 
     const firstAxisXCoord = -(radius * 1.5);
 
@@ -117,34 +96,10 @@ export default class SineWave extends Component {
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', radius)
-      .attr('class', 'outer-circle')
+      .attr('class', 'unit-circle')
       .style('fill', 'none');
 
-    [
-      {val: Math.PI/4, label: "$\\frac" + "{\\pi}4$"},
-      {val: Math.PI/2, label: "$\\frac" + "{\\pi}2$"},
-      {val: (3 * Math.PI) / 4, label: "$\\frac" + "{3\\pi}4$"},
-      {val: Math.PI, label: "$\\pi$"},
-      {val: (5 * Math.PI) / 4, label: "$\\frac" + "{5\\pi}4$"},
-      {val: (3 * Math.PI) / 2, label: "$\\frac" + "{3\\pi}2$"},
-      {val: (7 * Math.PI) / 4, label: "$\\frac" + "{7\\pi}4$"},
-      {val: (2 * Math.PI), label: "${2\\pi}$"},
-    ].forEach((ray) => {
-      const cosX = radius * Math.cos(ray.val);
-      const sinY = radius * -Math.sin(ray.val);
-
-      graphContainer.append('g')
-        .attr('class', 'tick')
-        .attr('transform', `translate(${cosX}, ${sinY})`)
-        .append('text')
-        .text(() => ray.label);
-
-      graphContainer.append('line')
-        .attr('x1', 0)
-        .attr('y1', 0)
-        .attr('x2', cosX)
-        .attr('y2', sinY);
-    });
+    this.addRadianNumberLine(graphContainer);
 
     const hypotenuse = graphContainer.append('line')
             .attr('class', 'hypotenuse')
@@ -168,18 +123,16 @@ export default class SineWave extends Component {
             .attr('y2', 0);
 
     const dot = graphContainer.append('circle')
+            .attr('class', 'dot')
             .attr('cx', radius)
             .attr('cy', 0)
-            .attr('r', 5)
-            .attr('class', 'circle-guide')
-            .attr('fill-opacity', 0.1);
+            .attr('r', 5);
 
     const verticalDot = graphContainer.append('circle')
             .attr('cx', 0)
             .attr('cy', 0)
             .attr('r', 5)
-            .attr('class', 'vertical-guide')
-            .attr('fill-opacity', 0.1);
+            .attr('class', 'vertical-guide');
 
     const joiningLine = graphContainer.append('line')
             .attr('class', 'joining-line')
@@ -188,6 +141,12 @@ export default class SineWave extends Component {
             .attr('x2', 0)
             .attr('y2', 0);
 
+    const axisDot = graphContainer.append('circle')
+            .attr('cx', radius)
+            .attr('cy', 0)
+            .attr('r', 5)
+            .attr('class', 'axis-dot');
+
     const yScaleAxis = d3.scale.linear()
             .domain([-1, 1])
             .range([radius, -radius]);
@@ -195,8 +154,6 @@ export default class SineWave extends Component {
     const xScaleAxis = d3.scale.linear()
             .domain([0, (Math.PI * 2)])
             .range([firstAxisXCoord, -initialX + 20]);
-
-    let time = 0;
 
     const state = {
       initialX: initialX,
@@ -211,7 +168,9 @@ export default class SineWave extends Component {
       hypotenuse: hypotenuse,
       joiningLine, joiningLine,
       verticalDot: verticalDot,
-      time: time
+      axisDot: axisDot,
+      time: 0,
+      xIncrement: 0
     };
 
     this.drawGraph(state);
@@ -223,11 +182,22 @@ export default class SineWave extends Component {
     const increase = ((Math.PI * 2) / 360);
 
     state.time += increase;
+    state.xIncrement += increase;
 
     this.drawSineWave(state);
 
+    if(state.xIncrement > (Math.PI * 2)) {
+      state.xIncrement = increase;
+    }
+
+    const axisDotX = state.xScaleAxis(state.xIncrement);
+
+    state.axisDot
+      .attr('cx', axisDotX)
+      .attr('cy', 0);
+
     const dx = radius * Math.cos(state.time);
-    const dy = radius * -Math.sin(state.time); // counter clockwise
+    const dy = radius * -Math.sin(state.time); // counter-clockwise
 
     state.dot
       .attr('cx', dx)
@@ -255,17 +225,19 @@ export default class SineWave extends Component {
       .attr('x2', state.dot.attr('cx'))
       .attr('y2', state.dot.attr('cy'));
 
-    requestAnimationFrame(this.drawGraph.bind(this, state));
+    setTimeout(() => {
+      requestAnimationFrame(this.drawGraph.bind(this, state));
+    }, 0);
   }
 
   drawSineWave(state) {
     d3.select('.sine-curve').remove();
 
-    const xValues = d3.range(0,84).map(x => x * 10 /100);
-
-    const sineData = xValues.map((x) => {
-      return {x: x, y: - Math.sin(x - state.time)};
-    });
+    const sineData = d3.range(0, 54)
+            .map(x => x * 10 / 85)
+            .map((x) => {
+              return {x: x, y: - Math.sin(x - state.time)};
+            });
 
     const sine = d3.svg.line()
             .interpolate('monotone')
@@ -276,6 +248,66 @@ export default class SineWave extends Component {
       .datum(sineData)
       .attr('class', 'sine-curve')
       .attr('d', sine);
+  }
+
+  addRadianNumberLine(container) {
+    [
+      {val: Math.PI/4, label: "$\\frac" + "{\\pi}4$"},
+      {val: Math.PI/2, label: "$\\frac" + "{\\pi}2$"},
+      {val: (3 * Math.PI) / 4, label: "$\\frac" + "{3\\pi}4$"},
+      {val: Math.PI, label: "$\\pi$"},
+      {val: (5 * Math.PI) / 4, label: "$\\frac" + "{5\\pi}4$"},
+      {val: (3 * Math.PI) / 2, label: "$\\frac" + "{3\\pi}2$"},
+      {val: (7 * Math.PI) / 4, label: "$\\frac" + "{7\\pi}4$"},
+      {val: (2 * Math.PI), label: "${2\\pi}$"},
+    ].forEach((ray) => {
+      const cosX = radius * Math.cos(ray.val);
+      const sinY = radius * -Math.sin(ray.val);
+
+      const offsetX = (ray.val > Math.PI / 2 && ray.val < (3 * Math.PI) / 2)  ? -20 : -5;
+      const offsetY = (ray.val > 0 && ray.val < Math.PI)  ? -35 : 0;
+
+      container.append('g')
+        .attr('class', 'tick')
+        .attr('transform', `translate(${cosX + offsetX}, ${sinY + offsetY})`)
+        .append('text')
+        .text(() => ray.label);
+
+      container.append('line')
+        .attr('x1', 0)
+        .attr('y1', 0)
+        .attr('x2', cosX)
+        .attr('y2', sinY);
+    });
+  }
+
+  addMathJax(svg) {
+    setTimeout(() => {
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+
+      MathJax.Hub.Register.StartupHook("End", function() {
+        setTimeout(() => {
+          svg.selectAll('.tick').each(function(){
+            var self = d3.select(this),
+                 g = self.select('text>span>svg');
+
+            if(g[0][0] && g[0][0].tagName === 'svg') {
+              g.remove();
+              self.append(function(){
+                return g.node();
+              });
+            }
+          });
+        }, 500);
+      });
+
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub, svg.node()]);
+    }, 500);
   }
 
   render(el, props){

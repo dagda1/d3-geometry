@@ -2,24 +2,34 @@
   display: none;
 }
 
-.outer-circle,
+.unit-circle,
 .line,
-.circle-guide,
 .vertical-guide{
-  stroke: steelblue
+  stroke: steelblue;
 }
+
+.circle-guide,
+.vertical-guide,
+.dot,
+.axis-dot{
+  fill: steelblue;
+}
+
+$stroke-width: 2px;
+$stroke-colour: steelblue;
 
 .adjacent,
 .guide-line,
 .joining-line,
 .hypotenuse,
 .opposite {
-  stroke: red;
+  stroke: $stroke-colour;
+  stroke-width: $stroke-width;
 }
 
 .sine-curve {
-  stroke: red;
-  stroke-width: 1;
+  stroke: $stroke-colour;
+  stroke-width: $stroke-width;
 	fill: none;
 }
 
