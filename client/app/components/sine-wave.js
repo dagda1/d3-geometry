@@ -147,11 +147,11 @@ export default class SineWave extends Component {
         .attr('y2', sinY);
     });
 
-    const guideLine = circleGroup.append('line')
-            .attr('class', 'guide-line')
+    const hypotenuse = circleGroup.append('line')
+            .attr('class', 'hypotenuse')
             .attr('x1', 0)
             .attr('y1', 0)
-            .attr('x2', radius)
+            .attr('x2', 0)
             .attr('y2', 0);
 
     const opposite = circleGroup.append('line')
@@ -215,28 +215,29 @@ export default class SineWave extends Component {
 
       this.drawSineWave(circleGroup, xScaleAxis, yScaleAxis, time);
 
-      const newX = radius * Math.cos(time);
-      const newY = radius * -Math.sin(time); // counter clockwise
+      const dx = radius * Math.cos(time);
+      const dy = radius * -Math.sin(time); // counter clockwise
 
       dot
-        .attr('cx', newX)
-        .attr('cy', newY);
+        .attr('cx', dx)
+        .attr('cy', dy);
 
-      guideLine
-        .attr('x2', newX)
-        .attr('y2', newY);
+      hypotenuse
+        .attr('x2', dx)
+        .attr('y2', dy);
 
       opposite
-        .attr('y1', newY);
-
-      verticalDot
-        .attr('cy', newY);
+        .attr('x1', dx)
+        .attr('y1', dy)
+        .attr('x2', dx)
+        .attr('y2', 0);
 
       adjacent
-        .attr('x1', verticalDot.attr('cx'))
-        .attr('y1', verticalDot.attr('cy'))
-        .attr('x2', dot.attr('cx'))
-        .attr('y2', dot.attr('cy'));
+        .attr('x1', dx)
+        .attr('y1', 0);
+
+      verticalDot
+        .attr('cy', dy);
 
       joiningLine
         .attr('y1', dot.attr('cy'))
