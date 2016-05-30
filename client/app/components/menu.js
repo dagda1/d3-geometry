@@ -20,7 +20,7 @@ export default class Menu extends Component {
               <li className={this.props.location === '/' ? 'active' : ''}>
                 <Link to="/">Home</Link>
               </li>
-        <li className={['/sine', '/Triangles', '/equation-of-a-line'].indexOf(this.props.location) > -1 ? 'dropdown active' : 'dropdown'}>
+              <li className={['/sine', '/Triangles', '/equation-of-a-line'].indexOf(this.props.location) > -1 ? 'dropdown active' : 'dropdown'}>
                 <a tabIndex="0" data-toggle="dropdown" data-submenu="" aria-expanded="false">Geometry<span className="caret"></span>
                 </a>
                 <ul className="dropdown-menu">

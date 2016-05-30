@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import math from 'mathjs';
-
 import {
   viewPortFromElement
 } from "../utils/dom";
@@ -17,6 +15,12 @@ const radius = 90;
 
 export default class SineWave extends Component {
   componentDidMount() {
+    this.createDocument();
+
+    window.addEventListener("resize", _.debounce(this.resize.bind(this), 200));
+  }
+
+  createDocument() {
     const el = this.refs.sine;
 
     const dimensions = this.getDimensions();
@@ -42,11 +46,11 @@ export default class SineWave extends Component {
   }
 
   resize() {
-    const dimensions = this.getDimensions();
+    d3.select('.svg-container').remove();
 
-    d3.select('svg-container')
-      .attr('width', dimensions.width)
-      .attr('height', dimensions.height);
+    console.log('here');
+
+    setTimeout(this.createDocument.bind(this), 500);
   }
 
   addSineAxis(state) {
@@ -84,7 +88,7 @@ export default class SineWave extends Component {
 
   addGraphContainer(container, xScale, yScale) {
     const initialX = xScale(12);
-    const initialY = yScale(13);
+    const initialY = yScale(15);
 
     const firstAxisXCoord = -(radius * 1.5);
 
@@ -225,9 +229,7 @@ export default class SineWave extends Component {
       .attr('x2', state.dot.attr('cx'))
       .attr('y2', state.dot.attr('cy'));
 
-    setTimeout(() => {
-      requestAnimationFrame(this.drawGraph.bind(this, state));
-    }, 0);
+    requestAnimationFrame(this.drawGraph.bind(this, state));
   }
 
   drawSineWave(state) {
@@ -282,7 +284,7 @@ export default class SineWave extends Component {
   }
 
   addMathJax(svg) {
-    setTimeout(() => {
+    const continuation = () => {
       MathJax.Hub.Config({
         tex2jax: {
           inlineMath: [ ['$','$'], ["\\(","\\)"] ],
@@ -307,13 +309,16 @@ export default class SineWave extends Component {
       });
 
       MathJax.Hub.Queue(["Typeset", MathJax.Hub, svg.node()]);
-    }, 500);
+    };
+
+    wait((window.hasOwnProperty('MathJax')), continuation.bind(this));
   }
 
   render(el, props){
     return (
         <div className="row">
           <div className="row">
+            <h2 className="tick" className="col-xs-offset-3 col-md-offset-1">$\sin(x)$</h2>
             <div id="sine-wave" ref="sine">
             </div>
           </div>

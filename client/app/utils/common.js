@@ -1,5 +1,5 @@
 export function wait(condition, func, counter = 0) {
-  if(condition() || counter > 10) {
+  if(condition || counter > 10) {
     return func();
   }
 
