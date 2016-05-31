@@ -17,7 +17,9 @@ export default class SineWave extends Component {
   componentDidMount() {
     this.createDocument();
 
-    window.addEventListener("resize", _.debounce(this.resize.bind(this), 200));
+    this.resizeFunc = _.debounce(this.resize.bind(this), 200);
+
+    window.addEventListener("resize", this.resizeFunc);
   }
 
   createDocument() {
@@ -48,18 +50,14 @@ export default class SineWave extends Component {
   resize() {
     d3.select('.svg-container').remove();
 
-    console.log('here');
-
     setTimeout(this.createDocument.bind(this), 500);
   }
 
   addSineAxis(state) {
-    const intTickFormat = d3.format('d');
-
     const yAxis = d3.svg.axis()
             .orient('left')
             .tickValues([-1, 0, 1])
-            .tickFormat(intTickFormat)
+            .tickFormat(d3.format('d'))
             .scale(state.yScaleAxis);
 
     state.graphContainer
@@ -318,7 +316,7 @@ export default class SineWave extends Component {
     return (
         <div className="row">
           <div className="row">
-            <h2 className="tick" className="col-xs-offset-3 col-md-offset-1">$\sin(x)$</h2>
+            <h2 className="tick" className="col-xs-offset-3 col-md-offset-1">sin(x)</h2>
             <div id="sine-wave" ref="sine">
             </div>
           </div>
@@ -334,6 +332,10 @@ export default class SineWave extends Component {
       bottom: 50
     };
 
+    if(!d3.select("#sine-wave")[0]) {
+      return undefined;
+    }
+
     const width = parseInt(d3.select("#sine-wave").style("width"));
     const height =  Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
@@ -342,5 +344,11 @@ export default class SineWave extends Component {
       width,
       height
     };
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resizeFunc);
+
+    d3.select('.svg-container').remove();
   }
 };
