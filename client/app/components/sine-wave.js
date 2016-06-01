@@ -22,6 +22,12 @@ export default class SineWave extends Component {
     window.addEventListener("resize", this.resizeFunc);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resizeFunc);
+
+    d3.select('.svg-container').remove();
+  }
+
   createDocument() {
     const el = this.refs.sine;
 
@@ -158,19 +164,19 @@ export default class SineWave extends Component {
             .range([firstAxisXCoord, -initialX + 20]);
 
     const state = {
-      initialX: initialX,
-      initialY: initialY,
-      firstAxisXCoord: firstAxisXCoord,
-      graphContainer: graphContainer,
-      xScaleAxis: xScaleAxis,
-      yScaleAxis: yScaleAxis,
-      dot: dot,
-      opposite: opposite,
-      adjacent: adjacent,
-      hypotenuse: hypotenuse,
-      joiningLine, joiningLine,
-      verticalDot: verticalDot,
-      axisDot: axisDot,
+      initialX,
+      initialY,
+      firstAxisXCoord,
+      graphContainer,
+      xScaleAxis,
+      yScaleAxis,
+      dot,
+      opposite,
+      adjacent,
+      hypotenuse,
+      joiningLine,
+      verticalDot,
+      axisDot,
       time: 0,
       xIncrement: 0
     };
@@ -344,11 +350,5 @@ export default class SineWave extends Component {
       width,
       height
     };
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunc);
-
-    d3.select('.svg-container').remove();
   }
 };

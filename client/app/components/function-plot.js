@@ -54,10 +54,11 @@ export default class FunctionPlot extends Component {
     const dimensions = this.getDimensions();
 
     this.svg = d3.select(el).append("svg")
-          .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
-          .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
+      .attr('class', 'function-svg')
+      .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
+      .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
 
     this.xScale = d3.scale.linear()
           .range([0, dimensions.width]);
@@ -217,7 +218,7 @@ export default class FunctionPlot extends Component {
       .attr('class', 'curve')
       .attr('d', line);
 
-    d3.select('svg').on('mousemove', mouseMove);
+    d3.select('.function-svg').on('mousemove', mouseMove);
   }
 
   drawAxes(data) {
