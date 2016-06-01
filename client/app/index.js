@@ -15,6 +15,7 @@ import Triangles from './components/triangles';
 import LineEquation from './components/equation-of-a-line';
 import FunctionContainer from "./components/functions-container";
 import SineContainer from "./components/sine-container";
+import Sine2Container from "./components/sine2-container";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -37,6 +38,7 @@ ReactDOM.render(
         <Route path="equation-of-a-line" component={LineEquation}/>
         <Route path="functions" component={FunctionContainer}/>
         <Route path="sine" component={SineContainer}/>
+        <Route path="sine2" component={Sine2Container}/>
       </Route>
     </Router>
   </Provider>,
