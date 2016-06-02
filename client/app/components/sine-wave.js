@@ -31,7 +31,7 @@ export default class SineWave extends Component {
   createDocument() {
     const el = this.refs.sine;
 
-    const dimensions = this.getDimensions();
+    const dimensions = viewPortFromElement(el);
 
     const xScale = d3.scale.linear()
             .domain([0, 20])
@@ -328,27 +328,5 @@ export default class SineWave extends Component {
           </div>
         </div>
     );
-  }
-
-  getDimensions() {
-    const margin = {
-      top: 20,
-      right: 50,
-      left: 50,
-      bottom: 50
-    };
-
-    if(!d3.select("#sine-wave")[0]) {
-      return undefined;
-    }
-
-    const width = parseInt(d3.select("#sine-wave").style("width"));
-    const height =  Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-
-    return {
-      margin,
-      width,
-      height
-    };
   }
 };

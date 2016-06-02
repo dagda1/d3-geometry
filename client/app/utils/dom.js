@@ -8,13 +8,21 @@ export function availableViewPort() {
   };
 }
 
-export function viewPortFromElement(el) {
-  const availableHeight = (window.innerHeight - el.offsetTop) * 0.65;
 
-  const availableWidth = availableHeight * 1.24;
+export function viewPortFromElement(el) {
+  const margin = {
+    top: 20,
+    right: 50,
+    left: 50,
+    bottom: 50
+  };
+
+  const width = parseInt(el.offsetWidth);
+  const height =  Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
   return {
-    width: availableWidth,
-    height: availableHeight
+    margin,
+    width,
+    height
   };
 }
