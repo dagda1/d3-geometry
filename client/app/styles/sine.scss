@@ -1,6 +1,5 @@
-.circle-container .x.axis .tick:first-child, .y.axis .tick:nth-child(2) {
-  display: none;
-}
+$stroke-width: 2px;
+$stroke-colour: steelblue;
 
 .unit-circle,
 .line,
@@ -8,35 +7,52 @@
   stroke: steelblue;
 }
 
-.circle-guide,
-.vertical-guide,
-.dot,
-.axis-dot{
-  fill: steelblue;
+
+.sine2-container {
+  .graph-container {
+    .x.axis .tick:first-child {
+      display: none;
+    }
+  }
 }
 
-$stroke-width: 2px;
-$stroke-colour: steelblue;
+.sinewave-container {
+  .circle-container .x.axis .tick:first-child, .svg-container .y.axis .tick:nth-child(2) {
+  display: none;
+  }
 
-.adjacent,
-.guide-line,
-.joining-line,
-.hypotenuse,
-.opposite {
-  stroke: $stroke-colour;
-  stroke-width: $stroke-width;
+  .unit-circle,
+  .line,
+  .vertical-guide{
+    stroke: steelblue;
+  }
+
+  .circle-guide,
+  .vertical-guide,
+  .dot,
+  .axis-dot{
+    fill: steelblue;
+  }
+
+  .adjacent,
+  .guide-line,
+  .joining-line,
+  .hypotenuse,
+  .opposite {
+    stroke: $stroke-colour;
+    stroke-width: $stroke-width;
+  }
+
+  .sine-curve {
+    stroke: $stroke-colour;
+    stroke-width: $stroke-width;
+	  fill: none;
+  }
+
+  .circle-container .tick {
+    font: 15pt sans-serif;
+  }
 }
-
-.sine-curve {
-  stroke: $stroke-colour;
-  stroke-width: $stroke-width;
-	fill: none;
-}
-
-.tick {
-  font: 15pt sans-serif;
-}
-
 .axis path,
 .axis line {
   fill: none;

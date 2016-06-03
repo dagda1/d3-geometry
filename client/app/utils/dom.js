@@ -23,5 +23,5 @@ export function viewPortFromElement(el) {
   return {
     margin,
     width: 800,
-    height: 600
+    height: 400
   };}

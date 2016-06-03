@@ -25,7 +25,7 @@ export default class SineWave extends Component {
   componentWillUnmount() {
     window.removeEventListener("resize", this.resizeFunc);
 
-    d3.select('.svg-container').remove();
+    d3.select('.sinewave-container').remove();
   }
 
   createDocument() {
@@ -42,7 +42,7 @@ export default class SineWave extends Component {
             .range([dimensions.height, 0]);
 
     const svg = d3.select(el).append("svg")
-            .attr('class', 'svg-container')
+            .attr('class', 'sinewave-container')
             .attr("width", dimensions.width)
             .attr("height", dimensions.height);
 
@@ -54,7 +54,7 @@ export default class SineWave extends Component {
   }
 
   resize() {
-    d3.select('.svg-container').remove();
+    d3.select('.sinewave-container').remove();
 
     setTimeout(this.createDocument.bind(this), 500);
   }
