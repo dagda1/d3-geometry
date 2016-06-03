@@ -14,7 +14,7 @@ export default class Triangles extends Component {
 
   render() {
     return (
-        <div ref="triangleContainer" className="triangle-container"></div>
+        <div ref="triangleContainer" className="triangle-container col-lg-4"></div>
     );
   }
 };

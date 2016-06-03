@@ -12,17 +12,16 @@ export function availableViewPort() {
 export function viewPortFromElement(el) {
   const margin = {
     top: 20,
-    right: 50,
-    left: 50,
-    bottom: 50
+    right: 100,
+    bottom: 30,
+    left: 100
   };
 
-  const width = parseInt(el.offsetWidth);
-  const height =  Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  const width = el.offsetWidth;
+  const height =  el.offsetWidth;
 
   return {
     margin,
-    width,
-    height
-  };
-}
+    width: 800,
+    height: 600
+  };}
