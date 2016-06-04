@@ -11,8 +11,6 @@ import {
   wait
 } from "../utils/common";
 
-const radius = 90;
-
 class Sine extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +37,7 @@ class Sine extends Component {
 
     state.time = 0;
 
-    this.animateCircle(state, {forward: true});
+    //this.animateCircle(state, {forward: true});
   }
 
   animateCircle(state, direction) {
@@ -53,45 +51,45 @@ class Sine extends Component {
       state.time += increase;
       nextX = parseFloat(state.dot.attr('cx')) + state.time;
     } else {
-      console.log('here');
       state.time -= increase;
       nextX = parseFloat(state.dot.attr('cx')) - state.time;
     }
 
     state.dot.attr('cx', nextX);
 
-    if(direction.forward && state.time > 5.25) {
+   if(direction.forward && state.time > 5.25) {
       direction = {backwards: true};
     }
 
-    if(direction.backwards && state.time < 0) {
+    if(direction.backwards && (Math.floor(nextX) < (state.zeroPosition) + 7)) {
+      state.time = 0;
       direction = {forward: true};
+      state.dot.attr('cx', state.zeroPosition);
     }
     requestAnimationFrame(this.animateCircle.bind(this, state, direction));
   }
 
   addShapes(state) {
-    const radius = 150;
+    state.radius = 150;
 
-    const offset = 30;
+    const unitCircleCx = 0 - state.radius;
 
     state.unitCircle = state.graphContainer.append('circle')
-      .attr('cx', state.zeroPosition)
+      .attr('cx', unitCircleCx)
       .attr('cy', state.zeroPosition)
-      .attr('r', radius)
-      .attr('transform', `translate(${-radius + offset}, 0)`)
+      .attr('r', state.radius)
       .attr('class', 'unit-circle')
       .style('fill', 'none');
 
-    state.radius = state.graphContainer.append('line')
+    state.guidingLine = state.graphContainer.append('line')
             .attr('class', 'ln')
-            .attr('x1', state.zeroPosition)
+            .attr('x1', 0)
             .attr('y1', state.zeroPosition)
-            .attr('x2', state.zeroPosition - radius + offset)
+            .attr('x2', state.zeroPosition - state.radius)
             .attr('y2', state.zeroPosition);
 
     state.dot = state.graphContainer.append('circle')
-      .attr('cx', state.zeroPosition + offset)
+      .attr('cx', 0)
       .attr('cy', state.zeroPosition)
       .attr('class', 'x-circle')
       .attr('r', 10);
@@ -121,9 +119,6 @@ class Sine extends Component {
   }
 
   addAxis(container, dimensions) {
-    const graphContainer = container.append("g")
-            .attr("class", "graph-container");
-
     const xScale = d3.scale.linear()
             .domain([0, ((Math.PI * 2))])
             .range([0, (dimensions.width)]);
@@ -132,7 +127,9 @@ class Sine extends Component {
             .domain([-1.0, 1.0])
             .range([(dimensions.height - 100), 0]);
 
-    const xPosition = xScale(1.5);
+    const graphContainer = container.append("g")
+            .attr("class", "graph-container")
+            .attr('transform', `translate(${xScale(1.5)}, ${yScale(0.5)})`);
 
     const yAxis = d3.svg.axis()
             .tickValues([-1.0, -0.5, 0, 0.5, 1.0])
@@ -140,19 +137,16 @@ class Sine extends Component {
             .orient('left')
             .scale(yScale);
 
-    const yOffset = 10;
-
     graphContainer
       .append('g')
       .attr('class', 'y axis')
-      .attr('transform', `translate(${xPosition}, ${yOffset})`)
       .call(yAxis);
 
     const xTickValues = [0, 1.57, 3.14, 4.71, 6.28];
 
     const xAxis = d3.svg.axis()
             .tickValues(xTickValues)
-            .tickFormat((t) =>{
+            .tickFormat((t) => {
               return t === 0 ? '' : t;
             })
             .scale(xScale);
@@ -168,7 +162,7 @@ class Sine extends Component {
     graphContainer
       .append('g')
       .attr('class', 'x axis')
-      .attr('transform', `translate(${xPosition - 4}, ${zeroPosition + yOffset})`)
+      .attr('transform', `translate(0, ${zeroPosition})`)
       .call(xAxis);
 
     return {
@@ -177,7 +171,7 @@ class Sine extends Component {
       graphContainer,
       xAxis,
       yAxis,
-      zeroPosition: zeroPosition + yOffset
+      zeroPosition
     };
   }
 
