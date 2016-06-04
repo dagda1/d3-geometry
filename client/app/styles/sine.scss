@@ -1,6 +1,13 @@
 $stroke-width: 2px;
 $stroke-colour: steelblue;
 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
 .unit-circle,
 .line,
 .vertical-guide{
@@ -13,6 +20,11 @@ $stroke-colour: steelblue;
     .x.axis .tick:first-child {
       display: none;
     }
+  }
+
+  .ln {
+    stroke-width: 3px;
+    stroke: black;
   }
 }
 
@@ -52,10 +64,4 @@ $stroke-colour: steelblue;
   .circle-container .tick {
     font: 15pt sans-serif;
   }
-}
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
 }

@@ -33,32 +33,91 @@ class Sine extends Component {
             .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.top)
             .attr("transform", `translate(${dimensions.margin.left}, ${dimensions.margin.top})`);
 
-    const state = this.addAxis(svg, dimensions);
+    let state = this.addAxis(svg, dimensions);
 
-    this.addCircle(state);
+    state = this.addShapes(state);
+
+    state.time = 0;
+
+    this.animateCircle(state, {forward: true});
   }
 
-  addCircle(state) {
+  animateCircle(state, direction) {
+    const twoPI = (Math.PI *2);
+
+    const increase = (twoPI / 360);
+
+    let nextX;
+
+    if(direction.forward) {
+      state.time += increase;
+      nextX = parseFloat(state.dot.attr('cx')) + state.time;
+    } else {
+      console.log('here');
+      state.time -= increase;
+      nextX = parseFloat(state.dot.attr('cx')) - state.time;
+    }
+
+    state.dot.attr('cx', nextX);
+
+    if(direction.forward && state.time > 5.25) {
+      direction = {backwards: true};
+    }
+
+    if(direction.backwards && state.time < 0) {
+      direction = {forward: true};
+    }
+    requestAnimationFrame(this.animateCircle.bind(this, state, direction));
+  }
+
+  addShapes(state) {
     const radius = 150;
 
-    const unitCircle = state.graphContainer.append('circle')
-            .attr('cx', state.zeroPosition)
-            .attr('cy', state.zeroPosition)
-            .attr('r', radius)
-            .attr('transform', `translate(${-radius + 30}, 0)`)
-            .attr('class', 'unit-circle')
-            .style('fill', 'none');
+    const offset = 30;
 
-    const line = state.graphContainer.append('line')
+    state.unitCircle = state.graphContainer.append('circle')
+      .attr('cx', state.zeroPosition)
+      .attr('cy', state.zeroPosition)
+      .attr('r', radius)
+      .attr('transform', `translate(${-radius + offset}, 0)`)
+      .attr('class', 'unit-circle')
+      .style('fill', 'none');
+
+    state.radius = state.graphContainer.append('line')
+            .attr('class', 'ln')
             .attr('x1', state.zeroPosition)
             .attr('y1', state.zeroPosition)
-            .attr('x2', state.zeroPosition - radius + 30)
+            .attr('x2', state.zeroPosition - radius + offset)
             .attr('y2', state.zeroPosition);
 
-    const smallCircle = state.graphContainer.append('circle')
-            .attr('cx', state.zeroPosition + 30)
-            .attr('cy', state.zeroPosition)
-            .attr('r', 10)
+    state.dot = state.graphContainer.append('circle')
+      .attr('cx', state.zeroPosition + offset)
+      .attr('cy', state.zeroPosition)
+      .attr('class', 'x-circle')
+      .attr('r', 10);
+
+    state.hypotenuse = state.graphContainer.append('line')
+      .attr('class', 'hypotenuse')
+      .attr('x1', state.zeroPosition)
+      .attr('y1', state.zeroPosition)
+      .attr('x2', state.zeroPosition)
+      .attr('y2', state.zeroPosition);
+
+    state.opposite = state.graphContainer.append('line')
+            .attr('class', 'opposite')
+            .attr('x1', state.zeroPosition)
+            .attr('y1', state.zeroPosition)
+            .attr('x2', state.zeroPosition)
+            .attr('y2', state.zeroPosition);
+
+    state.adjacent = state.graphContainer.append('line')
+            .attr('class', 'adjacent')
+            .attr('x1', state.zeroPosition)
+            .attr('y1', state.zeroPosition)
+            .attr('x2', state.zeroPosition)
+            .attr('y2', state.zeroPosition);
+
+    return state;
   }
 
   addAxis(container, dimensions) {
@@ -113,6 +172,8 @@ class Sine extends Component {
       .call(xAxis);
 
     return {
+      xScale,
+      yScale,
       graphContainer,
       xAxis,
       yAxis,
