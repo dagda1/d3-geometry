@@ -43,19 +43,41 @@ class Sine extends Component {
   animateCircle(state, direction) {
     const twoPI = (Math.PI *2);
 
-    const increase = (twoPI / 360);
+    const increase = ((Math.PI * 2) / 360);
 
-    let nextX;
+    let nextX = parseFloat(state.unitCircle.attr('cx'));
 
     if(direction.forward) {
       state.time += increase;
-      nextX = parseFloat(state.dot.attr('cx')) + state.time;
+      nextX += state.time;
     } else {
       state.time -= increase;
-      nextX = parseFloat(state.dot.attr('cx')) - state.time;
+      nextX -= - state.time;
     }
 
-    state.dot.attr('cx', nextX);
+    state.unitCircle.attr('cx', nextX);
+
+    const dx = nextX + (state.radius * Math.cos(state.time));
+    const dy = state.radius * -Math.sin(state.time); // counter-clockwise
+
+    state.guidingLine
+      .attr('x1', nextX)
+      .attr('x2', dx)
+      .attr('y2', dy);
+
+    state.opposite
+      .attr('x1', dx)
+      .attr('y1', dy)
+      .attr('x2', dx)
+      .attr('y2', 0);
+
+    state.adjacent
+      .attr('x1', nextX)
+      .attr('x2', dx)
+      .attr('y2', 0);
+
+    state.dot
+      .attr('cx', parseFloat(state.dot.attr('cx')) + state.time);
 
     if(direction.forward && state.time > 5.25) {
       direction = {backwards: true};
@@ -67,7 +89,9 @@ class Sine extends Component {
       state.dot.attr('cx', 0);
     }
 
-    requestAnimationFrame(this.animateCircle.bind(this, state, direction));
+    setTimeout(() => {
+      requestAnimationFrame(this.animateCircle.bind(this, state, direction));
+    }, 20);
   }
 
   addShapes(state) {
@@ -75,46 +99,53 @@ class Sine extends Component {
 
     const unitCircleCx = 0 - state.radius;
 
-    state.unitCircle = state.graphContainer.append('circle')
-      .attr('cx', unitCircleCx)
-      .attr('cy', state.yAxisZero)
+    state.circleContainer = state.graphContainer.append('g')
+      .attr('transform', `translate(${unitCircleCx}, ${state.yAxisZero})`);
+
+    state.unitCircle = state.circleContainer.append('circle')
+      .attr('cx', 0)
+      .attr('cy', 0)
       .attr('r', state.radius)
       .attr('class', 'unit-circle')
       .style('fill', 'none');
 
-    state.guidingLine = state.graphContainer.append('line')
-            .attr('class', 'ln')
-            .attr('x1', unitCircleCx)
-            .attr('y1', state.yAxisZero)
-            .attr('x2', state.yAxisZero - state.radius)
-            .attr('y2', state.yAxisZero);
+    state.time = 0;
+    const increase = ((Math.PI * 2) / 360);
+    state.time += increase;
 
-    state.dot = state.graphContainer.append('circle')
+    state.guidingLine = state.circleContainer.append('line')
+      .attr('class', 'ln')
+      .attr('x1', 0)
+      .attr('y1', 0)
+      .attr('x2', state.radius)
+      .attr('y2', 0);
+
+    state.dot = state.xAxisGroup.append('circle')
       .attr('cx', 0)
-      .attr('cy', state.yAxisZero)
+      .attr('cy', 0)
       .attr('class', 'x-circle')
       .attr('r', 10);
 
-    state.hypotenuse = state.graphContainer.append('line')
-      .attr('class', 'hypotenuse')
+    state.hypotenuse = state.circleContainer.append('line')
+      .attr('class', 'hypotenuse ln')
       .attr('x1', 0)
       .attr('y1', 0)
       .attr('x2', 0)
       .attr('y2', 0);
 
-    state.opposite = state.graphContainer.append('line')
-            .attr('class', 'opposite')
-            .attr('x1', 0)
-            .attr('y1', 0)
-            .attr('x2', 0)
-            .attr('y2', 0);
+    state.opposite = state.circleContainer.append('line')
+      .attr('class', 'opposite ln')
+      .attr('x1', 0)
+      .attr('y1', 0)
+      .attr('x2', 0)
+      .attr('y2', 0);
 
-    state.adjacent = state.graphContainer.append('line')
-            .attr('class', 'adjacent')
-            .attr('x1', 0)
-            .attr('y1', 0)
-            .attr('x2', 0)
-            .attr('y2', 0);
+    state.adjacent = state.circleContainer.append('line')
+      .attr('class', 'adjacent ln')
+      .attr('x1', 0)
+      .attr('y1', 0)
+      .attr('x2', 0)
+      .attr('y2', 0);
 
     return state;
   }
@@ -138,10 +169,10 @@ class Sine extends Component {
             .orient('left')
             .scale(yScale);
 
-    graphContainer
-      .append('g')
-      .attr('class', 'y axis')
-      .call(yAxis);
+    const yAxisGroup = graphContainer
+            .append('g')
+            .attr('class', 'y axis')
+            .call(yAxis);
 
     const xTickValues = [0, 1.57, 3.14, 4.71, 6.28];
 
@@ -157,21 +188,21 @@ class Sine extends Component {
     };
 
     const yAxisZero = graphContainer.selectAll(".y.axis .tick").filter(findZeroTick).map((tick) => {
-        return d3.transform(d3.select(tick[0]).attr('transform')).translate[1];
+      return d3.transform(d3.select(tick[0]).attr('transform')).translate[1];
     })[0];
 
-    graphContainer
-      .append('g')
-      .attr('class', 'x axis')
-      .attr('transform', `translate(0, ${yAxisZero})`)
-      .call(xAxis);
+    const xAxisGroup = graphContainer
+            .append('g')
+            .attr('class', 'x axis')
+            .attr('transform', `translate(0, ${yAxisZero})`)
+            .call(xAxis);
 
     return {
       xScale,
       yScale,
       graphContainer,
-      xAxis,
-      yAxis,
+      xAxisGroup,
+      yAxisGroup,
       yAxisZero
     };
   }
@@ -179,9 +210,9 @@ class Sine extends Component {
   render(el, props) {
     return (
         <div className="row">
-          <div className="row">
-            <div id="sine" ref="sine"/>
-          </div>
+        <div className="row">
+        <div id="sine" ref="sine"/>
+        </div>
         </div>
     );
   }
