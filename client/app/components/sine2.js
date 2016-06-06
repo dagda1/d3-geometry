@@ -77,7 +77,9 @@ class Sine extends Component {
       .attr('y2', 0);
 
     state.dot
-      .attr('cx', parseFloat(state.dot.attr('cx')) + state.time);
+      .attr('cx', state.xScale(state.time));
+
+    console.log(state.time);
 
     if(direction.forward && state.time > 5.25) {
       direction = {backwards: true};
@@ -91,7 +93,7 @@ class Sine extends Component {
 
     setTimeout(() => {
       requestAnimationFrame(this.animateCircle.bind(this, state, direction));
-    }, 20);
+    }, 200);
   }
 
   addShapes(state) {
@@ -99,26 +101,12 @@ class Sine extends Component {
 
     const unitCircleCx = 0 - state.radius;
 
-    state.circleContainer = state.graphContainer.append('g')
-      .attr('transform', `translate(${unitCircleCx}, ${state.yAxisZero})`);
-
-    state.unitCircle = state.circleContainer.append('circle')
-      .attr('cx', 0)
+    state.unitCircle = state.xAxisGroup.append('circle')
+      .attr('cx', unitCircleCx)
       .attr('cy', 0)
       .attr('r', state.radius)
       .attr('class', 'unit-circle')
       .style('fill', 'none');
-
-    state.time = 0;
-    const increase = ((Math.PI * 2) / 360);
-    state.time += increase;
-
-    state.guidingLine = state.circleContainer.append('line')
-      .attr('class', 'ln')
-      .attr('x1', 0)
-      .attr('y1', 0)
-      .attr('x2', state.radius)
-      .attr('y2', 0);
 
     state.dot = state.xAxisGroup.append('circle')
       .attr('cx', 0)
@@ -126,21 +114,28 @@ class Sine extends Component {
       .attr('class', 'x-circle')
       .attr('r', 10);
 
-    state.hypotenuse = state.circleContainer.append('line')
+    state.guidingLine = state.xAxisGroup.append('line')
+      .attr('class', 'ln')
+      .attr('x1', unitCircleCx)
+      .attr('y1', 0)
+      .attr('x2', 0)
+      .attr('y2', 0);
+
+    state.hypotenuse = state.xAxisGroup.append('line')
       .attr('class', 'hypotenuse ln')
       .attr('x1', 0)
       .attr('y1', 0)
       .attr('x2', 0)
       .attr('y2', 0);
 
-    state.opposite = state.circleContainer.append('line')
+    state.opposite = state.xAxisGroup.append('line')
       .attr('class', 'opposite ln')
       .attr('x1', 0)
       .attr('y1', 0)
       .attr('x2', 0)
       .attr('y2', 0);
 
-    state.adjacent = state.circleContainer.append('line')
+    state.adjacent = state.xAxisGroup.append('line')
       .attr('class', 'adjacent ln')
       .attr('x1', 0)
       .attr('y1', 0)
