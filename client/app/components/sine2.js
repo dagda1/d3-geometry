@@ -45,50 +45,45 @@ class Sine extends Component {
 
     const increase = ((Math.PI * 2) / 360);
 
-    let nextX = parseFloat(state.unitCircle.attr('cx'));
-
     if(direction.forward) {
       state.time += increase;
-      nextX += state.time;
     } else {
       state.time -= increase;
-      nextX -= - state.time;
     }
 
-    state.unitCircle.attr('cx', nextX);
+    const nextX = state.xScale(state.time);
 
-    const dx = nextX + (state.radius * Math.cos(state.time));
-    const dy = state.radius * -Math.sin(state.time); // counter-clockwise
+    state.unitCircle.attr('cx', nextX - state.radius);
+
+    const dx = parseFloat(state.unitCircle.attr('cx')) + (state.radius * Math.cos(state.time));
+    const dy = parseFloat(state.unitCircle.attr('cy')) + (state.radius * -Math.sin(state.time));
 
     state.guidingLine
-      .attr('x1', nextX)
+      .attr('x1', nextX - state.radius)
       .attr('x2', dx)
       .attr('y2', dy);
 
-    state.opposite
-      .attr('x1', dx)
-      .attr('y1', dy)
-      .attr('x2', dx)
-      .attr('y2', 0);
+    // state.opposite
+    //   .attr('x1', dx)
+    //   .attr('y1', dy)
+    //   .attr('x2', dx)
+    //   .attr('y2', 0);
 
-    state.adjacent
-      .attr('x1', nextX)
-      .attr('x2', dx)
-      .attr('y2', 0);
+    // state.adjacent
+    //   .attr('x1', nextX)
+    //   .attr('x2', dx)
+    //   .attr('y2', 0);
 
-    state.dot
-      .attr('cx', state.xScale(state.time));
+    // state.dot
+    //   .attr('cx', nextX);
 
-    console.log(state.time);
-
-    if(direction.forward && state.time > 5.25) {
+    if(direction.forward && state.time > twoPI) {
       direction = {backwards: true};
     }
 
-    if(direction.backwards && (nextX < 5.26)) {
+    if(direction.backwards && state.time < 0) {
       state.time = 0;
       direction = {forward: true};
-      state.dot.attr('cx', 0);
     }
 
     setTimeout(() => {
