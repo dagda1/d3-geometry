@@ -26,6 +26,12 @@ $stroke-colour: steelblue;
     stroke-width: 3px;
     stroke: black;
   }
+
+  .sine-curve {
+    stroke: red;
+    stroke-width: $stroke-width;
+	  fill: none;
+  }
 }
 
 .sinewave-container {

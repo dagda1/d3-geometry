@@ -37,7 +37,27 @@ class Sine extends Component {
 
     state.time = 0;
 
-    this.animateCircle(state, {forward: true});
+    // this.animateCircle(state, {forward: true});
+
+    this.drawSineGraph(state);
+  }
+
+  drawSineGraph(state) {
+    const sineData = d3.range(0, 54)
+            .map(x => x * 10 / 85)
+            .map((x) => {
+              return {x: x, y: Math.sin(x)};
+            });
+
+    const sine = d3.svg.line()
+            .interpolate('monotone')
+            .x( (d) => {return state.xScale(d.x);})
+            .y( (d) => {return state.yScale(d.y + 1);});
+
+    state.xAxisGroup.append('path')
+      .datum(sineData)
+      .attr('class', 'sine-curve')
+      .attr('d', sine);
   }
 
   animateCircle(state, direction) {
