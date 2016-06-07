@@ -63,19 +63,19 @@ class Sine extends Component {
       .attr('x2', dx)
       .attr('y2', dy);
 
-    // state.opposite
-    //   .attr('x1', dx)
-    //   .attr('y1', dy)
-    //   .attr('x2', dx)
-    //   .attr('y2', 0);
+    state.opposite
+      .attr('x1', dx)
+      .attr('y1', dy)
+      .attr('x2', dx)
+      .attr('y2', 0);
 
-    // state.adjacent
-    //   .attr('x1', nextX)
-    //   .attr('x2', dx)
-    //   .attr('y2', 0);
+    state.adjacent
+      .attr('x1', nextX - state.radius)
+      .attr('x2', dx)
+      .attr('y2', 0);
 
-    // state.dot
-    //   .attr('cx', nextX);
+    state.dot
+      .attr('cx', dx);
 
     if(direction.forward && state.time > twoPI) {
       direction = {backwards: true};
@@ -88,7 +88,7 @@ class Sine extends Component {
 
     setTimeout(() => {
       requestAnimationFrame(this.animateCircle.bind(this, state, direction));
-    }, 200);
+    }, 0);
   }
 
   addShapes(state) {
