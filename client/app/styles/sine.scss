@@ -1,4 +1,5 @@
 $stroke-width: 2px;
+$thick-stroke-width: 5px;
 $stroke-colour: steelblue;
 
 .axis path,
@@ -33,9 +34,14 @@ $stroke-colour: steelblue;
 	  fill: none;
   }
 
-  .opposite, .hypotenuse {
+  .opposite, .hypotenuse{
     stroke: red;
-    stroke-width: 3px;
+    stroke-width: $thick-stroke-width;
+  }
+
+  .adjacent {
+    stroke: blue;
+    stroke-width: $thick-stroke-width;
   }
 }
 

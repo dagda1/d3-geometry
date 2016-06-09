@@ -79,8 +79,6 @@ class Sine extends Component {
 
     const nextX = state.xScale(state.time);
 
-    // state.unitCircle.attr('cx', nextX - state.radius);
-
     const dx = (state.radius * Math.cos(state.time));
     const dy = (state.radius * -Math.sin(state.time));
 
@@ -88,9 +86,11 @@ class Sine extends Component {
       .attr('cx', nextX);
 
     state.hypotenuse
-      .attr('x1', 0)
+      .attr('x1', nextX - dx)
       .attr('x2', nextX)
       .attr('y2', dy);
+
+    state.unitCircle.attr('cx', parseFloat(state.hypotenuse.attr('x1')));
 
     state.opposite
       .attr('x1', nextX)
@@ -98,9 +98,11 @@ class Sine extends Component {
       .attr('x2', nextX)
       .attr('y2', dy);
 
-    // state.adjacent
-    //   .attr('x1', dx)
-    //   .attr('y1', 0);
+    state.adjacent
+      .attr('x1', 0)
+      .attr('y1', 0)
+      .attr('x2', nextX)
+      .attr('y2', 0);
 
     if(direction.forward && state.time > TWO_PI) {
       direction = {backwards: true};
@@ -111,9 +113,7 @@ class Sine extends Component {
       direction = {forward: true};
     }
 
-    setTimeout(() => {
-      requestAnimationFrame(this.animateCircle.bind(this, state, direction));
-    }, 0)
+    requestAnimationFrame(this.animateCircle.bind(this, state, direction));
   }
 
   addShapes(state) {
@@ -142,14 +142,14 @@ class Sine extends Component {
       .attr('y2', 0);
 
     state.hypotenuse = state.xAxisGroup.append('line')
-      .attr('class', 'hypotenuse ln')
+      .attr('class', 'hypotenuse')
       .attr('x1', 0)
       .attr('y1', 0)
       .attr('x2', 0)
       .attr('y2', 0);
 
     state.opposite = state.xAxisGroup.append('line')
-      .attr('class', 'opposite ln')
+      .attr('class', 'opposite')
       .attr('x1', 0)
       .attr('y1', 0)
       .attr('x2', 0)
