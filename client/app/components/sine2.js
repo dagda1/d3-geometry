@@ -11,6 +11,8 @@ import {
   wait
 } from "../utils/common";
 
+const TWO_PI = (Math.PI *2);
+
 class Sine extends Component {
   constructor(props) {
     super(props);
@@ -31,23 +33,29 @@ class Sine extends Component {
             .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.top)
             .attr("transform", `translate(${dimensions.margin.left}, ${dimensions.margin.top})`);
 
-    let state = this.addAxis(svg, dimensions);
+    let state = this.initializeArea(svg, dimensions);
 
     state = this.addShapes(state);
 
     state.time = 0;
 
-    // this.animateCircle(state, {forward: true});
-
-    this.drawSineGraph(state);
+    this.animateCircle(state, {forward: true});
   }
 
-  drawSineGraph(state) {
-    const sineData = d3.range(0, 54)
+  drawSineGraph(state, direction) {
+    const increase = 54 / 1000;
+
+    state.sineIncrease = state.sineIncrease || 0;
+
+    state.sineIncrease += increase;
+
+    const sineData = d3.range(0, state.sineIncrease)
             .map(x => x * 10 / 85)
             .map((x) => {
               return {x: x, y: Math.sin(x)};
             });
+
+    state.nextCoord = {x: state.xScale(_.last(sineData).x), y: state.yScale(Math.sin(_.last(sineData).y) + 1)};
 
     const sine = d3.svg.line()
             .interpolate('monotone')
@@ -61,43 +69,40 @@ class Sine extends Component {
   }
 
   animateCircle(state, direction) {
-    const twoPI = (Math.PI *2);
-
-    const increase = ((Math.PI * 2) / 360);
-
     if(direction.forward) {
-      state.time += increase;
+      state.time += state.increase;
     } else {
-      state.time -= increase;
+      state.time -= state.increase;
     }
+
+    //this.drawSineGraph(state, direction);
 
     const nextX = state.xScale(state.time);
 
-    state.unitCircle.attr('cx', nextX - state.radius);
+    // state.unitCircle.attr('cx', nextX - state.radius);
 
-    const dx = parseFloat(state.unitCircle.attr('cx')) + (state.radius * Math.cos(state.time));
-    const dy = parseFloat(state.unitCircle.attr('cy')) + (state.radius * -Math.sin(state.time));
+    const dx = (state.radius * Math.cos(state.time));
+    const dy = (state.radius * -Math.sin(state.time));
 
-    state.guidingLine
-      .attr('x1', nextX - state.radius)
-      .attr('x2', dx)
+    state.dot
+      .attr('cx', nextX);
+
+    state.hypotenuse
+      .attr('x1', 0)
+      .attr('x2', nextX)
       .attr('y2', dy);
 
     state.opposite
-      .attr('x1', dx)
-      .attr('y1', dy)
-      .attr('x2', dx)
-      .attr('y2', 0);
+      .attr('x1', nextX)
+      .attr('y1', 0)
+      .attr('x2', nextX)
+      .attr('y2', dy);
 
-    state.adjacent
-      .attr('x1', nextX - state.radius)
-      .attr('x2', dx)
-      .attr('y2', 0);
+    // state.adjacent
+    //   .attr('x1', dx)
+    //   .attr('y1', 0);
 
-    state.dot
-      .attr('cx', dx);
-
-    if(direction.forward && state.time > twoPI) {
+    if(direction.forward && state.time > TWO_PI) {
       direction = {backwards: true};
     }
 
@@ -108,11 +113,11 @@ class Sine extends Component {
 
     setTimeout(() => {
       requestAnimationFrame(this.animateCircle.bind(this, state, direction));
-    }, 0);
+    }, 0)
   }
 
   addShapes(state) {
-    state.radius = 150;
+    state.radius = state.yScale(0);
 
     const unitCircleCx = 0 - state.radius;
 
@@ -160,7 +165,7 @@ class Sine extends Component {
     return state;
   }
 
-  addAxis(container, dimensions) {
+  initializeArea(container, dimensions) {
     const xScale = d3.scale.linear()
             .domain([0, ((Math.PI * 2))])
             .range([0, (dimensions.width)]);
@@ -213,16 +218,16 @@ class Sine extends Component {
       graphContainer,
       xAxisGroup,
       yAxisGroup,
-      yAxisZero
+      yAxisZero,
+      increase: ((Math.PI * 2) / 360)
     };
   }
 
   render(el, props) {
     return (
         <div className="row">
-        <div className="row">
-        <div id="sine" ref="sine"/>
-        </div>
+          <div className="row">
+            <div id="sine" ref="sine" className="col-lg-6"/></div>
         </div>
     );
   }

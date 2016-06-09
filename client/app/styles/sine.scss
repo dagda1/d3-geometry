@@ -32,6 +32,11 @@ $stroke-colour: steelblue;
     stroke-width: $stroke-width;
 	  fill: none;
   }
+
+  .opposite, .hypotenuse {
+    stroke: red;
+    stroke-width: 3px;
+  }
 }
 
 .sinewave-container {
