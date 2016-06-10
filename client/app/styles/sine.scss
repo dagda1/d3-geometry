@@ -30,11 +30,15 @@ $stroke-colour: steelblue;
 
   .sine-curve {
     stroke: red;
-    stroke-width: $stroke-width;
+    stroke-width: $thick-stroke-width;
 	  fill: none;
   }
 
-  .opposite, .hypotenuse{
+  .hypotenuse {
+    stroke-width: $thick-stroke-width;
+  }
+
+  .opposite{
     stroke: red;
     stroke-width: $thick-stroke-width;
   }

@@ -43,29 +43,13 @@ class Sine extends Component {
   }
 
   drawSineGraph(state, direction) {
-    const increase = 54 / 1000;
+    if(direction.forward) {
+      state.sineData.push(state.time);
+    } else {
+      state.sineData.pop();
+    }
 
-    state.sineIncrease = state.sineIncrease || 0;
-
-    state.sineIncrease += increase;
-
-    const sineData = d3.range(0, state.sineIncrease)
-            .map(x => x * 10 / 85)
-            .map((x) => {
-              return {x: x, y: Math.sin(x)};
-            });
-
-    state.nextCoord = {x: state.xScale(_.last(sineData).x), y: state.yScale(Math.sin(_.last(sineData).y) + 1)};
-
-    const sine = d3.svg.line()
-            .interpolate('monotone')
-            .x( (d) => {return state.xScale(d.x);})
-            .y( (d) => {return state.yScale(d.y + 1);});
-
-    state.xAxisGroup.append('path')
-      .datum(sineData)
-      .attr('class', 'sine-curve')
-      .attr('d', sine);
+    state.sineCurve.attr('d', state.sine(state.sineData));
   }
 
   animateCircle(state, direction) {
@@ -75,33 +59,31 @@ class Sine extends Component {
       state.time -= state.increase;
     }
 
-    //this.drawSineGraph(state, direction);
-
-    const nextX = state.xScale(state.time);
+    const xTo = state.xScale(state.time);
 
     const dx = (state.radius * Math.cos(state.time));
     const dy = (state.radius * -Math.sin(state.time));
 
     state.dot
-      .attr('cx', nextX);
+      .attr('cx', xTo);
 
     state.hypotenuse
-      .attr('x1', nextX - dx)
-      .attr('x2', nextX)
+      .attr('x1', xTo - dx)
+      .attr('x2', xTo)
       .attr('y2', dy);
 
     state.unitCircle.attr('cx', parseFloat(state.hypotenuse.attr('x1')));
 
     state.opposite
-      .attr('x1', nextX)
+      .attr('x1', xTo)
       .attr('y1', 0)
-      .attr('x2', nextX)
+      .attr('x2', xTo)
       .attr('y2', dy);
 
     state.adjacent
       .attr('x1', 0)
       .attr('y1', 0)
-      .attr('x2', nextX)
+      .attr('x2', xTo)
       .attr('y2', 0);
 
     if(direction.forward && state.time > TWO_PI) {
@@ -112,6 +94,8 @@ class Sine extends Component {
       state.time = 0;
       direction = {forward: true};
     }
+
+    this.drawSineGraph(state, direction);
 
     requestAnimationFrame(this.animateCircle.bind(this, state, direction));
   }
@@ -134,13 +118,6 @@ class Sine extends Component {
       .attr('class', 'x-circle')
       .attr('r', 10);
 
-    state.guidingLine = state.xAxisGroup.append('line')
-      .attr('class', 'ln')
-      .attr('x1', unitCircleCx)
-      .attr('y1', 0)
-      .attr('x2', 0)
-      .attr('y2', 0);
-
     state.hypotenuse = state.xAxisGroup.append('line')
       .attr('class', 'hypotenuse')
       .attr('x1', 0)
@@ -161,6 +138,16 @@ class Sine extends Component {
       .attr('y1', 0)
       .attr('x2', 0)
       .attr('y2', 0);
+
+    const sine = state.sine = d3.svg.line()
+            .interpolate('monotone')
+		        .x((d, i) => { return state.xScale(d); })
+		        .y((d, i) => { return state.yScale(Math.sin(d) + 1); });
+
+    const sineData = state.sineData = [];
+
+    state.sineCurve = state.xAxisGroup.append('path')
+      .attr('class', 'sine-curve');
 
     return state;
   }
