@@ -178,10 +178,12 @@ class Sine extends Component {
 
     const xTickValues = [0, 1.57, 3.14, 4.71, 6.28];
 
+    const piMap = {"1.57": "π/2", "3.14": "π", "4.71": "3π/2", "6.28": "2π"};
+
     const xAxis = d3.svg.axis()
             .tickValues(xTickValues)
             .tickFormat((t) => {
-              return t === 0 ? '' : t;
+              return t === 0 ? '' : piMap[t.toString()];
             })
             .scale(xScale);
 
