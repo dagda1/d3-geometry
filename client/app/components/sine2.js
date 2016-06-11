@@ -67,12 +67,47 @@ class Sine extends Component {
     state.dot
       .attr('cx', xTo);
 
-    state.hypotenuse
-      .attr('x1', xTo - dx)
-      .attr('x2', xTo)
-      .attr('y2', dy);
+    const hypotenuseCentre = xTo - dx;
 
-    state.unitCircle.attr('cx', parseFloat(state.hypotenuse.attr('x1')));
+    const hypotenuseCoords = {
+      x1: hypotenuseCentre,
+      y1: parseFloat(state.hypotenuse.attr('y1')),
+      x2: xTo,
+      y2: dy
+    };
+
+    state.hypotenuse
+      .attr('x1', hypotenuseCoords.x1)
+      .attr('x2', hypotenuseCoords.x2)
+      .attr('y2', hypotenuseCoords.y2);
+
+    let angle = Math.atan2(hypotenuseCoords.y2 - hypotenuseCoords.y1, hypotenuseCoords.x2 - hypotenuseCoords.x1);
+
+    if(angle > 0) {
+      angle = -2*(Math.PI) + angle;
+    }
+
+    const innerArc = d3.svg.arc()
+            .innerRadius(8)
+            .outerRadius(12)
+            .startAngle(Math.PI/2)
+            .endAngle(angle + Math.PI/2);
+
+    const outerArc = d3.svg.arc()
+            .innerRadius(state.radius - 1)
+            .outerRadius(state.radius + 3)
+            .startAngle(Math.PI/2)
+            .endAngle(angle + Math.PI/2);
+
+    state.innerAngle
+      .attr('d', innerArc)
+      .attr('transform', `translate(${hypotenuseCentre}, 0)`);
+
+    state.outerAngle
+      .attr('d', outerArc)
+      .attr('transform', `translate(${hypotenuseCentre}, 0)`);
+
+    state.unitCircle.attr('cx', hypotenuseCoords.x1);
 
     state.opposite
       .attr('x1', xTo)
@@ -149,12 +184,20 @@ class Sine extends Component {
     state.sineCurve = state.xAxisGroup.append('path')
       .attr('class', 'sine-curve');
 
+    state.innerAngle = state.xAxisGroup
+      .append("path")
+      .attr("class", "arc");
+
+    state.outerAngle = state.xAxisGroup
+      .append("path")
+      .attr("class", "arc");
+
     return state;
   }
 
   initializeArea(container, dimensions) {
     const xScale = d3.scale.linear()
-            .domain([0, ((Math.PI * 2))])
+            .domain([0, (TWO_PI)])
             .range([0, (dimensions.width)]);
 
     const yScale = d3.scale.linear()
@@ -201,6 +244,19 @@ class Sine extends Component {
             .attr('transform', `translate(0, ${yAxisZero})`)
             .call(xAxis);
 
+    const leftXAxis = d3.svg.axis()
+            .tickValues(xTickValues)
+            .tickFormat(() => '')
+            .innerTickSize(0)
+            .outerTickSize(0)
+            .scale(xScale);
+
+    graphContainer
+      .append('g')
+      .attr('class', 'x axis')
+      .attr('transform', `translate(${-300}, ${yAxisZero})`)
+      .call(leftXAxis);
+
     return {
       xScale,
       yScale,
@@ -208,7 +264,7 @@ class Sine extends Component {
       xAxisGroup,
       yAxisGroup,
       yAxisZero,
-      increase: ((Math.PI * 2) / 360)
+      increase: (TWO_PI / 360)
     };
   }
 

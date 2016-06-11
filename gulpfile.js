@@ -26,6 +26,7 @@ gulp.task('deploy', ['sync'], function () {
     .exec([
       'docker rm -f d3',
       'docker build -t dnginx .',
-      'docker run --name d3 -d -p 80:80 dnginx'
+      'docker run --name d3 -d -p 80:80 dnginx',
+      // 'docker rmi -f $(docker images | grep "<none>" | awk "{print \$3}")'
     ]);
 });

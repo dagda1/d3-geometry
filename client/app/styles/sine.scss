@@ -17,6 +17,9 @@ $stroke-colour: steelblue;
 
 
 .sine2-container {
+  $triangle-legs-color: red;
+  $tracer-color: blue;
+
   .graph-container {
     .x.axis .tick:first-child {
       display: none;
@@ -29,7 +32,7 @@ $stroke-colour: steelblue;
   }
 
   .sine-curve {
-    stroke: red;
+    stroke: $triangle-legs-color;
     stroke-width: $thick-stroke-width;
 	  fill: none;
   }
@@ -39,13 +42,17 @@ $stroke-colour: steelblue;
   }
 
   .opposite{
-    stroke: red;
+    stroke: $triangle-legs-color;
     stroke-width: $thick-stroke-width;
   }
 
   .adjacent {
-    stroke: blue;
+    stroke: $tracer-color;
     stroke-width: $thick-stroke-width;
+  }
+
+  .arc {
+    fill: $tracer-color;
   }
 }
 
