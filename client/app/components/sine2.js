@@ -39,7 +39,7 @@ class Sine extends Component {
 
     state.time = 0;
 
-    this.animateCircle(state, {forward: true});
+    this.animate(state, {forward: true});
   }
 
   drawSineGraph(state, direction) {
@@ -52,7 +52,7 @@ class Sine extends Component {
     state.sineCurve.attr('d', state.sine(state.sineData));
   }
 
-  animateCircle(state, direction) {
+  animate(state, direction) {
     if(direction.forward) {
       state.time += state.increase;
     } else {
@@ -132,7 +132,7 @@ class Sine extends Component {
 
     this.drawSineGraph(state, direction);
 
-    requestAnimationFrame(this.animateCircle.bind(this, state, direction));
+    requestAnimationFrame(this.animate.bind(this, state, direction));
   }
 
   addShapes(state) {
