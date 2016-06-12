@@ -42,7 +42,7 @@ class Sine extends Component {
     this.animate(state, {forward: true});
   }
 
-  drawSineGraph(state, direction) {
+  progressSineGraph(state, direction) {
     if(direction.forward) {
       state.sineData.push(state.time);
     } else {
@@ -81,23 +81,28 @@ class Sine extends Component {
       .attr('x2', hypotenuseCoords.x2)
       .attr('y2', hypotenuseCoords.y2);
 
-    let angle = Math.atan2(hypotenuseCoords.y2 - hypotenuseCoords.y1, hypotenuseCoords.x2 - hypotenuseCoords.x1);
+    let angle = Math.atan2(
+      (hypotenuseCoords.y2 - hypotenuseCoords.y1),
+      (hypotenuseCoords.x2 - hypotenuseCoords.x1)
+    );
 
     if(angle > 0) {
-      angle = -2*(Math.PI) + angle;
+      angle = (-2 * (Math.PI) + angle);
     }
+
+    angle = angle + Math.PI / 2;
 
     const innerArc = d3.svg.arc()
             .innerRadius(8)
             .outerRadius(12)
             .startAngle(Math.PI/2)
-            .endAngle(angle + Math.PI/2);
+            .endAngle(angle);
 
     const outerArc = d3.svg.arc()
             .innerRadius(state.radius - 1)
             .outerRadius(state.radius + 3)
             .startAngle(Math.PI/2)
-            .endAngle(angle + Math.PI/2);
+            .endAngle(angle);
 
     state.innerAngle
       .attr('d', innerArc)
@@ -130,7 +135,7 @@ class Sine extends Component {
       direction = {forward: true};
     }
 
-    this.drawSineGraph(state, direction);
+    this.progressSineGraph(state, direction);
 
     requestAnimationFrame(this.animate.bind(this, state, direction));
   }
