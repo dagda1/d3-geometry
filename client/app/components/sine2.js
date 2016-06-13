@@ -20,6 +20,16 @@ class Sine extends Component {
 
   componentDidMount() {
     this.createDocument();
+
+    this.resizeFunc = _.debounce(this.resize.bind(this), 200);
+
+    window.addEventListener("resize", this.resizeFunc);
+  }
+
+  resize() {
+    d3.select('.sine2-container').remove();
+
+    setTimeout(this.createDocument.bind(this), 500);
   }
 
   createDocument() {

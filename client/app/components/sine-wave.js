@@ -22,6 +22,12 @@ export default class SineWave extends Component {
     window.addEventListener("resize", this.resizeFunc);
   }
 
+  resize() {
+    d3.select('.sinewave-container').remove();
+
+    setTimeout(this.createDocument.bind(this), 500);
+  }
+
   componentWillUnmount() {
     window.removeEventListener("resize", this.resizeFunc);
 
@@ -51,12 +57,6 @@ export default class SineWave extends Component {
     this.addSineAxis(state);
 
     this.addMathJax(svg);
-  }
-
-  resize() {
-    d3.select('.sinewave-container').remove();
-
-    setTimeout(this.createDocument.bind(this), 500);
   }
 
   addSineAxis(state) {
