@@ -14,7 +14,11 @@ export default class Triangles extends Component {
 
   render() {
     return (
-        <div ref="triangleContainer" className="triangle-container col-lg-4"></div>
+        <div className="row">
+          <div className="row">
+            <div ref="triangleContainer" className="triangle-container col-lg-6 col-md-6 col-xs-8"></div>
+          </div>
+        </div>
     );
   }
 };

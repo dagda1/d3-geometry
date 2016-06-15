@@ -32,6 +32,12 @@ class Sine extends Component {
     setTimeout(this.createDocument.bind(this), 500);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resizeFunc);
+
+    d3.select('.sinewave-container').remove();
+  }
+
   createDocument() {
     const el = this.refs.sine;
 
@@ -221,7 +227,7 @@ class Sine extends Component {
 
     const graphContainer = container.append("g")
             .attr("class", "graph-container")
-            .attr('transform', `translate(${xScale(1.5)}, ${yScale(0.5)})`);
+            .attr('transform', `translate(${xScale(1.5)}, 20)`);
 
     const yAxis = d3.svg.axis()
             .tickValues([-1.0, -0.5, 0, 0.5, 1.0])
@@ -287,7 +293,7 @@ class Sine extends Component {
     return (
         <div className="row">
           <div className="row">
-            <div id="sine" ref="sine" className="col-lg-6"/></div>
+            <div id="sine" ref="sine" className="col-lg-6 col-md-6 col-xs-8"/></div>
         </div>
     );
   }

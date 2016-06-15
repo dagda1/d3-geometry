@@ -92,7 +92,7 @@ export default class SineWave extends Component {
 
   addGraphContainer(container, xScale, yScale) {
     const initialX = xScale(12);
-    const initialY = yScale(15);
+    const initialY = 125;
 
     const firstAxisXCoord = -(radius * 1.5);
 

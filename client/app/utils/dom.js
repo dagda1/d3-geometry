@@ -8,7 +8,6 @@ export function availableViewPort() {
   };
 }
 
-
 export function viewPortFromElement(el) {
   const margin = {
     top: 20,
@@ -17,11 +16,13 @@ export function viewPortFromElement(el) {
     left: 100
   };
 
-  const width = el.offsetWidth;
-  const height =  el.offsetWidth;
+  const w = el.offsetWidth;
+
+  const h =  w * 0.68;
 
   return {
     margin,
-    width: width,
-    height: width / 2
-  };}
+    width: w,
+    height: h
+  };
+}
