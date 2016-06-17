@@ -22,7 +22,7 @@ export default class Triangulator {
 
     const xScale = d3.scale.linear()
             .domain([0, 20])
-            .range([0, dimensions.width]);
+            .range([0, dimensions.height]);
 
     const yScale = d3.scale.linear()
             .domain([0, 20])
@@ -283,7 +283,7 @@ export default class Triangulator {
     ];
 
     const circumCircleCentre = solveMatrix(matrix, [c1, c2]);
-    const dist = distance(this.convertPoint(area, 'b'), circumCircleCentre) - 0.7;
+    const dist = distance(this.convertPoint(area, 'b'), circumCircleCentre);
 
     area.g.append('circle')
       .attr('cx', area.xScale(circumCircleCentre.x))
