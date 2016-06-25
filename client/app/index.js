@@ -16,6 +16,8 @@ import LineEquation from './components/equation-of-a-line';
 import FunctionContainer from "./components/functions-container";
 import SineContainer from "./components/sine-container";
 import Sine2Container from "./components/sine2-container";
+import Cube from './components/cube';
+import Pyramid from './components/pyramid';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -39,6 +41,8 @@ ReactDOM.render(
         <Route path="functions" component={FunctionContainer}/>
         <Route path="sine" component={SineContainer}/>
         <Route path="sine2" component={Sine2Container}/>
+        <Route path="cube" component={Cube}/>
+        <Route path="pyramid" component={Pyramid}/>
       </Route>
     </Router>
   </Provider>,

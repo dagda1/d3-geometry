@@ -41,6 +41,16 @@ export default class Menu extends Component {
                   </li>
                 </ul>
               </li>
+              <li className={['/cube', '/pyramid'].indexOf(this.props.location) > -1 ? 'dropdown active' : 'dropdown'}>
+                <a tabIndex="0" data-toggle="dropdown" data-submenu="" aria-expanded="false">3d<span className="caret"></span>
+                </a>
+                <ul className="dropdown-menu">
+                  <li className="dropdown-submenu">
+                    <Link to="/cube">Cube</Link>
+                    <Link to="/pyramid">Pyramid</Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </div>
         </nav>
