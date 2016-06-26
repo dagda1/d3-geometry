@@ -111,7 +111,8 @@ export default class Triangulator {
   }
 
   addRadioButtons(area) {
-    const form = d3.select(area.el).append('form');
+    const form = d3.select(area.el).append('form')
+            .attr('class', 'col-md-8 col-xs-8');
 
     const effects = _.toArray(this.getEffects());
 
