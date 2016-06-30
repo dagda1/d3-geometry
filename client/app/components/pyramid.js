@@ -9,7 +9,7 @@ export default class Pyramid extends Component {
       <div className="row">
         <div className="row">
           <div className="pyramid-parent">
-            Pyramid
+            <div className="triangle"></div>
           </div>
         </div>
       </div>
