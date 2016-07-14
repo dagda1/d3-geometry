@@ -20,33 +20,39 @@
   transform:rotateX(20deg) rotateY(40deg);
   position: relative;
   display: inline-block;
-  animation: spin 8s infinite linear;
+  // animation: spin 8s infinite linear;
 }
 
+$base: 200px;
+$half-base: ($base / 2);
+$apothem: 200px;
+$rotate-X: 30deg;
+$translate-Z: 100px;
+$base-move: 0 - ($apothem - $half-base);
 
 #pyramid div:not(.base) {
   position: absolute;
-  border-left: 100px solid transparent;   /* 1/2 Base */
-  border-right: 100px solid transparent;   /* 1/2 Base */
-  border-bottom: 200px solid;  /* Apothem */
-  transform-origin: 100px 200px 0; /* bottom of trangle (1/2 Base, Apothem) */
+  border-left: $half-base solid transparent;   /* 1/2 Base */
+  border-right: $half-base solid transparent;  /* 1/2 Base */
+  border-bottom: $apothem solid;  /* Apothem */
+  transform-origin: $half-base $apothem 0; /* bottom of trangle (1/2 Base, Apothem) */
   opacity: .5;
 }
 
 .base {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: $base;
+  height: $base;
   background-color: rgba(147,81,166,0.9);
   /* transform by default from middle (100px, 100px)
      move by Apothem - 1/2 Base = 41px */
-  transform: rotateX(90deg) translate3d(0px, 0px, -100px);
+  transform: rotateX(90deg) translate3d(0px, 0px, $base-move);
   opacity: .5;
 }
 
 #pyramid div.front {
   border-bottom-color: #e04545;
-  transform: rotateY(0deg) translate3d(0px, 0px, 100px) rotateX(30deg);
+  transform: rotateY(0deg) translate3d(0px, 0px, $translate-Z) rotateX($rotate-X);
 
   &:after {
     position: absolute;
@@ -59,15 +65,15 @@
 
 #pyramid div.back {
   border-bottom-color: #ccaf5a;
-  transform: rotateY(90deg) translate3d(0px, 0px, 100px) rotateX(30deg);
+  transform: rotateY(90deg) translate3d(0px, 0px, $translate-Z) rotateX($rotate-X);
 }
 
 #pyramid div.left {
   border-bottom-color: #ccaf5a;
-  transform: rotateY(180deg) translate3d(0px, 0px, 100px) rotateX(30deg);
+  transform: rotateY(180deg) translate3d(0px, 0px, $translate-Z) rotateX($rotate-X);
 }
 
 #pyramid div.right {
    border-bottom-color: #4ccfc8;
-   transform: rotateY(2070deg) translate3d(0px, 0px, 100px) rotateX(30deg);
+   transform: rotateY(270deg) translate3d(0px, 0px, $translate-Z) rotateX($rotate-X);
 }
