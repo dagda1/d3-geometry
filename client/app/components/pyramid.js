@@ -8,10 +8,11 @@ export default class Pyramid extends Component {
     return (
       <div className="row">
         <div className="row">
-          <div className="pyramid-container text-center">
+          <div className="pyramid-container col-lg-1 col-md-4 col-xs-4 col-md-offset-5 col-xs-offset-5">
             <div id="pyramid">
               <div className="base"></div>
               <div className="front"></div>
+              <div className="back"></div>
               <div className="left"></div>
               <div className="right"></div>
             </div>

@@ -19,22 +19,20 @@
   transform-style: preserve-3d;
   transform:rotateX(20deg) rotateY(40deg);
   position: relative;
-  display: inline-block;
-  // animation: spin 8s infinite linear;
+  animation: spin 8s infinite linear;
 }
 
-$base: 200px;
+$base: 270px;
 $half-base: ($base / 2);
-$apothem: 200px;
+$apothem: 270px;  //(1/2 base) X tan(theta)
 $rotate-X: 30deg;
-$translate-Z: 100px;
 $base-move: 0 - ($apothem - $half-base);
 
 #pyramid div:not(.base) {
   position: absolute;
-  border-left: $half-base solid transparent;   /* 1/2 Base */
-  border-right: $half-base solid transparent;  /* 1/2 Base */
-  border-bottom: $apothem solid;  /* Apothem */
+  border-left: $half-base solid transparent;
+  border-right: $half-base solid transparent;
+  border-bottom: $apothem solid;
   transform-origin: $half-base $apothem 0; /* bottom of trangle (1/2 Base, Apothem) */
   opacity: .5;
 }
@@ -44,15 +42,13 @@ $base-move: 0 - ($apothem - $half-base);
   width: $base;
   height: $base;
   background-color: rgba(147,81,166,0.9);
-  /* transform by default from middle (100px, 100px)
-     move by Apothem - 1/2 Base = 41px */
   transform: rotateX(90deg) translate3d(0px, 0px, $base-move);
   opacity: .5;
 }
 
 #pyramid div.front {
   border-bottom-color: #e04545;
-  transform: rotateY(0deg) translate3d(0px, 0px, $translate-Z) rotateX($rotate-X);
+  transform: rotateY(0deg) translate3d(0px, 0px, $half-base) rotateX($rotate-X);
 
   &:after {
     position: absolute;
@@ -65,15 +61,15 @@ $base-move: 0 - ($apothem - $half-base);
 
 #pyramid div.back {
   border-bottom-color: #ccaf5a;
-  transform: rotateY(90deg) translate3d(0px, 0px, $translate-Z) rotateX($rotate-X);
+  transform: rotateY(90deg) translate3d(0px, 0px, $half-base) rotateX($rotate-X);
 }
 
 #pyramid div.left {
   border-bottom-color: #ccaf5a;
-  transform: rotateY(180deg) translate3d(0px, 0px, $translate-Z) rotateX($rotate-X);
+  transform: rotateY(180deg) translate3d(0px, 0px, $half-base) rotateX($rotate-X);
 }
 
 #pyramid div.right {
    border-bottom-color: #4ccfc8;
-   transform: rotateY(270deg) translate3d(0px, 0px, $translate-Z) rotateX($rotate-X);
+   transform: rotateY(270deg) translate3d(0px, 0px, $half-base) rotateX($rotate-X);
 }
