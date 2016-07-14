@@ -12,7 +12,7 @@
   height: 16em;
   list-style: none;
   transform-style: preserve-3d;  // how will children be positioned in 3d space
-  //animation: ani 8s infinite linear;
+  animation: ani 8s infinite linear;
 }
 
 @keyframes ani {
@@ -20,7 +20,7 @@
 }
 
 .face {
-	box-sizing: border-box; /* too-lazy-to-compute stuff fix */
+	box-sizing: border-box; 
 	position: absolute;
 	top: 50%; left: 50%;
 	outline: solid 1px;
@@ -29,9 +29,6 @@
 	width: 16em; height: 16em; /* make it square width = height */
 	opacity: .65;
 	background: $shape-color;
-	/**
-	backface-visibility: hidden; /* useful for testing you don't have 
-									the faces of the cube inside out */ 
 }
 
 .face:nth-child(1) { transform: translateZ(8em);}
