@@ -1,0 +1,124 @@
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.hexagon-container {
+  display: inline-block;
+  position: absolute;
+  top: 100px;
+  left: 25%;
+  perspective: 800px;
+}
+
+.hexagon-container div {
+}
+
+.hexagon-container > div {
+  transform-style: preserve-3d;
+  //animation: spin 8s infinite linear;
+}
+
+$hexagon-dimensions: 200px;
+
+@mixin pos-els {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.hexagon-wrapper {
+  text-align: center;
+  width: $hexagon-dimensions;
+  height: $hexagon-dimensions;
+  @include pos-els;
+}
+
+.hexagon {
+  height: 100%;
+  width: 57.735%;
+  display: inline-block;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background-color: inherit;
+    height: inherit;
+    width: 100%;
+    content: '';
+    transform: rotate(60deg);
+    transform-origin:25% 25%;
+  }
+
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background-color: inherit;
+    height: inherit;
+    width: 100%;
+    content: '';
+    transform: rotate(-60deg);
+    transform-origin:25% 75%;
+  }
+}
+
+.hexagon-wrapper.front .hexagon {
+  background-color: #D93;
+  transform: translateZ(8em) rotateX(90deg);
+}
+
+.hexagon-wrapper.back .hexagon {
+  background-color: #6C6;
+  transform: translateY(150px) translateZ(8em) rotateX(90deg);
+}
+
+.hexagon-container .side {
+  box-sizing: border-box;
+  width: 135px;
+  height: 175px;
+  background: #ccaf5a;
+  @include pos-els;
+  opacity: .5;
+  z-index: 1;
+}
+
+.hexagon-container .side:nth-child(2) {
+  transform: translate3d(49px, 117px, 8em);
+  background-color: #e04545;
+}
+
+.hexagon-container .side:nth-child(3) {
+  transform: rotateY(60deg) translate3d(49px, 117px, 8em);
+  transform-origin:  120px;
+  background-color: #ccaf5a;
+}
+
+.hexagon-container .side:nth-child(4) {
+  transform: rotateY(120deg) translate3d(54px, 116px, 8em);
+  transform-origin:  120px;
+  background-color: #800000;
+}
+
+.hexagon-container .side:nth-child(5) {
+  transform: rotateY(180deg) translate3d(56px, 115px, 8em);
+  transform-origin:  120px;
+  background-color: #2E86C1;
+}
+
+.hexagon-container .side:nth-child(6) {
+  transform: rotateY(240deg) translate3d(50px, 117px, 122px);
+  transform-origin:  120px;
+  background-color: #AAB7B8;
+}
+
+.hexagon-container .side:nth-child(7) {
+  transform: rotateY(300deg) translate3d(50px, 117px, 118px);
+  transform-origin:  120px;
+  background-color: #0B5345;
+}

@@ -13,8 +13,8 @@ export default class Pyramid extends Component {
               <div className="base"></div>
               <div className="front"></div>
               <div className="back"></div>
-              <div className="left"></div>
               <div className="right"></div>
+              <div className="left"></div>
             </div>
           </div>
         </div>

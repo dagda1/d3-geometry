@@ -16,19 +16,19 @@
 }
 
 @keyframes ani {
-	to { transform: rotateY(360deg) rotateX(360deg) rotateZ(360deg); }
+  to { transform: rotateY(360deg) rotateX(360deg) rotateZ(360deg); }
 }
 
 .face {
-	box-sizing: border-box; 
-	position: absolute;
-	top: 50%; left: 50%;
-	outline: solid 1px;
-	margin: -8em; /* centering trick: top and left are 50% and margin is width/2 */
-	padding: 1.6em;
-	width: 16em; height: 16em; /* make it square width = height */
-	opacity: .65;
-	background: $shape-color;
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%; left: 50%;
+  outline: solid 1px;
+  margin: -8em;
+  padding: 1.6em;
+  width: 16em; height: 16em;
+  opacity: .65;
+  background: $shape-color;
 }
 
 .face:nth-child(1) { transform: translateZ(8em);}

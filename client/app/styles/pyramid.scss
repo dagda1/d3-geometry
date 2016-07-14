@@ -11,7 +11,7 @@
 
 .pyramid-container {
   perspective: 800px;
-	perspective-origin: center;
+  perspective-origin: center;
 }
 
 #pyramid {
@@ -24,8 +24,8 @@
 
 $base: 270px;
 $half-base: ($base / 2);
-$apothem: 270px;  //(1/2 base) X tan(theta)
-$rotate-X: 30deg;
+$apothem: 270px;  //(1/2 base) / cos(theta)
+$apex-angle: 30deg; // apex angle = 180 - 90(right-angle) - α
 $base-move: 0 - ($apothem - $half-base);
 
 #pyramid div:not(.base) {
@@ -37,6 +37,17 @@ $base-move: 0 - ($apothem - $half-base);
   opacity: .5;
 }
 
+#pyramid div {
+  &:after {
+    position: absolute;
+    top: $half-base;
+    text-align: center;
+    color: #fff;
+    left: -10px;
+    font-size: 5em;
+  }
+}
+
 .base {
   position: absolute;
   width: $base;
@@ -44,32 +55,46 @@ $base-move: 0 - ($apothem - $half-base);
   background-color: rgba(147,81,166,0.9);
   transform: rotateX(90deg) translate3d(0px, 0px, $base-move);
   opacity: .5;
+
+  &:after {
+    content: "5";
+    left: 112px !important;
+    top: 93px !important;
+  }
 }
 
 #pyramid div.front {
   border-bottom-color: #e04545;
-  transform: rotateY(0deg) translate3d(0px, 0px, $half-base) rotateX($rotate-X);
+  transform: rotateY(0deg) translate3d(0px, 0px, $half-base) rotateX($apex-angle);
 
   &:after {
-    position: absolute;
-    content: "Triangle";
-    color: #fff;
-    left: -250px;
-    text-align: center;
+    content: "1";
   }
 }
 
 #pyramid div.back {
   border-bottom-color: #ccaf5a;
-  transform: rotateY(90deg) translate3d(0px, 0px, $half-base) rotateX($rotate-X);
+  transform: rotateY(90deg) translate3d(0px, 0px, $half-base) rotateX($apex-angle);
+
+  &:after {
+    content: "2";
+  }
 }
 
 #pyramid div.left {
-  border-bottom-color: #ccaf5a;
-  transform: rotateY(180deg) translate3d(0px, 0px, $half-base) rotateX($rotate-X);
+  border-bottom-color: #800000;
+  transform: rotateY(180deg) translate3d(0px, 0px, $half-base) rotateX($apex-angle);
+
+  &:after {
+    content: "3";
+  }
 }
 
 #pyramid div.right {
    border-bottom-color: #4ccfc8;
-   transform: rotateY(270deg) translate3d(0px, 0px, $half-base) rotateX($rotate-X);
+   transform: rotateY(270deg) translate3d(0px, 0px, $half-base) rotateX($apex-angle);
+
+  &:after {
+    content: "4";
+  }
 }
