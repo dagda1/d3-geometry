@@ -1,38 +1,37 @@
-@keyframes spin {
+@keyframes spinXY {
   from {
-    transform: rotateY(0deg);
+    transform: rotateX(0deg) rotateY(0deg);
   }
   to {
-    transform: rotateY(360deg);
+    transform: rotateX(720deg) rotateY(360deg);
   }
 }
 
 .hexagon-container {
-  display: inline-block;
-  position: absolute;
-  top: 100px;
-  left: 25%;
-  perspective: 800px;
-}
-
-.hexagon-container div {
+  padding-top: 80px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  perspective: 1000px;
+  perspective-origin: 50% 50%;
 }
 
 .hexagon-container > div {
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  position: relative;
   transform-style: preserve-3d;
-  //animation: spin 8s infinite linear;
+  animation: spinXY 8s infinite linear;
 }
 
 $hexagon-dimensions: 200px;
 
 @mixin pos-els {
   position: absolute;
-  top: 50%;
-  left: 50%;
 }
 
 .hexagon-wrapper {
-  text-align: center;
   width: $hexagon-dimensions;
   height: $hexagon-dimensions;
   @include pos-els;
@@ -52,7 +51,7 @@ $hexagon-dimensions: 200px;
     width: 100%;
     content: '';
     transform: rotate(60deg);
-    transform-origin:25% 25%;
+    transform-origin: 25% 25%;
   }
 
   &:after {
@@ -70,55 +69,82 @@ $hexagon-dimensions: 200px;
 
 .hexagon-wrapper.front .hexagon {
   background-color: #D93;
-  transform: translateZ(8em) rotateX(90deg);
+  transform: translateZ(0em) rotateX(90deg);
 }
 
 .hexagon-wrapper.back .hexagon {
   background-color: #6C6;
-  transform: translateY(150px) translateZ(8em) rotateX(90deg);
+  transform: translateY(150px) translateZ(0em) rotateX(90deg);
 }
 
 .hexagon-container .side {
   box-sizing: border-box;
-  width: 135px;
-  height: 175px;
+  width: 116px;
+  height: 150px;
   background: #ccaf5a;
   @include pos-els;
   opacity: .5;
   z-index: 1;
+
+  &:after {
+    content: "1";
+    position: absolute;
+    text-align: center;
+    color: #fff;
+    font-size: 5em;
+    top: 20%;
+    left: 30%;
+  }
+}
+
+@mixin position-side ($rotate-y) {
+  transform: rotateY($rotate-y) translateX(0px) translateY(100px) translateZ(99px);
 }
 
 .hexagon-container .side:nth-child(2) {
-  transform: translate3d(49px, 117px, 8em);
+  @include position-side(0deg);
   background-color: #e04545;
+  &:after {
+    content: "1";
+  }
 }
 
 .hexagon-container .side:nth-child(3) {
-  transform: rotateY(60deg) translate3d(49px, 117px, 8em);
-  transform-origin:  120px;
+  @include position-side(60deg);
   background-color: #ccaf5a;
+  &:after {
+    content: "2";
+  }
 }
 
 .hexagon-container .side:nth-child(4) {
-  transform: rotateY(120deg) translate3d(54px, 116px, 8em);
-  transform-origin:  120px;
+  @include position-side(120deg);
   background-color: #800000;
+  &:after {
+    content: "3";
+  }
 }
 
 .hexagon-container .side:nth-child(5) {
-  transform: rotateY(180deg) translate3d(56px, 115px, 8em);
-  transform-origin:  120px;
+  @include position-side(180deg);
   background-color: #2E86C1;
+  &:after {
+    content: "4";
+  }
 }
 
 .hexagon-container .side:nth-child(6) {
-  transform: rotateY(240deg) translate3d(50px, 117px, 122px);
-  transform-origin:  120px;
+  @include position-side(240deg);
   background-color: #AAB7B8;
+  &:after {
+    content: "5";
+  }
 }
 
 .hexagon-container .side:nth-child(7) {
-  transform: rotateY(300deg) translate3d(50px, 117px, 118px);
-  transform-origin:  120px;
+  @include position-side(300deg);
   background-color: #0B5345;
+  &:after {
+    content: "6";
+  }
 }

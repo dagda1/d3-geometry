@@ -1,6 +1,6 @@
 @import "partials/colors";
 
-@keyframes spin {
+@keyframes spinY {
   from {
     transform: rotateY(0deg);
   }
@@ -19,7 +19,7 @@
   transform-style: preserve-3d;
   transform:rotateX(20deg) rotateY(40deg);
   position: relative;
-  animation: spin 8s infinite linear;
+  animation: spinY 8s infinite linear;
 }
 
 $base: 270px;
