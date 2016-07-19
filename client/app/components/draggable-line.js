@@ -6,8 +6,6 @@ export default class DraggableLine {
   render(el, props = {}) {
     const dimensions = viewPortFromElement(el);
 
-    const margin = {top: 20, right: 100, bottom: 30, left: 100};
-
     const xScale = d3.scale.linear()
           .domain([0, 20])
           .range([0, dimensions.width]);
@@ -30,10 +28,10 @@ export default class DraggableLine {
           .tickPadding(10);
 
     const svg = d3.select(el).append("svg")
-          .attr("width", dimensions.width + margin.left + margin.right)
-          .attr("height", dimensions.height + margin.top + margin.bottom)
+          .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
+          .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
           .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
 
     svg.append("g")
       .attr("class", "x axis")

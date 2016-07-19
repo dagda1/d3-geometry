@@ -15,6 +15,7 @@ var config = {
 		app: ['babel-polyfill', "./client/app/index.js"],
 		vendors: ["d3", "_"]
 	},
+  devtool: 'source-map',
 	output: {
     path: process.env.NODE_ENV === 'production' ? path.resolve(ROOT_PATH, 'dist') : path.resolve(ROOT_PATH, 'app/build'),
 		"filename": "bundle.js"

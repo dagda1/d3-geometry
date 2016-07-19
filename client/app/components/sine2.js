@@ -14,11 +14,9 @@ import {
 const TWO_PI = (Math.PI *2);
 
 class Sine extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
+    this.cancelled = false;
+
     this.createDocument();
 
     this.resizeFunc = _.debounce(this.resize.bind(this), 200);
@@ -35,7 +33,9 @@ class Sine extends Component {
   componentWillUnmount() {
     window.removeEventListener("resize", this.resizeFunc);
 
-    d3.select('.sinewave-container').remove();
+    this.cancelled = true;
+
+    d3.select('.sine2-container').remove();
   }
 
   createDocument() {
@@ -69,6 +69,10 @@ class Sine extends Component {
   }
 
   animate(state, direction) {
+    if(this.cancelled) {
+      return;
+    }
+
     if(direction.forward) {
       state.time += state.increase;
     } else {
@@ -291,10 +295,10 @@ class Sine extends Component {
 
   render(el, props) {
     return (
+      <div className="row">
         <div className="row">
-          <div className="row">
-            <div id="sine" ref="sine" className="col-lg-6 col-md-6 col-xs-8"/></div>
-        </div>
+          <div id="sine" ref="sine" className="col-lg-6 col-md-6 col-xs-8"/></div>
+      </div>
     );
   }
 }

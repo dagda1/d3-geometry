@@ -15,6 +15,8 @@ const radius = 90;
 
 export default class SineWave extends Component {
   componentDidMount() {
+    this.cancelled = false;
+
     this.createDocument();
 
     this.resizeFunc = _.debounce(this.resize.bind(this), 200);
@@ -30,6 +32,8 @@ export default class SineWave extends Component {
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.resizeFunc);
+
+    this.cancelled = true;
 
     d3.select('.sinewave-container').remove();
   }
@@ -187,6 +191,10 @@ export default class SineWave extends Component {
   }
 
   drawGraph(state) {
+    if(this.cancelled) {
+      return;
+    }
+
     const increase = ((Math.PI * 2) / 360);
 
     state.time += increase;
@@ -320,13 +328,13 @@ export default class SineWave extends Component {
 
   render(el, props){
     return (
+      <div className="row">
         <div className="row">
-          <div className="row">
-            <h2 className="tick" className="col-xs-offset-3 col-md-offset-1">sin(x)</h2>
-            <div id="sine-wave" ref="sine">
-            </div>
+          <h2 className="tick" className="col-xs-offset-3 col-md-offset-1">sin(x)</h2>
+          <div id="sine-wave" ref="sine">
           </div>
         </div>
+      </div>
     );
   }
 };

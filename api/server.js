@@ -6,7 +6,6 @@ const compress = require('koa-compress');
 const cors = require('koa-cors');
 const zlib = require('zlib');
 const koaBody = require('koa-bodyparser');
-const helmet = require('koa-helmet');
 const config = require('./config.js').config;
 const router = require('./routes/index');
 const Models = require('./models/index');
@@ -21,7 +20,6 @@ app.use(compress({
 
 app.use(koaBody());
 app.use(logger());
-app.use(helmet());
 
 app.use(mount('/api', cors()));
 

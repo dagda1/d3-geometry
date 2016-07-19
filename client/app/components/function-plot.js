@@ -46,7 +46,8 @@ export default class FunctionPlot extends Component {
     const width = 500 - margin.left - margin.right;
     const height = 380 - margin.top - margin.bottom;
 
-    return {margin: margin, height: height, width: width};}
+    return {margin: margin, height: height, width: width};
+  }
 
   componentDidMount() {
     const el = this.refs.curve;
@@ -364,34 +365,34 @@ export default class FunctionPlot extends Component {
                   <legend>Enter Expression</legend>
                   <div className="expression col-xs-10 col-md-10">
                     <input type="text"
-                      className="form-control input-md"
-                      defaultValue={this.props.expression}
-                      onKeyDown={this.handleSubmit.bind(this, this.setExpression.bind(this))}
-                      onBlur={this.handleExpressionBlur.bind(this)}
-                      ref="expressionInput"
-                    />
+                           className="form-control input-md"
+                           defaultValue={this.props.expression}
+                           onKeyDown={this.handleSubmit.bind(this, this.setExpression.bind(this))}
+                           onBlur={this.handleExpressionBlur.bind(this)}
+                           ref="expressionInput"
+                           />
                   </div>
                   <button className="btn btn-primary btn-responsive" onClick={this.setExpression.bind(this)}>Go</button>
                 </fieldset>
                 <fieldset className="field-set window">
                   <legend>X Range</legend>
-                     <input type="text"
-                      className="form-control input-md limits"
-                      defaultValue={this.props.minX}
-                      onBlur={this.handleXScaleBlur.bind(this)}
-                      onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
-                      ref="lowerX"
-                     />
+                  <input type="text"
+                         className="form-control input-md limits"
+                         defaultValue={this.props.minX}
+                         onBlur={this.handleXScaleBlur.bind(this)}
+                         onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
+                         ref="lowerX"
+                         />
 
-                    <label>&lt; x &lt;</label>
+                  <label>&lt; x &lt;</label>
 
-                    <input type="text"
-                      className="form-control input-md limits"
-                      defaultValue={this.props.maxX}
-                      onBlur={this.handleXScaleBlur.bind(this)}
-                      onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
-                      ref="upperX"
-                     />
+                  <input type="text"
+                         className="form-control input-md limits"
+                         defaultValue={this.props.maxX}
+                         onBlur={this.handleXScaleBlur.bind(this)}
+                         onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
+                         ref="upperX"
+                         />
                 </fieldset>
               </div>
             </div>

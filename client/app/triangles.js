@@ -1,6 +1,4 @@
-(function () {
-   'use strict';
-}());
+'use strict';
 
 import {solveMatrix} from './utils/matrices';
 
@@ -382,7 +380,6 @@ function addGrabbers(area, vertices) {
     .style('fill', 'red')
     .call(drag);
 }
-
 
 function draggable(area, d) {
   const circle = d3.select(`.grabber.${d.label}`);
