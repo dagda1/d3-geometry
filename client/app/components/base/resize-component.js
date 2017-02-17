@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { debounce } from 'lodash';
 
 export var ResizeComponent = ComposedComponent  => class extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ export var ResizeComponent = ComposedComponent  => class extends Component {
   registerReize() {
     this.createDocument();
 
-    this.resizeFunc = _.debounce(this.resize.bind(this), 200);
+    this.resizeFunc = debounce(this.resize.bind(this), 200);
 
     window.addEventListener("resize", this.resizeFunc);
   }

@@ -12,8 +12,7 @@ var config = {
 		this.module.noParse.push(path);
 	},
 	entry: {
-		app: ['babel-polyfill', "./client/app/index.js"],
-		vendors: ["d3", "_"]
+		app: ['babel-polyfill', "./client/app/index.js"]
 	},
   devtool: 'source-map',
 	output: {
@@ -59,13 +58,6 @@ var config = {
   },
 	plugins: [
     new webpack.HotModuleReplacementPlugin(),
-		// This plugin makes a module available as variable in every module
-		new webpack.ProvidePlugin({
-			d3: "d3",
-      _: "_"
-		}),
-		// CommonsChunkPlugin will take the vendors chunk and create a commonly used js file
-		new webpack.optimize.CommonsChunkPlugin('vendors','vendors.js', Infinity),
     // https://www.npmjs.com/package/html-webpack-plugin
     new HtmlWebpackPlugin({
       title: 'D3 and react',
@@ -74,8 +66,4 @@ var config = {
 	]
 
 };
-
-config.addVendor('d3', npm_dir + '/d3/d3.min.js');
-config.addVendor('_', npm_dir + '/lodash/lodash.min.js');
-
 module.exports = config;

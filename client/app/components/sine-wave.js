@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { debounce } from 'lodash';
 
 import {
   viewPortFromElement
@@ -19,7 +20,7 @@ export default class SineWave extends Component {
 
     this.createDocument();
 
-    this.resizeFunc = _.debounce(this.resize.bind(this), 200);
+    this.resizeFunc = debounce(this.resize.bind(this), 200);
 
     window.addEventListener("resize", this.resizeFunc);
   }

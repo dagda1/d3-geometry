@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import { find } from 'lodash';
 import math from 'mathjs';
 
 import "../plugins/mathdiff.js";
@@ -156,7 +156,7 @@ export default class FunctionPlot extends Component {
       };
 
       if(point.x > maxX) {
-        const maxY = _.find(data, (d) => d.x === maxX).y;
+        const maxY = find(data, (d) => d.x === maxX).y;
 
         point.x = maxX;
         point.y = maxY;
