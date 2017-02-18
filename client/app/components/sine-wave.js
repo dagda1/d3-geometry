@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { debounce } from 'lodash';
+import Container from './Container';
+import Row from './Row';
 
 import {
   viewPortFromElement
@@ -40,7 +42,7 @@ export default class SineWave extends Component {
   }
 
   createDocument() {
-    const el = this.refs.sine;
+    const el = this.sine;
 
     const dimensions = viewPortFromElement(el);
 
@@ -327,15 +329,14 @@ export default class SineWave extends Component {
     wait((window.hasOwnProperty('MathJax')), continuation.bind(this));
   }
 
-  render(el, props){
+  render() {
     return (
-      <div className="row">
-        <div className="row">
-          <h2 className="tick" className="col-xs-offset-3 col-md-offset-1">sin(x)</h2>
-          <div id="sine-wave" ref="sine">
-          </div>
-        </div>
-      </div>
+      <Container>
+        <Row>
+          <h2>sin(x)</h2>
+          <div id="sineWave" ref={(sine) => { this.sine = sine }} />
+        </Row>
+      </Container>
     );
   }
 };

@@ -14,7 +14,9 @@ const Nav = (props) => {
           <span className="icon-bar"></span>
           <span className="icon-bar"></span>
         </button>
-        <a href="#" className="navbar-brand"><strong>Paul Cowan Hackery</strong></a>
+        <Link to="/" className="navbar-brand">
+          <strong>Paul Cowan Hackery</strong>
+        </Link>
       </div>
       <div id="navbarCollapse" className="collapse navbar-collapse">
         <ul className="nav navbar-nav">
