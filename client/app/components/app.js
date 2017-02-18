@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 
-import Menu from './menu';
+import Nav from './Nav';
 
 export default class App extends Component {
   render() {
     return (
       <div>
-        <Menu location={this.props.location.pathname}/>
+        <Nav location={this.props.location.pathname}/>
         <div>
           {this.props.children}
         </div>
