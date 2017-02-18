@@ -7,7 +7,7 @@ export default class App extends Component {
     return (
       <div>
         <Menu location={this.props.location.pathname}/>
-        <div className="jumbotron">
+        <div>
           {this.props.children}
         </div>
       </div>
