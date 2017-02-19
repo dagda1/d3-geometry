@@ -1,18 +1,16 @@
 import React, { PropTypes } from 'react';
-import classNames from 'classNames';
+import classNames from 'classnames';
 
-const Row = ({ classes, children }) => {
-  classes.unshift('row');
-
+const Row = ({ className, children }) => {
   return (
-    <div classNames={classNames(...classes)}>
+    <div className={`row ${className}`}>
       {children}
     </div>
   )
 };
 
 Row.propTypes = {
-  classes: PropTypes.arrayOf(PropTypes.any),
+  className: PropTypes.string,
   children: PropTypes.node.isRequired
 };
 

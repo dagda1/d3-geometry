@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { debounce } from 'lodash';
 import { ResizeComponent } from "./base/resize-component";
+import * as X from './index';
 
 import {
   viewPortFromElement
@@ -39,7 +40,7 @@ class Sine extends Component {
   }
 
   createDocument() {
-    const el = this.refs.sine;
+    const el = this.sine;
 
     const dimensions = viewPortFromElement(el);
 
@@ -295,10 +296,13 @@ class Sine extends Component {
 
   render(el, props) {
     return (
-      <div className="row">
-        <div className="row">
-          <div id="sine" ref="sine" className="col-lg-6 col-md-6 col-xs-8"/></div>
-      </div>
+      <X.Grid>
+        <X.Row>
+          <X.Col lg={6} md={6} xs={8}>
+            <div id="sine" ref={el => this.sine = el}/>
+          </X.Col>
+        </X.Row>
+      </X.Grid>
     );
   }
 }

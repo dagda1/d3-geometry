@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { debounce } from 'lodash';
-import Container from './Container';
-import Row from './Row';
+import * as X from './index';
 
 import {
   viewPortFromElement
@@ -331,12 +330,14 @@ export default class SineWave extends Component {
 
   render() {
     return (
-      <Container>
-        <Row>
-          <h2>sin(x)</h2>
-          <div id="sineWave" ref={(sine) => { this.sine = sine }} />
-        </Row>
-      </Container>
+      <X.Grid>
+        <X.Row>
+          <X.Col sm={12}>
+            <X.Col xsOffset={3} mdOffset={1} componentClass="h2">sin(x)</X.Col>
+            <div id="sineWave" ref={(sine) => { this.sine = sine }} />
+          </X.Col>
+        </X.Row>
+      </X.Grid>
     );
   }
 };

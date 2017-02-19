@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
+import * as X from './index';
 
 import DraggableLine from './draggable-line';
 
@@ -7,18 +7,18 @@ export default class LineEquation extends Component {
   componentDidMount() {
     const draggableLine = new DraggableLine();
 
-    const el = this.refs.equationOfALine;
-
-    draggableLine.render(el);
+    draggableLine.render(this.equationOfALine);
   }
 
   render() {
     return (
-      <div className="row">
-        <div className="row">
-          <div ref="equationOfALine" className="equation-of-a-line col-lg-6 col-md-6 col-xs-8"/>
-        </div>
-      </div>
+      <X.Grid>
+        <X.Row>
+          <X.Col sm={12} className="equation-of-a-line">
+            <div  ref={el => this.equationOfALine = el}/>
+          </X.Col>
+        </X.Row>
+      </X.Grid>
     );
   }
 };
