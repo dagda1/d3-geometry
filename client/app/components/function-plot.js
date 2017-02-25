@@ -362,7 +362,7 @@ export default class FunctionPlot extends Component {
             <div className="function-dashboard col-lg-3 col-md-5 col-xs-9">
               <div className="form-horizontal">
                 <div className="form-group">
-                  <fieldset className="field-set">
+                  <fieldset className="">
                     <legend>Enter Expression</legend>
                     <div className="expression col-xs-10 col-md-10">
                       <input type="text"
@@ -375,7 +375,7 @@ export default class FunctionPlot extends Component {
                     </div>
                     <button className="btn btn-primary btn-responsive" onClick={this.setExpression.bind(this)}>Go</button>
                   </fieldset>
-                  <fieldset className="field-set window">
+                  <fieldset className="">
                     <legend>X Range</legend>
                     <input type="text"
                            className="form-control input-md limits"

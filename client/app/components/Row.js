@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 const Row = ({ className, children }) => {
   return (
-    <div className={`row ${className}`}>
+    <div className={classNames('row', className)}>
       {children}
     </div>
   )

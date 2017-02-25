@@ -6,7 +6,9 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <Nav location={this.props.location.pathname}/>
+        <div className="nav-container">
+          <Nav location={this.props.location.pathname}/>
+        </div>
         <div>
           {this.props.children}
         </div>

@@ -6,6 +6,8 @@ export default class DraggableLine {
   render(el, props = {}) {
     const dimensions = viewPortFromElement(el);
 
+    console.dir(dimensions);
+
     const xScale = d3.scale.linear()
           .domain([0, 20])
           .range([0, dimensions.width]);

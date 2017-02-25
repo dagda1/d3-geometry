@@ -1,21 +1,20 @@
-@import 'variables';
+@import './partials/colors';
+@import './partials/grid';
+@import './partials/nav';
+
+html {
+  min-height: 100%;
+}
 
 body {
   background-color: #f5f5f5;
 }
 
-.navbar {
-  margin-bottom: 0;
-}
 
 .chart {
   background: #fff;
   font: 10px sans-serif;
   shape-rendering: crispEdges;
-}
-
-.black {
- background: #24292e;
 }
 
 .chart text {
@@ -38,50 +37,9 @@ body {
   margin-right: 10px;
 }
 
-@media (max-width: 768px) {
-  .btn-responsive {
-    padding:2px 4px 1px;
-    font-size:80%;
-    line-height: 1;
-    border-radius:3px;
-  }
-}
-
-@media (min-width: 769px) {
-  .btn-responsive {
-    padding:9px 10px 8px;
-    font-size:90%;
-    line-height: 1.2;
-  }
-}
-
 .difflabel {
   fill: red;
   font-size: 1em;
-}
-
-.jumbotron {
-  padding-top: 1px;
-  background-color: transparent;
-}
-
-.field-set {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: small;
-  font-weight: normal;
-  border: 1px solid #999999;
-  padding: 4px 4px 10px 4px;
-  margin: 5px;
-}
-
-.field-set legend {
-  width: auto;
-  font-size: 90%;
-  color: #888888;
-  background-color: transparent;
-  font-weight: bold;
-  border-bottom: none;
-  margin-bottom: auto;
 }
 
 .dropdown {

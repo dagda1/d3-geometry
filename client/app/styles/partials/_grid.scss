@@ -1,0 +1,8 @@
+@import './colors';
+
+@media screen and (min-width: 1200px) {
+  .container-fluid {
+    max-width: 1170px;
+    margin: auto;
+  }
+}

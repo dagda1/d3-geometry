@@ -1,0 +1,14 @@
+@import './colors';
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.nav-container {
+  background-color: $nav-background-color;
+  border-color: $nav-border-color;
+}
+
+.navbar-brand {
+  padding-left: 0;
+}
