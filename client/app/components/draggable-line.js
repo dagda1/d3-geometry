@@ -2,34 +2,34 @@ import {
   viewPortFromElement
 } from "../utils/dom";
 
+import { select, event } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { drag } from 'd3-drag';
+import { format } from 'd3-format';
+
 export default class DraggableLine {
   render(el, props = {}) {
     const dimensions = viewPortFromElement(el);
 
-    console.dir(dimensions);
-
-    const xScale = d3.scale.linear()
+    const xScale = scaleLinear()
           .domain([0, 20])
           .range([0, dimensions.width]);
 
-    const yScale = d3.scale.linear()
+    const yScale = scaleLinear()
           .domain([0, 20])
           .range([dimensions.height, 0]);
 
-    const xAxis = d3.svg.axis()
-          .scale(xScale)
-          .orient("bottom")
-          .innerTickSize(-dimensions.height)
+    const xAxis = axisBottom(xScale)
+      .tickSizeInner(-dimensions.height)
+      .tickPadding(10);
+
+    const yAxis = axisLeft(yScale)
+          .tickSizeInner(-dimensions.width)
+          .tickSizeOuter(0)
           .tickPadding(10);
 
-    const yAxis = d3.svg.axis()
-          .scale(yScale)
-          .orient("left")
-          .innerTickSize(-dimensions.width)
-          .outerTickSize(0)
-          .tickPadding(10);
-
-    const svg = d3.select(el).append("svg")
+    const svg = select(el).append("svg")
           .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
           .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
           .append("g")
@@ -70,29 +70,29 @@ export default class DraggableLine {
     const lineData = [line.start, line.finish];
     const equationOfLine = this.equationOfLine;
 
-    const drag = d3.behavior
-            .drag()
-            .on("drag", function(d) {
-              const circle = d3.select(this);
-              const line = d3.select('.line');
-              const isStart = circle.classed('start');
-              const textClass = isStart ? ".textstart" : ".textfinish";
-              const lineX = isStart ? 'x1' : 'x2';
-              const lineY = isStart ? 'y1' : 'y2';
-              const text = d3.select(textClass);
-              const title = d3.select('.title');
-              const xStart = d3.format(",.0f")(xScale.invert(line.attr('x1')));
-              const yStart = d3.format(",.0f")(yScale.invert(line.attr('y1')));
-              const xFinish = d3.format(",.0f")(xScale.invert(line.attr('x2')));
-              const yFinish = d3.format(",.0f")(yScale.invert(line.attr('y2')));
-              text.text( function (d) { return "( " + d3.format(",.0f")(xScale.invert(d.x))  + ", " + d3.format(",.0f")(yScale.invert(d.y)) +" )"; });
+    const draggable = drag()
+      .on("drag", function(d) {
+        const circle = select(this);
+        const line = select('.line');
+        const isStart = circle.classed('start');
+        const textClass = isStart ? ".textstart" : ".textfinish";
+        const lineX = isStart ? 'x1' : 'x2';
+        const lineY = isStart ? 'y1' : 'y2';
+        const text = select(textClass);
+        const title = select('.title');
+        const xStart = format(",.0f")(xScale.invert(line.attr('x1')));
+        const yStart = format(",.0f")(yScale.invert(line.attr('y1')));
+        const xFinish = format(",.0f")(xScale.invert(line.attr('x2')));
+        const yFinish = format(",.0f")(yScale.invert(line.attr('y2')));
+        text.text( function (d) { return "( " + format(",.0f")(xScale.invert(d.x))  + ", " + format(",.0f")(yScale.invert(d.y)) +" )"; });
 
-              line.attr(lineX, d3.event.x).attr(lineY, d3.event.y);
-              text.attr('x', d3.event.x).attr('y', d3.event.y - 20);
-              circle.attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+        console.log(event);
+        line.attr(lineX, event.x).attr(lineY, event.y);
+        text.attr('x', event.x).attr('y', event.y - 20);
+        circle.attr("cx", d.x = event.x).attr("cy", d.y = event.y);
 
-              title.text(equationOfLine({x: xStart, y: yStart}, {x: xFinish, y: yFinish}));
-            });
+        title.text(equationOfLine({x: xStart, y: yStart}, {x: xFinish, y: yFinish}));
+      });
 
     g.selectAll('circle')
       .data(lineData)
@@ -102,7 +102,7 @@ export default class DraggableLine {
       .attr('cy', function(d){return yScale(d.y);})
       .attr('r', 10)
       .style('fill', 'red')
-      .call(drag);
+      .call(draggable);
 
     g.selectAll('text')
       .data(lineData)
@@ -130,6 +130,6 @@ export default class DraggableLine {
       return 'x = ' + start.x;
     }
 
-    return 'y = ' + d3.format(",.2f")(slope) + 'x + ' + d3.format(",.2f")(yIntercept);
+    return 'y = ' + format(",.2f")(slope) + 'x + ' + format(",.2f")(yIntercept);
   }
 };

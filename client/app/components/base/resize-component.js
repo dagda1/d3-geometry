@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { debounce } from 'lodash';
+import { select } from 'd3-selection';
 
 export var ResizeComponent = ComposedComponent  => class extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ export var ResizeComponent = ComposedComponent  => class extends Component {
   unregisterResize() {
     window.removeEventListener("resize", this.resizeFunc);
 
-    d3.select('.svg-container').remove();
+    select('.svg-container').remove();
   }
 
   render() {

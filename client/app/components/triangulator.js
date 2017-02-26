@@ -12,6 +12,13 @@ import {
   viewPortFromElement
 } from "../utils/dom";
 
+
+import { select, selectAll, event } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { drag } from 'd3-drag';
+import { format } from 'd3-format';
+
 export default class Triangulator {
   render(el, props = {}) {
     if(props.resizeFunc) {
@@ -20,11 +27,11 @@ export default class Triangulator {
 
     const dimensions = viewPortFromElement(el);
 
-    const xScale = d3.scale.linear()
+    const xScale = scaleLinear()
             .domain([0, 20])
             .range([0, dimensions.height]);
 
-    const yScale = d3.scale.linear()
+    const yScale = scaleLinear()
             .domain([0, 20])
             .range([dimensions.height, 0]);
 
@@ -53,17 +60,13 @@ export default class Triangulator {
       };
     }
 
-    const xAxis = d3.svg.axis()
-            .scale(xScale)
-            .orient("bottom");
+    const xAxis = axisBottom(xScale);
 
-    const yAxis = d3.svg.axis()
-            .scale(yScale)
-            .orient("left");
+    const yAxis = axisLeft(yScale);
 
     const margin = {top: 20, right: 100, bottom: 30, left: 100};
 
-    const svg = d3.select(el).append("svg")
+    const svg = select(el).append("svg")
             .attr("width", dimensions.width + margin.left + margin.right)
             .attr("height", dimensions.height + margin.top + margin.bottom)
             .append("g")
@@ -111,7 +114,7 @@ export default class Triangulator {
   }
 
   addRadioButtons(area) {
-    const form = d3.select(area.el).append('form')
+    const form = select(area.el).append('form')
             .attr('class', 'col-md-8 col-xs-8');
 
     const effects = _.toArray(this.getEffects());
@@ -122,20 +125,19 @@ export default class Triangulator {
       });
     };
 
-    form.selectAll('label')
+    const labels = form.selectAll('label');
+
+    labels
       .data(effects)
       .enter()
       .append('label')
       .text(function(d) { return d.label; })
       .insert('input')
-      .attr({
-        type: 'radio',
-        class: "shape",
-        name: 'mode',
-        value: function(d) {
-          return d;
-        }
-      }).property('checked', (effect) => {
+      .attr('type', 'radio')
+      .attr('class', 'shape')
+      .attr('name', 'mode')
+      .attr('value', d => d)
+      .property('checked', (effect) => {
         const currentEffect = (effect);
 
         return area.currentEffect === currentEffect.func;
@@ -296,8 +298,8 @@ export default class Triangulator {
   }
 
   addCurrentEffects(area) {
-    d3.select('.circumcircle').remove();
-    d3.selectAll('.line').remove();
+    select('.circumcircle').remove();
+    selectAll('.line').remove();
 
     area.currentEffect.call(this, area);
   }
@@ -351,36 +353,35 @@ export default class Triangulator {
   }
 
   draggable(area, d) {
-    const circle = d3.select(`.grabber.${d.label}`);
+    const circle = select(`.grabber.${d.label}`);
 
-    d3.select('.triangle').remove();
-    d3.select('.circumcircle').remove();
-    d3.selectAll('.line').remove();
+    select('.triangle').remove();
+    select('.circumcircle').remove();
+    selectAll('.line').remove();
 
-    const label = d3.select(".label." + d.label);
-    const x = d3.format(",.0f")(area.xScale.invert(d3.event.x));
-    const y = d3.format(",.0f")(area.yScale.invert(d3.event.y));
+    const label = select(".label." + d.label);
+    const x = format(",.0f")(area.xScale.invert(event.x));
+    const y = format(",.0f")(area.yScale.invert(event.y));
 
     label.text( function () {
       return `${d.label.toUpperCase()} (${x}, ${y})`;
     });
 
-    label.attr('x', d3.event.x).attr('y', d3.event.y - 20);
+    label.attr('x', event.x).attr('y', event.y - 20);
 
-    area.points[d.label] = {x: d3.event.x, y: d3.event.y};
+    area.points[d.label] = {x: event.x, y: event.y};
 
     this.drawTriangle(area.points, area.g);
 
     this.addCurrentEffects(area);
 
     circle
-      .attr('cx', d.x = d3.event.x)
-      .attr('cy', d.y = d3.event.y);
+      .attr('cx', d.x = event.x)
+      .attr('cy', d.y = event.y);
   }
 
   addGrabbers(area, vertices) {
-    const drag = d3.behavior
-            .drag()
+    const dragger = drag()
             .on("drag", this.draggable.bind(this, area));
 
     area.g.selectAll('.grabber')
@@ -391,6 +392,6 @@ export default class Triangulator {
       .attr('cy', function(d) { return d.point.y; })
       .attr('r', 10)
       .style('fill', 'red')
-      .call(drag);
+      .call(dragger);
   }
 };

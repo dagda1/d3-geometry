@@ -1,6 +1,11 @@
 'use strict';
 
 import {solveMatrix} from './utils/matrices';
+import { select, selectAll, event } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { drag } from 'd3-drag';
+import { format } from 'd3-format';
 
 import {
   distance,
@@ -35,16 +40,16 @@ function render(state = {}) {
         width = availableWidth - margin.left - margin.right,
         height = availableHeight - margin.top - margin.bottom;
 
-  d3.select("body").select("svg").remove();
+  select("body").select("svg").remove();
 
-  d3.selectAll('label').remove();
-  d3.selectAll('input[type=radio]').remove();
+  selectAll('label').remove();
+  selectAll('input[type=radio]').remove();
 
-  const xScale = d3.scale.linear()
+  const xScale = scaleLinear()
           .domain([0, 20])
           .range([0, width]);
 
-  const yScale = d3.scale.linear()
+  const yScale = scaleLinear()
           .domain([0, 20])
           .range([height, 0]);
 
@@ -73,15 +78,14 @@ function render(state = {}) {
     };
   }
 
-  const xAxis = d3.svg.axis()
-          .scale(xScale)
+  const xAxis = axisBottom(xScale)
           .orient("bottom");
 
-  const yAxis = d3.svg.axis()
+  const yAxis = axisLeft()
           .scale(yScale)
           .orient("left");
 
-  const svg = d3.select("body").append("svg")
+  const svg = select("body").append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
           .append("g")
@@ -131,10 +135,10 @@ function render(state = {}) {
   area.resizeFunc = resizeFunc;
 
   //window.addEventListener("resize", area.resizeFunc);
-}
+  }
 
 function addRadioButtons(area) {
-  const form = d3.select('body').append('form');
+  const form = select('body').append('form');
 
   const effects = _.toArray(getEffects());
 
@@ -169,8 +173,8 @@ function addRadioButtons(area) {
 }
 
 function addCurrentEffects(area) {
-  d3.select('.circumcircle').remove();
-  d3.selectAll('.line').remove();
+  select('.circumcircle').remove();
+  selectAll('.line').remove();
 
   area.currentEffect.call(null, area);
 }
@@ -366,8 +370,7 @@ function addPointLabels(area, vertices) {
 }
 
 function addGrabbers(area, vertices) {
-  const drag = d3.behavior
-        .drag()
+  const drag = drag()
         .on("drag", draggable.bind(null, area));
 
   area.g.selectAll('.grabber')
@@ -382,31 +385,31 @@ function addGrabbers(area, vertices) {
 }
 
 function draggable(area, d) {
-  const circle = d3.select(`.grabber.${d.label}`);
+  const circle = select(`.grabber.${d.label}`);
 
-  d3.select('.triangle').remove();
-  d3.select('.circumcircle').remove();
-  d3.selectAll('.line').remove();
+  select('.triangle').remove();
+  select('.circumcircle').remove();
+  selectAll('.line').remove();
 
-  const label = d3.select(".label." + d.label);
-  const x = d3.format(",.0f")(area.xScale.invert(d3.event.x));
-  const y = d3.format(",.0f")(area.yScale.invert(d3.event.y));
+  const label = select(".label." + d.label);
+  const x = format(",.0f")(area.xScale.invert(event.x));
+  const y = format(",.0f")(area.yScale.invert(event.y));
 
   label.text( function () {
     return `${d.label.toUpperCase()} (${x}, ${y})`;
   });
 
-  label.attr('x', d3.event.x).attr('y', d3.event.y - 20);
+  label.attr('x', event.x).attr('y', event.y - 20);
 
-  area.points[d.label] = {x: d3.event.x, y: d3.event.y};
+  area.points[d.label] = {x: event.x, y: event.y};
 
   drawTriangle(area.points, area.g);
 
   addCurrentEffects(area);
 
   circle
-    .attr('cx', d.x = d3.event.x)
-    .attr('cy', d.y = d3.event.y);
+    .attr('cx', d.x = event.x)
+    .attr('cy', d.y = event.y);
 }
 
 render();

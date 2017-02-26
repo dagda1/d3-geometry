@@ -7,17 +7,14 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ROOT_PATH = path.resolve(__dirname);
 
 var config = {
-	addVendor: function(name, path){
-		this.resolve.alias[name] = path;
-		this.module.noParse.push(path);
-	},
 	entry: {
 		app: ['babel-polyfill', "./client/app/index.js"]
 	},
   devtool: 'source-map',
 	output: {
-    path: process.env.NODE_ENV === 'production' ? path.resolve(ROOT_PATH, 'dist') : path.resolve(ROOT_PATH, 'app/build'),
-		"filename": "bundle.js"
+    path: process.env.NODE_ENV === 'production' ? path.join(ROOT_PATH, 'dist') : path.join(ROOT_PATH, 'build'),
+		"filename": "bundle.js",
+    publicPath: ''
 	},
 	module: {
 		noParse: [],
@@ -28,7 +25,7 @@ var config = {
 
         // Skip any files outside of your project's `src` directory
         include: [
-          path.resolve(__dirname, "client/app"),
+          path.join(__dirname, "client/app"),
         ],
 
         // Only run `.js` and `.jsx` files through Babel
@@ -49,12 +46,13 @@ var config = {
     root: [path.join(__dirname, "client/app")]
 	},
   devServer: {
-    contentBase: path.resolve(ROOT_PATH, 'build'),
+    contentBase: path.join(ROOT_PATH, 'build'),
     historyApiFallback: true,
     hot: true,
     inline: true,
     progress: true,
-    port: '3030'
+    port: '3030',
+    displayErrorMessages: true
   },
 	plugins: [
     new webpack.HotModuleReplacementPlugin(),
