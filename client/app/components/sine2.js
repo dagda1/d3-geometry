@@ -12,6 +12,14 @@ import {
   wait
 } from "../utils/common";
 
+import { select, selectAll, event } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { drag } from 'd3-drag';
+import { format } from 'd3-format';
+import { range } from 'd3-array';
+import { line, curveMonotoneX, arc } from 'd3-shape';
+
 const TWO_PI = (Math.PI *2);
 
 class Sine extends Component {
@@ -26,7 +34,7 @@ class Sine extends Component {
   }
 
   resize() {
-    d3.select('.sine2-container').remove();
+    select('.sine2-container').remove();
 
     setTimeout(this.createDocument.bind(this), 500);
   }
@@ -36,7 +44,7 @@ class Sine extends Component {
 
     this.cancelled = true;
 
-    d3.select('.sine2-container').remove();
+    select('.sine2-container').remove();
   }
 
   createDocument() {
@@ -44,7 +52,7 @@ class Sine extends Component {
 
     const dimensions = viewPortFromElement(el);
 
-    const svg = d3.select(el).append("svg")
+    const svg = select(el).append("svg")
             .attr('class', 'sine2-container')
             .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
             .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.top)
@@ -113,13 +121,13 @@ class Sine extends Component {
 
     angle = angle + Math.PI / 2;
 
-    const innerArc = d3.svg.arc()
+    const innerArc = arc()
             .innerRadius(8)
             .outerRadius(12)
             .startAngle(Math.PI/2)
             .endAngle(angle);
 
-    const outerArc = d3.svg.arc()
+    const outerArc = arc()
             .innerRadius(state.radius - 1)
             .outerRadius(state.radius + 3)
             .startAngle(Math.PI/2)
@@ -200,8 +208,8 @@ class Sine extends Component {
       .attr('x2', 0)
       .attr('y2', 0);
 
-    const sine = state.sine = d3.svg.line()
-            .interpolate('monotone')
+    const sine = state.sine = line()
+            .curve(curveMonotoneX)
 		        .x((d, i) => { return state.xScale(d); })
 		        .y((d, i) => { return state.yScale(Math.sin(d) + 1); });
 
@@ -222,11 +230,11 @@ class Sine extends Component {
   }
 
   initializeArea(container, dimensions) {
-    const xScale = d3.scale.linear()
+    const xScale = scaleLinear()
             .domain([0, (TWO_PI)])
             .range([0, (dimensions.width)]);
 
-    const yScale = d3.scale.linear()
+    const yScale = scaleLinear()
             .domain([-1.0, 1.0])
             .range([(dimensions.height - 100), 0]);
 
@@ -234,11 +242,9 @@ class Sine extends Component {
             .attr("class", "graph-container")
             .attr('transform', `translate(${xScale(1.5)}, 20)`);
 
-    const yAxis = d3.svg.axis()
+    const yAxis = axisLeft(yScale)
             .tickValues([-1.0, -0.5, 0, 0.5, 1.0])
-            .outerTickSize(0)
-            .orient('left')
-            .scale(yScale);
+            .tickSizeOuter(0);
 
     const yAxisGroup = graphContainer
             .append('g')
@@ -249,20 +255,20 @@ class Sine extends Component {
 
     const piMap = {"1.57": "π/2", "3.14": "π", "4.71": "3π/2", "6.28": "2π"};
 
-    const xAxis = d3.svg.axis()
+    const xAxis = axisBottom(xScale)
             .tickValues(xTickValues)
             .tickFormat((t) => {
               return t === 0 ? '' : piMap[t.toString()];
-            })
-            .scale(xScale);
+            });
 
     const findZeroTick = (data) => {
       return data === 0.0;
     };
 
-    const yAxisZero = graphContainer.selectAll(".y.axis .tick").filter(findZeroTick).map((tick) => {
-      return d3.transform(d3.select(tick[0]).attr('transform')).translate[1];
-    })[0];
+    const yAxisZero = graphContainer.selectAll(".y.axis .tick").filter(findZeroTick)._groups
+                                    .map((tick) => {
+                                      return parseFloat(select(select(tick[0])._groups[0][0]).attr('transform').split(',')[1].replace(/\)/, ''), 10)
+                                    })[0];
 
     const xAxisGroup = graphContainer
             .append('g')
@@ -270,12 +276,11 @@ class Sine extends Component {
             .attr('transform', `translate(0, ${yAxisZero})`)
             .call(xAxis);
 
-    const leftXAxis = d3.svg.axis()
+    const leftXAxis = axisBottom(xScale)
             .tickValues(xTickValues)
             .tickFormat(() => '')
-            .innerTickSize(0)
-            .outerTickSize(0)
-            .scale(xScale);
+            .tickSizeInner(0)
+            .tickSizeOuter(0);
 
     graphContainer
       .append('g')

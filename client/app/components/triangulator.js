@@ -12,7 +12,6 @@ import {
   viewPortFromElement
 } from "../utils/dom";
 
-
 import { select, selectAll, event } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';

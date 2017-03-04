@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom';
 import { debounce } from 'lodash';
 import * as X from './index';
 
+import { select, selectAll, event } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { drag } from 'd3-drag';
+import { format } from 'd3-format';
+import { range } from 'd3-array';
+import { line, curveMonotoneX } from 'd3-shape';
+
 import {
   viewPortFromElement
 } from "../utils/dom";
@@ -27,7 +35,7 @@ export default class SineWave extends Component {
   }
 
   resize() {
-    d3.select('.sinewave-container').remove();
+    select('.sinewave-container').remove();
 
     setTimeout(this.createDocument.bind(this), 500);
   }
@@ -37,7 +45,7 @@ export default class SineWave extends Component {
 
     this.cancelled = true;
 
-    d3.select('.sinewave-container').remove();
+    select('.sinewave-container').remove();
   }
 
   createDocument() {
@@ -45,15 +53,15 @@ export default class SineWave extends Component {
 
     const dimensions = viewPortFromElement(el);
 
-    const xScale = d3.scale.linear()
+    const xScale = scaleLinear()
             .domain([0, 20])
             .range([0, dimensions.width]);
 
-    const yScale = d3.scale.linear()
+    const yScale = scaleLinear()
             .domain([0, 20])
             .range([dimensions.height, 0]);
 
-    const svg = d3.select(el).append("svg")
+    const svg = select(el).append("svg")
             .attr('class', 'sinewave-container')
             .attr("width", dimensions.width)
             .attr("height", dimensions.height);
@@ -66,11 +74,9 @@ export default class SineWave extends Component {
   }
 
   addSineAxis(state) {
-    const yAxis = d3.svg.axis()
-            .orient('left')
+    const yAxis = axisLeft(state.yScaleAxis)
             .tickValues([-1, 0, 1])
-            .tickFormat(d3.format('d'))
-            .scale(state.yScaleAxis);
+            .tickFormat(format('d'))
 
     state.graphContainer
       .append('g')
@@ -82,11 +88,10 @@ export default class SineWave extends Component {
 
     const piMap = {'0': '0', '1.57': '\\pi\\over 2', '3.14': '\\pi', '4.71': '3\\pi\\over 2', '6.28': '2\\pi'};
 
-    const xAxis = d3.svg.axis()
-            .orient('bottom')
+    const xAxis = axisBottom(state.xScaleAxis)
             .tickValues(xTickValues)
-            .innerTickSize(0)
-            .outerTickSize(0)
+            .tickSizeInner(0)
+            .tickSizeOuter(0)
             .tickFormat((x) => `$${piMap[x]}$`)
             .scale(state.xScaleAxis);
 
@@ -161,11 +166,11 @@ export default class SineWave extends Component {
             .attr('r', 5)
             .attr('class', 'axis-dot');
 
-    const yScaleAxis = d3.scale.linear()
+    const yScaleAxis = scaleLinear()
             .domain([-1, 1])
             .range([radius, -radius]);
 
-    const xScaleAxis = d3.scale.linear()
+    const xScaleAxis = scaleLinear()
             .domain([0, (Math.PI * 2)])
             .range([firstAxisXCoord, -initialX + 20]);
 
@@ -247,18 +252,18 @@ export default class SineWave extends Component {
   }
 
   drawSineWave(state) {
-    d3.select('.sine-curve').remove();
+    select('.sine-curve').remove();
 
-    const sineData = d3.range(0, 54)
+    const sineData = range(0, 54)
             .map(x => x * 10 / 85)
             .map((x) => {
               return {x: x, y: - Math.sin(x - state.time)};
             });
 
-    const sine = d3.svg.line()
-            .interpolate('monotone')
-            .x( (d) => {return state.xScaleAxis(d.x);})
-            .y( (d) => {return state.yScaleAxis(d.y);});
+    const sine = line()
+      .curve(curveMonotoneX)
+      .x( (d) => {return state.xScaleAxis(d.x);})
+      .y( (d) => {return state.yScaleAxis(d.y);});
 
     state.graphContainer.append('path')
       .datum(sineData)
@@ -309,10 +314,10 @@ export default class SineWave extends Component {
       MathJax.Hub.Register.StartupHook("End", function() {
         setTimeout(() => {
           svg.selectAll('.tick').each(function(){
-            var self = d3.select(this),
+            var self = select(this),
                  g = self.select('text>span>svg');
 
-            if(g[0][0] && g[0][0].tagName === 'svg') {
+            if(g._groups[0][0] && g._groups[0][0].tagName === 'svg') {
               g.remove();
               self.append(function(){
                 return g.node();
