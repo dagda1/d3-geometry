@@ -9,6 +9,15 @@ import {
   getYIntercept
 } from "../utils/line";
 
+import { select, selectAll, event, mouse } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { drag } from 'd3-drag';
+import { format } from 'd3-format';
+import { range } from 'd3-array';
+import { line, curveMonotoneX, curveBasis, arc } from 'd3-shape';
+import { max, min, extent } from 'd3-array';
+import { transform } from 'd3-zoom';
 
 require("../styles/functions.scss");
 
@@ -54,17 +63,16 @@ export default class FunctionPlot extends Component {
 
     const dimensions = this.getDimensions();
 
-    this.svg = d3.select(el).append("svg")
+    this.svg = select(el).append("svg")
       .attr('class', 'function-svg')
       .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
       .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
+      .append("g");
 
-    this.xScale = d3.scale.linear()
+    this.xScale = scaleLinear()
           .range([0, dimensions.width]);
 
-    this.yScale = d3.scale.linear()
+    this.yScale = scaleLinear()
           .range([dimensions.height, 0]);
 
     const data = this.getDataFromProps(this.props);
@@ -83,7 +91,7 @@ export default class FunctionPlot extends Component {
   componentWillReceiveProps(nextProps) {
     const data = this.getDataFromProps(nextProps);
 
-    d3.selectAll('.axis').remove();
+    selectAll('.axis').remove();
 
     this.drawAxes(data);
 
@@ -97,23 +105,23 @@ export default class FunctionPlot extends Component {
       return expression.eval({x: x});
     };
 
-    return d3.range(state.minX, state.maxX).map( (d) => {
+    return range(state.minX, state.maxX).map( (d) => {
       return {x:d, y:fn(d)};
     });
   }
 
   drawCurve(data) {
-    d3.select('.curve').remove();
-    d3.select('.diff').remove();
-    d3.select('.difflabel').remove();
-    d3.select('.tangent').remove();
+    select('.curve').remove();
+    select('.diff').remove();
+    select('.difflabel').remove();
+    select('.tangent').remove();
 
     const xScale = this.xScale;
     const yScale = this.yScale;
     const svg = this.svg;
 
-    const line = d3.svg.line()
-            .interpolate('basis')
+    const lin = line()
+            .curve(curveBasis)
             .x( (d) => {return xScale(d.x);})
             .y( (d) => {return yScale(d.y);});
 
@@ -139,10 +147,10 @@ export default class FunctionPlot extends Component {
       .attr('x2', xScale(0))
       .attr('y2', yScale(0));
 
-    const maxX = d3.max(data, (d) => d.x);
+    const maxX = max(data, (d) => d.x);
 
     const mouseMove = function() {
-      const m = d3.mouse(d3.select('.curve').node());
+      const m = mouse(select('.curve').node());
 
       let x = m[0];
 
@@ -217,25 +225,22 @@ export default class FunctionPlot extends Component {
     this.svg.append('path')
       .datum(data)
       .attr('class', 'curve')
-      .attr('d', line);
+      .attr('d', lin);
 
-    d3.select('.function-svg').on('mousemove', mouseMove);
+    select('.function-svg').on('mousemove', mouseMove);
   }
 
   drawAxes(data) {
-    const xAxis = d3.svg.axis()
-            .scale(this.xScale);
+    const xAxis = axisBottom(this.xScale);
 
-    const yAxis = d3.svg.axis()
-            .orient('left')
-            .scale(this.yScale);
+    const yAxis = axisLeft(this.yScale);
 
     const dimensions = this.getDimensions();
 
-    this.xScale.domain(d3.extent(data, (d) => d.x));
+    this.xScale.domain(extent(data, (d) => d.x));
 
-    const minY = d3.min(data, (d) => d.y);
-    const maxY = d3.max(data, (d) => d.y);
+    const minY = min(data, (d) => d.y);
+    const maxY = max(data, (d) => d.y);
 
     const nonNegativeXAxis = minY >= 0 && maxY >= 0;
     const positiveAndNegativeXAxis = minY < 0 && maxY > 0;
@@ -243,9 +248,9 @@ export default class FunctionPlot extends Component {
     let yScaleDomain, xAxisPosition;
 
     if(nonNegativeXAxis) {
-      yScaleDomain = [0, d3.max(data, (d) => d.y)];
+      yScaleDomain = [0, max(data, (d) => d.y)];
     }  else {
-      yScaleDomain = d3.extent(data, (d) => d.y);
+      yScaleDomain = extent(data, (d) => d.y);
     }
 
     this.yScale.domain(yScaleDomain);
@@ -260,14 +265,15 @@ export default class FunctionPlot extends Component {
       .call(yAxis);
 
     if(nonNegativeXAxis) {
-      yScaleDomain = [0, d3.max(data, (d) => d.y)];
+      yScaleDomain = [0, max(data, (d) => d.y)];
       xAxisPosition = dimensions.height;
     } else if(positiveAndNegativeXAxis) {
-      xAxisPosition = this.svg.selectAll(".tick").filter(findZeroTick).map((tick) => {
-        return d3.transform(d3.select(tick[0]).attr('transform')).translate[1];
-      });
+      xAxisPosition = this.svg.selectAll(".tick").filter(findZeroTick)._groups
+                          .map((tick) => {
+                            return parseFloat(select(select(tick[0])._groups[0][0]).attr('transform').split(',')[1].replace(/\)/, ''), 10)
+                          });
     } else {
-      yScaleDomain = d3.extent(data, (d) => d.y);
+      yScaleDomain = extent(data, (d) => d.y);
       xAxisPosition = 0;
     }
 
@@ -276,10 +282,10 @@ export default class FunctionPlot extends Component {
       .attr('transform', `translate(0, ${xAxisPosition})`)
       .call(xAxis);
 
-    d3.select('.y-axis').remove();
+    select('.y-axis').remove();
 
-    const minX = d3.min(data, (d) => d.x);
-    const maxX = d3.max(data, (d) => d.y);
+    const minX = min(data, (d) => d.x);
+    const maxX = max(data, (d) => d.y);
 
     const positiveXOnly = minX > 0 && maxX > 0;
     const negativeXOnly = minX < 0 && maxX < 0;
@@ -291,8 +297,8 @@ export default class FunctionPlot extends Component {
     } else if(negativeXOnly) {
       yAxisPosition = dimensions.width;
     } else {
-      yAxisPosition = this.svg.selectAll(".x-axis .tick").filter(findZeroTick).map((tick) => {
-        return d3.transform(d3.select(tick[0]).attr('transform')).translate[0];
+      yAxisPosition = selectAll(".x-axis .tick").filter(findZeroTick)._groups.map((tick) => {
+        return parseFloat(/\(([^)]+)\,/.exec(select(tick[0]).attr('transform'))[1]);
       });
     }
 
@@ -308,7 +314,7 @@ export default class FunctionPlot extends Component {
     const yScale = this.yScale;
 
     const clickable = function (data){
-      const tick = d3.select(this);
+      const tick = select(this);
 
       const transform = d3.transform(tick.attr("transform")).translate;
 
@@ -325,7 +331,7 @@ export default class FunctionPlot extends Component {
         .attr('y2', yScale(y));
     };
 
-    d3.selectAll('.x-axis .tick').on('click', clickable);
+    selectAll('.x-axis .tick').on('click', clickable);
   }
 
   componentDidUpdate() {
@@ -344,8 +350,8 @@ export default class FunctionPlot extends Component {
   }
 
   componentWillUnmount() {
-    d3.select('.x-axis').on('click', null);
-    d3.select('svg').on('mousemove', null);
+    select('.x-axis').on('click', null);
+    select('svg').on('mousemove', null);
   }
 
   render() {
@@ -354,51 +360,63 @@ export default class FunctionPlot extends Component {
     return (
       <X.Grid>
         <X.Row className="plotter">
-          <div className="row">
-            <h2 ref="expr" className="col-xs-offset-3 col-md-offset-1">{latextExpression}</h2>
-            <div className="col-lg-4 col-md-6 col-xs-12 function-curve">
-              <div ref="curve"></div>
-            </div>
-            <div className="function-dashboard col-lg-3 col-md-5 col-xs-9">
-              <div className="form-horizontal">
-                <div className="form-group">
-                  <fieldset className="">
-                    <legend>Enter Expression</legend>
-                    <div className="expression col-xs-10 col-md-10">
-                      <input type="text"
-                             className="form-control input-md"
-                             defaultValue={this.props.expression}
-                             onKeyDown={this.handleSubmit.bind(this, this.setExpression.bind(this))}
-                             onBlur={this.handleExpressionBlur.bind(this)}
-                             ref="expressionInput"
-                      />
-                    </div>
-                    <button className="btn btn-primary btn-responsive" onClick={this.setExpression.bind(this)}>Go</button>
-                  </fieldset>
-                  <fieldset className="">
-                    <legend>X Range</legend>
-                    <input type="text"
-                           className="form-control input-md limits"
-                           defaultValue={this.props.minX}
-                           onBlur={this.handleXScaleBlur.bind(this)}
-                           onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
-                           ref="lowerX"
-                    />
-
-                    <label>&lt; x &lt;</label>
-
-                    <input type="text"
-                           className="form-control input-md limits"
-                           defaultValue={this.props.maxX}
-                           onBlur={this.handleXScaleBlur.bind(this)}
-                           onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
-                           ref="upperX"
-                    />
-                  </fieldset>
-                </div>
-              </div>
-            </div>
-          </div>
+         <X.Col md={5}>
+             <h2 ref="expr">{latextExpression}</h2>
+             <div>
+                 <div ref="curve"></div>
+             </div>
+         </X.Col>
+         <X.Col md={7}>
+           <X.Row>
+               <X.Col lg={6}>
+                   <div className="panel panel-default">
+                       <div className="panel-heading">
+                           <label>Enter Expression</label>
+                       </div>
+                       <div className="panel-body">
+                           <div className="input-group">
+                               <input type="text"
+                                      defaultValue={this.props.expression}
+                                      onKeyDown={this.handleSubmit.bind(this, this.setExpression.bind(this))}
+                                      onBlur={this.handleExpressionBlur.bind(this)}
+                                      ref="expressionInput"
+                                      className="form-control"
+                               />
+                               <span className="input-group-btn">
+                                   <button className="btn btn-primary" onClick={this.setExpression.bind(this)}>Go</button>
+                               </span>
+                           </div>
+                       </div>
+                   </div>
+             </X.Col>
+           </X.Row>
+           <X.Row>
+               <X.Col lg={6}>
+                   <div className="panel panel-default">
+                       <div className="panel-heading">
+                           <label>X Range</label>
+                       </div>
+                       <div className="panel-body">
+                           <input type="text"
+                                  defaultValue={this.props.minX}
+                                  onBlur={this.handleXScaleBlur.bind(this)}
+                                  onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
+                                  className="form-control"
+                                  ref="lowerX"
+                           />
+                           <label>&lt; x &lt;</label>
+                           <input type="text"
+                                  defaultValue={this.props.maxX}
+                                  onBlur={this.handleXScaleBlur.bind(this)}
+                                  onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
+                                  className="form-control"
+                                  ref="upperX"
+                           />
+                       </div>
+                   </div>
+               </X.Col>
+           </X.Row>
+         </X.Col>
         </X.Row>
       </X.Grid>
     );
