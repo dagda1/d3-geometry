@@ -63,7 +63,7 @@ export default class Triangulator {
 
     const yAxis = axisLeft(yScale);
 
-    const margin = {top: 20, right: 100, bottom: 30, left: 100};
+    const margin = {top: 20, right: 100, bottom: 30, left: 30};
 
     const svg = select(el).append("svg")
             .attr("width", dimensions.width + margin.left + margin.right)
@@ -113,8 +113,7 @@ export default class Triangulator {
   }
 
   addRadioButtons(area) {
-    const form = select(area.el).append('form')
-            .attr('class', 'col-md-8 col-xs-8');
+    const form = select(area.el).append('form');
 
     const effects = _.toArray(this.getEffects());
 
