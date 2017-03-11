@@ -10,7 +10,6 @@ const Col = ({ componentClass: Component, className, children, ...props }) => {
     .map(key => `col-${key.replace( /([A-Z])/g, "-$1").toLowerCase()}-${props[key]}`)
     .value();
 
-  console.log(classes);
   return (
     <Component className={classNames(className, classes)}>
       {children}

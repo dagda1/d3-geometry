@@ -45,3 +45,32 @@ body {
 .dropdown {
   cursor: pointer;
 }
+
+@media (max-width: 767px) {
+  .text-xs-center {
+    text-align: center;
+  }
+}
+
+$margins: ();
+
+@for $i from 1 through 50 {
+  .mt-#{$i} {
+    margin-top: #{$i}px !important;
+  }
+
+  .ml-#{$i} {
+    margin-left: #{$i}px !important;
+  }
+
+  .mb-#{$i} {
+    margin-bottom: #{$i}px !important;
+  }
+
+
+  .mr-#{$i} {
+    margin-right: #{$i}px !important;
+  }
+
+  $margins: append($margins, $i, comma);
+}

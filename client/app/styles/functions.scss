@@ -20,3 +20,17 @@
 .MathJax_SVG_Display {
   text-align: left !important;
 }
+
+$range-label-margin: 5px;
+
+.plotter .panel.panel-default.scale {
+  input[type=text] {
+    width: 50px;
+    display: inline;
+  }
+
+  .range {
+    margin-left: $range-label-margin;
+    margin-right: $range-label-margin;
+  }
+}

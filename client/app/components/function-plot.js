@@ -30,12 +30,13 @@ export default class FunctionPlot extends Component {
     fn();
   }
 
+
   handleExpressionBlur() {
     this.setExpression();
   }
 
   setExpression() {
-    this.props.setExpression(this.refs.expressionInput.value);
+    this.props.setExpression(this.expressionInput.value);
   }
 
   handleXScaleBlur() {
@@ -43,8 +44,8 @@ export default class FunctionPlot extends Component {
   }
 
   setXRange() {
-    const minX = this.refs.lowerX.value;
-    const maxX = this.refs.upperX.value;
+    const minX = this.lowerX.value;
+    const maxX = this.upperX.value;
 
     this.props.changeScale(minX, maxX);
   }
@@ -59,7 +60,7 @@ export default class FunctionPlot extends Component {
   }
 
   componentDidMount() {
-    const el = this.refs.curve;
+    const el = this.curve;
 
     const dimensions = this.getDimensions();
 
@@ -85,7 +86,7 @@ export default class FunctionPlot extends Component {
       return;
     }
 
-    MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.refs.expr]);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.expr]);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -339,7 +340,7 @@ export default class FunctionPlot extends Component {
   }
 
   queueMathJax() {
-    MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.refs.expr]);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.expr]);
   }
 
   convertPoint(point) {
@@ -360,16 +361,16 @@ export default class FunctionPlot extends Component {
     return (
       <X.Grid>
         <X.Row className="plotter">
-         <X.Col md={5}>
-             <h2 ref="expr">{latextExpression}</h2>
+          <X.Col md={5}>
+             <h2 ref={el => this.expr = el}>{latextExpression}</h2>
              <div>
-                 <div ref="curve"></div>
+                 <div ref={el => this.curve = el}></div>
              </div>
-         </X.Col>
-         <X.Col md={7}>
+          </X.Col>
+         <X.Col md={5}>
            <X.Row>
-               <X.Col lg={6}>
-                   <div className="panel panel-default">
+               <X.Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3} className="mt-20">
+                   <div className="panel panel-default text-center">
                        <div className="panel-heading">
                            <label>Enter Expression</label>
                        </div>
@@ -379,7 +380,7 @@ export default class FunctionPlot extends Component {
                                       defaultValue={this.props.expression}
                                       onKeyDown={this.handleSubmit.bind(this, this.setExpression.bind(this))}
                                       onBlur={this.handleExpressionBlur.bind(this)}
-                                      ref="expressionInput"
+                                      ref={el => this.expressionInput = el}
                                       className="form-control"
                                />
                                <span className="input-group-btn">
@@ -391,34 +392,34 @@ export default class FunctionPlot extends Component {
              </X.Col>
            </X.Row>
            <X.Row>
-               <X.Col lg={6}>
-                   <div className="panel panel-default">
-                       <div className="panel-heading">
-                           <label>X Range</label>
-                       </div>
-                       <div className="panel-body">
-                           <input type="text"
-                                  defaultValue={this.props.minX}
-                                  onBlur={this.handleXScaleBlur.bind(this)}
-                                  onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
-                                  className="form-control"
-                                  ref="lowerX"
-                           />
-                           <label>&lt; x &lt;</label>
-                           <input type="text"
-                                  defaultValue={this.props.maxX}
-                                  onBlur={this.handleXScaleBlur.bind(this)}
-                                  onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
-                                  className="form-control"
-                                  ref="upperX"
-                           />
-                       </div>
-                   </div>
-               </X.Col>
+             <X.Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3}>
+               <div className="panel panel-default scale text-center">
+                 <div className="panel-heading">
+                   <label>X Range</label>
+                 </div>
+                 <div className="panel-body">
+                   <input type="text"
+                          defaultValue={this.props.minX}
+                          onBlur={this.handleXScaleBlur.bind(this)}
+                          onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
+                          className="form-control"
+                          ref={el => this.lowerX = el}
+                   />
+                   <label className="range">&lt; x &lt;</label>
+                   <input type="text"
+                          defaultValue={this.props.maxX}
+                          onBlur={this.handleXScaleBlur.bind(this)}
+                          onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
+                          className="form-control"
+                          ref={el => this.upperX = el}
+                   />
+                 </div>
+               </div>
+             </X.Col>
            </X.Row>
          </X.Col>
         </X.Row>
       </X.Grid>
     );
   }
-};
+}
