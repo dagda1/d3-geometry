@@ -13,7 +13,7 @@ export function viewPortFromElement(el) {
     top: 20,
     right: 100,
     bottom: 30,
-    left: 100
+    left: 30
   };
 
   const w = el.offsetWidth;

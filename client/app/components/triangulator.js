@@ -385,9 +385,9 @@ export default class Triangulator {
     area.g.selectAll('.grabber')
       .data(vertices)
       .enter().append('circle')
-      .attr('class', function(d) { return 'grabber ' + d.label; })
-      .attr('cx', function(d) { return d.point.x; })
-      .attr('cy', function(d) { return d.point.y; })
+      .attr('class', d => 'grabber ' + d.label)
+      .attr('cx', d => d.point.x)
+      .attr('cy', d => d.point.y)
       .attr('r', 10)
       .style('fill', 'red')
       .call(dragger);

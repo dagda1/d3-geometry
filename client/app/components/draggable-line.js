@@ -45,8 +45,8 @@ export default class DraggableLine {
       .call(yAxis);
 
     const line = {
-      start: {x: 2, y: 3, type: 'start'},
-      finish: {x: 14, y: 6, type: 'finish'}
+      start: {x: xScale(2), y: yScale(3), type: 'start'},
+      finish: {x: xScale(14), y: yScale(6), type: 'finish'}
     };
 
     const g = svg.append('g');
@@ -54,10 +54,10 @@ export default class DraggableLine {
     g.append('line')
       .style('stroke', 'blue')
       .attr('class', 'line')
-      .attr('x1', xScale(line.start.x))
-      .attr('y1', yScale(line.start.y))
-      .attr('x2', xScale(line.finish.x))
-      .attr('y2', yScale(line.finish.y));
+      .attr('x1', line.start.x)
+      .attr('y1', line.start.y)
+      .attr('x2', line.finish.x)
+      .attr('y2', line.finish.y);
 
     svg.append('text')
       .attr('class', 'title')
@@ -68,13 +68,22 @@ export default class DraggableLine {
       .attr("font-size", "24px");
 
     const lineData = [line.start, line.finish];
+
     const equationOfLine = this.equationOfLine;
+
+    const formatText = d => `(${format(",.0f")(xScale.invert(d.x))}, ${format(",.0f")(yScale.invert(d.y))})`
+
 
     const draggable = drag()
       .on("drag", function(d) {
-        const circle = select(this);
+        select(this).attr("cx", d.x = xScale(event.x)).attr("cy", d.y = yScale(event.y));
+        const circle = select(`.circle.${d.type}`);
+
+        circle.attr("cx", d.x = event.x)
+              .attr("cy", d.y = event.y);
+
         const line = select('.line');
-        const isStart = circle.classed('start');
+        const isStart = d.type === 'start';
         const textClass = isStart ? ".textstart" : ".textfinish";
         const lineX = isStart ? 'x1' : 'x2';
         const lineY = isStart ? 'y1' : 'y2';
@@ -84,37 +93,34 @@ export default class DraggableLine {
         const yStart = format(",.0f")(yScale.invert(line.attr('y1')));
         const xFinish = format(",.0f")(xScale.invert(line.attr('x2')));
         const yFinish = format(",.0f")(yScale.invert(line.attr('y2')));
-        text.text( function (d) { return "( " + format(",.0f")(xScale.invert(d.x))  + ", " + format(",.0f")(yScale.invert(d.y)) +" )"; });
+        text.text(formatText);
 
-        console.log(event);
         line.attr(lineX, event.x).attr(lineY, event.y);
         text.attr('x', event.x).attr('y', event.y - 20);
-        circle.attr("cx", d.x = event.x).attr("cy", d.y = event.y);
 
         title.text(equationOfLine({x: xStart, y: yStart}, {x: xFinish, y: yFinish}));
       });
 
     g.selectAll('circle')
-      .data(lineData)
-      .enter().append("circle")
-      .attr('class', function(d){ return "circle " + d.type;})
-      .attr('cx', function(d){return xScale(d.x);})
-      .attr('cy', function(d){return yScale(d.y);})
-      .attr('r', 10)
-      .style('fill', 'red')
-      .call(draggable);
+     .data(lineData)
+     .enter().append("circle")
+     .attr('class', function(d){ return "circle " + d.type;})
+     .attr('cx', d => d.x)
+     .attr('cy', d => d.y)
+     .attr('r', 10)
+     .style('fill', 'red')
+     .call(draggable);
 
     g.selectAll('text')
-      .data(lineData)
-      .enter().append('text')
-      .attr("x", function(d){return xScale(d.x);})
-      .attr("y", function(d){return yScale(d.y + 1);})
-      .attr('class', function(d) {return "text" + d.type;})
-      .text( function (d) { return "( " + d.x  + ", " + d.y +" )"; })
+     .data(lineData)
+     .enter().append('text')
+     .attr('x', d => d.x)
+     .attr('y', d => d.y)
+     .attr('class', d => "text" + d.type)
+     .text(formatText)
       .attr("font-family", "sans-serif")
       .attr("font-size", "14px")
       .attr("fill", "red");
-
   }
 
   equationOfLine(start, finish) {

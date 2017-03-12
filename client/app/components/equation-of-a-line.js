@@ -14,7 +14,7 @@ export default class LineEquation extends Component {
     return (
       <X.Grid>
         <X.Row>
-          <X.Col sm={12} className="equation-of-a-line">
+          <X.Col lg={7} md={7} xs={8} className="equation-of-a-line">
             <div  ref={el => this.equationOfALine = el}/>
           </X.Col>
         </X.Row>

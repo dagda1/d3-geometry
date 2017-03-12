@@ -4,7 +4,6 @@ import { chain, isEmpty } from 'lodash';
 import classNames from 'classnames';
 
 const Col = ({ componentClass: Component, className, children, ...props }) => {
-  console.log(props);
   const classes = chain(Object.keys(props))
     .pickBy(key => /^(xs|sm|md|lg)/.test(key))
     .map(key => `col-${key.replace( /([A-Z])/g, "-$1").toLowerCase()}-${props[key]}`)
