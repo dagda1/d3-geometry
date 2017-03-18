@@ -1,20 +1,48 @@
 import React, {Component} from 'react';
 import * as X from './index';
 import Triangulator from './triangulator';
+import RadioButtonGroup from './radio-button-group/radio-button-group';
+import { setTriangleMode } from '../actions/triangle-actions';
+import { connect } from 'react-redux';
 
-
+@connect((state) => {
+  return {
+    mode: state.triangles.mode
+  }
+}, {
+  setTriangleMode
+})
 export default class Triangles extends Component {
-  componentDidMount() {
-    const triangulator = new Triangulator();
+  constructor() {
+    super(...arguments);
 
+    this.triangulator = new Triangulator();
+  }
+
+  componentDidMount() {
     const el = this.triangleContainer;
 
-    triangulator.render(el);
+    this.triangulator.render(el, {
+      currentEffect: this.props.mode
+    });
+  }
+
+  componentDidUpdate() {
+    this.triangulator.changeEffect(this.props.mode);
   }
 
   render() {
     return (
       <X.Grid>
+        <X.Row>
+          <X.Col md={7} sm={7}>
+            <RadioButtonGroup
+                values={['Perpendicular Bisectors', 'Medians', 'Altitudes']}
+                selected={this.props.mode}
+                onChange={this.props.setTriangleMode}
+            />
+          </X.Col>
+        </X.Row>
         <X.Row>
           <X.Col lg={6} md={6} xs={8}>
             <div ref={el => this.triangleContainer = el} className="triangle-container"></div>

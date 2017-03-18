@@ -3,6 +3,11 @@
   stroke: teal;
 }
 
+.plotter h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .plotter .axis path, line {
   stroke: #aaa;
   shape-rendering: crispEdges;
@@ -19,6 +24,8 @@
 
 .MathJax_SVG_Display {
   text-align: left !important;
+  margin-bottom: 20px !important;
+  margin-top: 0 !important;
 }
 
 $range-label-margin: 5px;

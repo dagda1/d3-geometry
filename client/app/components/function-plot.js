@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { find } from 'lodash';
 import math from 'mathjs';
 import * as X from './index';
 import "../plugins/mathdiff.js";
-
 import {
   getYIntercept
 } from "../utils/line";
 
+import { setExpression, changeScale } from '../actions/function-actions';
 import { select, selectAll, event, mouse } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
@@ -21,6 +22,16 @@ import { transform } from 'd3-zoom';
 
 require("../styles/functions.scss");
 
+@connect((state) => {
+    return {
+        expression: state.func.expression,
+        maxX: state.func.maxX,
+        minX: state.func.minX
+    }
+}, {
+    setExpression,
+    changeScale
+})
 export default class FunctionPlot extends Component {
   handleSubmit(fn, e) {
     if(e.which !== 13) {
@@ -369,7 +380,7 @@ export default class FunctionPlot extends Component {
           </X.Col>
          <X.Col md={5}>
            <X.Row>
-               <X.Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3} className="mt-20">
+               <X.Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3}>
                    <div className="panel panel-default text-center">
                        <div className="panel-heading">
                            <label>Enter Expression</label>

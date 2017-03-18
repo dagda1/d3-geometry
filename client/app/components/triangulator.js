@@ -17,6 +17,7 @@ import { scaleLinear } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { drag } from 'd3-drag';
 import { format } from 'd3-format';
+import { find, toArray } from 'lodash';
 
 export default class Triangulator {
   render(el, props = {}) {
@@ -86,11 +87,7 @@ export default class Triangulator {
       yScale: yScale
     };
 
-    area.currentEffect = props.currentEffect || this.drawPerpendicularBisectors;
-
     area.points = points;
-
-    this.addRadioButtons(area);
 
     const g = svg.append('g');
 
@@ -98,8 +95,6 @@ export default class Triangulator {
     area.svg = svg;
 
     this.drawTriangle(points, g);
-
-    this.addCurrentEffects(area);
 
     const vertices = [
       {point: area.points.a, label: 'a'},
@@ -110,40 +105,22 @@ export default class Triangulator {
     this.addPointLabels(area, vertices);
 
     this.addGrabbers(area, vertices);
+
+    this.changeEffect = this.changeEffect.bind(this, area);
+
+    this.changeEffect(props.currentEffect);
   }
 
-  addRadioButtons(area) {
-    const form = select(area.el).append('form');
+  findEffectFunction(effect) {
+    return find(toArray(this.getEffects()), (e) =>  {
+      return e.label == effect;
+    });
+  }
 
-    const effects = _.toArray(this.getEffects());
-
-    const findEffectFunction = (effect) => {
-      return _.find(effects, (e) =>  {
-        return effect.label === e.label;
-      });
-    };
-
-    const labels = form.selectAll('label');
-
-    labels
-      .data(effects)
-      .enter()
-      .append('label')
-      .text(function(d) { return d.label; })
-      .insert('input')
-      .attr('type', 'radio')
-      .attr('class', 'shape')
-      .attr('name', 'mode')
-      .attr('value', d => d)
-      .property('checked', (effect) => {
-        const currentEffect = (effect);
-
-        return area.currentEffect === currentEffect.func;
-      }).on('change', (effect) => {
-        const selected = findEffectFunction(effect);
-        area.currentEffect = selected.func;
-        this.addCurrentEffects(area);
-      });
+  changeEffect(area, effect) {
+    const selected = this.findEffectFunction(effect);
+    area.currentEffect = selected.func;
+    this.addCurrentEffects(area);
   }
 
   getEffects() {

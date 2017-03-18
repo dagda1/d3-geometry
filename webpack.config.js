@@ -22,20 +22,10 @@ var config = {
       { test: /\.css$/, loader: "style-loader!css-loader?root=." },
       { test: /\.scss$/, loaders: ['style', 'css?sourceMap', 'sass?sourceMap']},
       { loader: "babel-loader",
-
-        // Skip any files outside of your project's `src` directory
         include: [
           path.join(__dirname, "client/app"),
         ],
-
-        // Only run `.js` and `.jsx` files through Babel
-        test: /\.jsx?$/,
-
-        // Options to configure babel with
-        query: {
-          plugins: ['transform-runtime'],
-          presets: ['es2015', 'stage-0', 'react']
-        }
+        test: /\.jsx?$/
       },
       { test: /\.gif$/, loader: "url-loader?mimetype=image/png" },
       { test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/, loader: 'url-loader?limit=100000' }
