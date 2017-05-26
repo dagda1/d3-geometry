@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { find } from 'lodash';
 import math from 'mathjs';
-import * as X from './index';
+import { Grid, Row, Col } from 'react-bootstrap';
 import "../plugins/mathdiff.js";
 import {
   getYIntercept
@@ -370,17 +370,17 @@ export default class FunctionPlot extends Component {
     const latextExpression = '$$ f(x) = ' + math.parse(this.props.expression).toTex() + '$$';
 
     return (
-      <X.Grid>
-        <X.Row className="plotter">
-          <X.Col md={5}>
+      <Grid>
+        <Row className="plotter">
+          <Col md={5}>
              <h2 ref={el => this.expr = el}>{latextExpression}</h2>
              <div>
                  <div ref={el => this.curve = el}></div>
              </div>
-          </X.Col>
-         <X.Col md={5}>
-           <X.Row>
-               <X.Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3}>
+          </Col>
+         <Col md={5}>
+           <Row>
+               <Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3}>
                    <div className="panel panel-default text-center">
                        <div className="panel-heading">
                            <label>Enter Expression</label>
@@ -400,10 +400,10 @@ export default class FunctionPlot extends Component {
                            </div>
                        </div>
                    </div>
-             </X.Col>
-           </X.Row>
-           <X.Row>
-             <X.Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3}>
+             </Col>
+           </Row>
+           <Row>
+             <Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3}>
                <div className="panel panel-default scale text-center">
                  <div className="panel-heading">
                    <label>X Range</label>
@@ -426,11 +426,11 @@ export default class FunctionPlot extends Component {
                    />
                  </div>
                </div>
-             </X.Col>
-           </X.Row>
-         </X.Col>
-        </X.Row>
-      </X.Grid>
+             </Col>
+           </Row>
+         </Col>
+        </Row>
+      </Grid>
     );
   }
 }

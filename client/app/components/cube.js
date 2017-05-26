@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import * as X from './index';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 require("../styles/cube.scss");
 
 export default () => {
   return (
-    <X.Grid>
-      <X.Row>
-        <X.Col sm={12}>
+    <Grid>
+      <Row>
+        <Col sm={12}>
           <div className="cube-parent">
             <ul className="cube">
               <li className="face"/>
@@ -19,8 +19,8 @@ export default () => {
               <li className="face"/>
             </ul>
           </div>
-        </X.Col>
-      </X.Row>
-    </X.Grid>
+        </Col>
+      </Row>
+    </Grid>
   )
 }

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { debounce } from 'lodash';
-import * as X from './index';
-
+import { Grid, Row, Col } from 'react-bootstrap';
 import { select, selectAll, event } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
@@ -54,17 +53,17 @@ export default class SineWave extends Component {
     const dimensions = viewPortFromElement(el);
 
     const xScale = scaleLinear()
-            .domain([0, 20])
-            .range([0, dimensions.width]);
+      .domain([0, 20])
+      .range([0, dimensions.width]);
 
     const yScale = scaleLinear()
-            .domain([0, 20])
-            .range([dimensions.height, 0]);
+      .domain([0, 20])
+      .range([dimensions.height, 0]);
 
     const svg = select(el).append("svg")
-            .attr('class', 'sinewave-container')
-            .attr("width", dimensions.width)
-            .attr("height", dimensions.height);
+                          .attr('class', 'sinewave-container')
+                          .attr("width", dimensions.width)
+                          .attr("height", dimensions.height);
 
     const state = this.addGraphContainer(svg, xScale, yScale);
 
@@ -75,8 +74,8 @@ export default class SineWave extends Component {
 
   addSineAxis(state) {
     const yAxis = axisLeft(state.yScaleAxis)
-            .tickValues([-1, 0, 1])
-            .tickFormat(format('d'))
+      .tickValues([-1, 0, 1])
+      .tickFormat(format('d'))
 
     state.graphContainer
       .append('g')
@@ -89,16 +88,16 @@ export default class SineWave extends Component {
     const piMap = {'0': '0', '1.57': '\\pi\\over 2', '3.14': '\\pi', '4.71': '3\\pi\\over 2', '6.28': '2\\pi'};
 
     const xAxis = axisBottom(state.xScaleAxis)
-            .tickValues(xTickValues)
-            .tickSizeInner(0)
-            .tickSizeOuter(0)
-            .tickFormat((x) => `$${piMap[x]}$`)
-            .scale(state.xScaleAxis);
+      .tickValues(xTickValues)
+      .tickSizeInner(0)
+      .tickSizeOuter(0)
+      .tickFormat((x) => `$${piMap[x]}$`)
+      .scale(state.xScaleAxis);
 
     state.graphContainer
-      .append('g')
-      .attr('class', 'x axis left')
-      .call(xAxis);
+         .append('g')
+         .attr('class', 'x axis left')
+         .call(xAxis);
   }
 
   addGraphContainer(container, xScale, yScale) {
@@ -108,71 +107,71 @@ export default class SineWave extends Component {
     const firstAxisXCoord = -(radius * 1.5);
 
     const graphContainer = container.append("g")
-            .attr("class", "circle-container")
-            .attr('transform', `translate(${initialX}, ${initialY})`);
+                                    .attr("class", "circle-container")
+                                    .attr('transform', `translate(${initialX}, ${initialY})`);
 
     graphContainer.append('circle')
-      .attr('cx', 0)
-      .attr('cy', 0)
-      .attr('r', radius)
-      .attr('class', 'unit-circle')
-      .style('fill', 'none');
+                  .attr('cx', 0)
+                  .attr('cy', 0)
+                  .attr('r', radius)
+                  .attr('class', 'unit-circle')
+                  .style('fill', 'none');
 
     this.addRadianNumberLine(graphContainer);
 
     const hypotenuse = graphContainer.append('line')
-            .attr('class', 'hypotenuse')
-            .attr('x1', 0)
-            .attr('y1', 0)
-            .attr('x2', 0)
-            .attr('y2', 0);
+                                     .attr('class', 'hypotenuse')
+                                     .attr('x1', 0)
+                                     .attr('y1', 0)
+                                     .attr('x2', 0)
+                                     .attr('y2', 0);
 
     const opposite = graphContainer.append('line')
-            .attr('class', 'opposite')
-            .attr('x1', 0)
-            .attr('y1', 0)
-            .attr('x2', 0)
-            .attr('y2', 0);
+                                   .attr('class', 'opposite')
+                                   .attr('x1', 0)
+                                   .attr('y1', 0)
+                                   .attr('x2', 0)
+                                   .attr('y2', 0);
 
     const adjacent = graphContainer.append('line')
-            .attr('class', 'adjacent')
-            .attr('x1', 0)
-            .attr('y1', 0)
-            .attr('x2', 0)
-            .attr('y2', 0);
+                                   .attr('class', 'adjacent')
+                                   .attr('x1', 0)
+                                   .attr('y1', 0)
+                                   .attr('x2', 0)
+                                   .attr('y2', 0);
 
     const dot = graphContainer.append('circle')
-            .attr('class', 'dot')
-            .attr('cx', radius)
-            .attr('cy', 0)
-            .attr('r', 5);
+                              .attr('class', 'dot')
+                              .attr('cx', radius)
+                              .attr('cy', 0)
+                              .attr('r', 5);
 
     const verticalDot = graphContainer.append('circle')
-            .attr('cx', 0)
-            .attr('cy', 0)
-            .attr('r', 5)
-            .attr('class', 'vertical-guide');
+                                      .attr('cx', 0)
+                                      .attr('cy', 0)
+                                      .attr('r', 5)
+                                      .attr('class', 'vertical-guide');
 
     const joiningLine = graphContainer.append('line')
-            .attr('class', 'joining-line')
-            .attr('x1', firstAxisXCoord)
-            .attr('y1', 0)
-            .attr('x2', 0)
-            .attr('y2', 0);
+                                      .attr('class', 'joining-line')
+                                      .attr('x1', firstAxisXCoord)
+                                      .attr('y1', 0)
+                                      .attr('x2', 0)
+                                      .attr('y2', 0);
 
     const axisDot = graphContainer.append('circle')
-            .attr('cx', radius)
-            .attr('cy', 0)
-            .attr('r', 5)
-            .attr('class', 'axis-dot');
+                                  .attr('cx', radius)
+                                  .attr('cy', 0)
+                                  .attr('r', 5)
+                                  .attr('class', 'axis-dot');
 
     const yScaleAxis = scaleLinear()
-            .domain([-1, 1])
-            .range([radius, -radius]);
+      .domain([-1, 1])
+      .range([radius, -radius]);
 
     const xScaleAxis = scaleLinear()
-            .domain([0, (Math.PI * 2)])
-            .range([firstAxisXCoord, -initialX + 20]);
+      .domain([0, (Math.PI * 2)])
+      .range([firstAxisXCoord, -initialX + 20]);
 
     const state = {
       initialX,
@@ -216,37 +215,37 @@ export default class SineWave extends Component {
     const axisDotX = state.xScaleAxis(state.xIncrement);
 
     state.axisDot
-      .attr('cx', axisDotX)
-      .attr('cy', 0);
+         .attr('cx', axisDotX)
+         .attr('cy', 0);
 
     const dx = radius * Math.cos(state.time);
     const dy = radius * -Math.sin(state.time); // counter-clockwise
 
     state.dot
-      .attr('cx', dx)
-      .attr('cy', dy);
+         .attr('cx', dx)
+         .attr('cy', dy);
 
     state.hypotenuse
-      .attr('x2', dx)
-      .attr('y2', dy);
+         .attr('x2', dx)
+         .attr('y2', dy);
 
     state.opposite
-      .attr('x1', dx)
-      .attr('y1', dy)
-      .attr('x2', dx)
-      .attr('y2', 0);
+         .attr('x1', dx)
+         .attr('y1', dy)
+         .attr('x2', dx)
+         .attr('y2', 0);
 
     state.adjacent
-      .attr('x1', dx)
-      .attr('y1', 0);
+         .attr('x1', dx)
+         .attr('y1', 0);
 
     state.verticalDot
-      .attr('cy', dy);
+         .attr('cy', dy);
 
     state.joiningLine
-      .attr('y1', state.dot.attr('cy'))
-      .attr('x2', state.dot.attr('cx'))
-      .attr('y2', state.dot.attr('cy'));
+         .attr('y1', state.dot.attr('cy'))
+         .attr('x2', state.dot.attr('cx'))
+         .attr('y2', state.dot.attr('cy'));
 
     requestAnimationFrame(this.drawGraph.bind(this, state));
   }
@@ -255,10 +254,10 @@ export default class SineWave extends Component {
     select('.sine-curve').remove();
 
     const sineData = range(0, 54)
-            .map(x => x * 10 / 85)
-            .map((x) => {
-              return {x: x, y: - Math.sin(x - state.time)};
-            });
+      .map(x => x * 10 / 85)
+      .map((x) => {
+        return {x: x, y: - Math.sin(x - state.time)};
+      });
 
     const sine = line()
       .curve(curveMonotoneX)
@@ -266,9 +265,9 @@ export default class SineWave extends Component {
       .y( (d) => {return state.yScaleAxis(d.y);});
 
     state.graphContainer.append('path')
-      .datum(sineData)
-      .attr('class', 'sine-curve')
-      .attr('d', sine);
+         .datum(sineData)
+         .attr('class', 'sine-curve')
+         .attr('d', sine);
   }
 
   addRadianNumberLine(container) {
@@ -289,16 +288,16 @@ export default class SineWave extends Component {
       const offsetY = (ray.val > 0 && ray.val < Math.PI)  ? -35 : 0;
 
       container.append('g')
-        .attr('class', 'tick')
-        .attr('transform', `translate(${cosX + offsetX}, ${sinY + offsetY})`)
-        .append('text')
-        .text(() => ray.label);
+               .attr('class', 'tick')
+               .attr('transform', `translate(${cosX + offsetX}, ${sinY + offsetY})`)
+               .append('text')
+               .text(() => ray.label);
 
       container.append('line')
-        .attr('x1', 0)
-        .attr('y1', 0)
-        .attr('x2', cosX)
-        .attr('y2', sinY);
+               .attr('x1', 0)
+               .attr('y1', 0)
+               .attr('x2', cosX)
+               .attr('y2', sinY);
     });
   }
 
@@ -315,7 +314,7 @@ export default class SineWave extends Component {
         setTimeout(() => {
           svg.selectAll('.tick').each(function(){
             var self = select(this),
-                 g = self.select('text>span>svg');
+                g = self.select('text>span>svg');
 
             if(g._groups[0][0] && g._groups[0][0].tagName === 'svg') {
               g.remove();
@@ -335,14 +334,14 @@ export default class SineWave extends Component {
 
   render() {
     return (
-      <X.Grid>
-        <X.Row>
-          <X.Col sm={12}>
-            <X.Col xsOffset={3} mdOffset={1} componentClass="h2">sin(x)</X.Col>
+      <Grid>
+        <Row>
+          <Col sm={12}>
+            <Col xsOffset={3} mdOffset={1} componentClass="h2">sin(x)</Col>
             <div id="sineWave" ref={(sine) => { this.sine = sine }} />
-          </X.Col>
-        </X.Row>
-      </X.Grid>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 };

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { debounce } from 'lodash';
 import { ResizeComponent } from "./base/resize-component";
-import * as X from './index';
-
+import { Grid, Row, Col } from 'react-bootstrap';
 import {
   viewPortFromElement
 } from "../utils/dom";
@@ -53,10 +52,10 @@ class Sine extends Component {
     const dimensions = viewPortFromElement(el);
 
     const svg = select(el).append("svg")
-            .attr('class', 'sine2-container')
-            .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
-            .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.top)
-            .attr("transform", `translate(${dimensions.margin.left}, ${dimensions.margin.top})`);
+                          .attr('class', 'sine2-container')
+                          .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
+                          .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.top)
+                          .attr("transform", `translate(${dimensions.margin.left}, ${dimensions.margin.top})`);
 
     let state = this.initializeArea(svg, dimensions);
 
@@ -94,7 +93,7 @@ class Sine extends Component {
     const dy = (state.radius * -Math.sin(state.time));
 
     state.dot
-      .attr('cx', xTo);
+         .attr('cx', xTo);
 
     const hypotenuseCentre = xTo - dx;
 
@@ -106,9 +105,9 @@ class Sine extends Component {
     };
 
     state.hypotenuse
-      .attr('x1', hypotenuseCoords.x1)
-      .attr('x2', hypotenuseCoords.x2)
-      .attr('y2', hypotenuseCoords.y2);
+         .attr('x1', hypotenuseCoords.x1)
+         .attr('x2', hypotenuseCoords.x2)
+         .attr('y2', hypotenuseCoords.y2);
 
     let angle = Math.atan2(
       (hypotenuseCoords.y2 - hypotenuseCoords.y1),
@@ -122,38 +121,38 @@ class Sine extends Component {
     angle = angle + Math.PI / 2;
 
     const innerArc = arc()
-            .innerRadius(8)
-            .outerRadius(12)
-            .startAngle(Math.PI/2)
-            .endAngle(angle);
+      .innerRadius(8)
+      .outerRadius(12)
+      .startAngle(Math.PI/2)
+      .endAngle(angle);
 
     const outerArc = arc()
-            .innerRadius(state.radius - 1)
-            .outerRadius(state.radius + 3)
-            .startAngle(Math.PI/2)
-            .endAngle(angle);
+      .innerRadius(state.radius - 1)
+      .outerRadius(state.radius + 3)
+      .startAngle(Math.PI/2)
+      .endAngle(angle);
 
     state.innerAngle
-      .attr('d', innerArc)
-      .attr('transform', `translate(${hypotenuseCentre}, 0)`);
+         .attr('d', innerArc)
+         .attr('transform', `translate(${hypotenuseCentre}, 0)`);
 
     state.outerAngle
-      .attr('d', outerArc)
-      .attr('transform', `translate(${hypotenuseCentre}, 0)`);
+         .attr('d', outerArc)
+         .attr('transform', `translate(${hypotenuseCentre}, 0)`);
 
     state.unitCircle.attr('cx', hypotenuseCoords.x1);
 
     state.opposite
-      .attr('x1', xTo)
-      .attr('y1', 0)
-      .attr('x2', xTo)
-      .attr('y2', dy);
+         .attr('x1', xTo)
+         .attr('y1', 0)
+         .attr('x2', xTo)
+         .attr('y2', dy);
 
     state.adjacent
-      .attr('x1', 0)
-      .attr('y1', 0)
-      .attr('x2', xTo)
-      .attr('y2', 0);
+         .attr('x1', 0)
+         .attr('y1', 0)
+         .attr('x2', xTo)
+         .attr('y2', 0);
 
     if(direction.forward && state.time > TWO_PI) {
       direction = {backwards: true};
@@ -175,91 +174,91 @@ class Sine extends Component {
     const unitCircleCx = 0 - state.radius;
 
     state.unitCircle = state.xAxisGroup.append('circle')
-      .attr('cx', unitCircleCx)
-      .attr('cy', 0)
-      .attr('r', state.radius)
-      .attr('class', 'unit-circle')
-      .style('fill', 'none');
+                            .attr('cx', unitCircleCx)
+                            .attr('cy', 0)
+                            .attr('r', state.radius)
+                            .attr('class', 'unit-circle')
+                            .style('fill', 'none');
 
     state.dot = state.xAxisGroup.append('circle')
-      .attr('cx', 0)
-      .attr('cy', 0)
-      .attr('class', 'x-circle')
-      .attr('r', 10);
+                     .attr('cx', 0)
+                     .attr('cy', 0)
+                     .attr('class', 'x-circle')
+                     .attr('r', 10);
 
     state.hypotenuse = state.xAxisGroup.append('line')
-      .attr('class', 'hypotenuse')
-      .attr('x1', 0)
-      .attr('y1', 0)
-      .attr('x2', 0)
-      .attr('y2', 0);
+                            .attr('class', 'hypotenuse')
+                            .attr('x1', 0)
+                            .attr('y1', 0)
+                            .attr('x2', 0)
+                            .attr('y2', 0);
 
     state.opposite = state.xAxisGroup.append('line')
-      .attr('class', 'opposite')
-      .attr('x1', 0)
-      .attr('y1', 0)
-      .attr('x2', 0)
-      .attr('y2', 0);
+                          .attr('class', 'opposite')
+                          .attr('x1', 0)
+                          .attr('y1', 0)
+                          .attr('x2', 0)
+                          .attr('y2', 0);
 
     state.adjacent = state.xAxisGroup.append('line')
-      .attr('class', 'adjacent ln')
-      .attr('x1', 0)
-      .attr('y1', 0)
-      .attr('x2', 0)
-      .attr('y2', 0);
+                          .attr('class', 'adjacent ln')
+                          .attr('x1', 0)
+                          .attr('y1', 0)
+                          .attr('x2', 0)
+                          .attr('y2', 0);
 
     const sine = state.sine = line()
-            .curve(curveMonotoneX)
-		        .x((d, i) => { return state.xScale(d); })
-		        .y((d, i) => { return state.yScale(Math.sin(d) + 1); });
+      .curve(curveMonotoneX)
+		  .x((d, i) => { return state.xScale(d); })
+		  .y((d, i) => { return state.yScale(Math.sin(d) + 1); });
 
     const sineData = state.sineData = [];
 
     state.sineCurve = state.xAxisGroup.append('path')
-      .attr('class', 'sine-curve');
+                           .attr('class', 'sine-curve');
 
     state.innerAngle = state.xAxisGroup
-      .append("path")
-      .attr("class", "arc");
+                            .append("path")
+                            .attr("class", "arc");
 
     state.outerAngle = state.xAxisGroup
-      .append("path")
-      .attr("class", "arc");
+                            .append("path")
+                            .attr("class", "arc");
 
     return state;
   }
 
   initializeArea(container, dimensions) {
     const xScale = scaleLinear()
-            .domain([0, (TWO_PI)])
-            .range([0, (dimensions.width)]);
+      .domain([0, (TWO_PI)])
+      .range([0, (dimensions.width)]);
 
     const yScale = scaleLinear()
-            .domain([-1.0, 1.0])
-            .range([(dimensions.height - 100), 0]);
+      .domain([-1.0, 1.0])
+      .range([(dimensions.height - 100), 0]);
 
     const graphContainer = container.append("g")
-            .attr("class", "graph-container")
-            .attr('transform', `translate(${xScale(1.5)}, 20)`);
+                                    .attr("class", "graph-container")
+                                    .attr('transform', `translate(${xScale(1.5)}, 20)`);
 
     const yAxis = axisLeft(yScale)
-            .tickValues([-1.0, -0.5, 0, 0.5, 1.0])
-            .tickSizeOuter(0);
+      .tickValues([-1.0, -0.5, 0, 0.5, 1.0])
+      .tickSizeOuter(0);
 
     const yAxisGroup = graphContainer
-            .append('g')
-            .attr('class', 'y axis')
-            .call(yAxis);
+      .append('g')
+      .attr('class', 'y axis')
+      .call(yAxis);
 
     const xTickValues = [0, 1.57, 3.14, 4.71, 6.28];
 
     const piMap = {"1.57": "π/2", "3.14": "π", "4.71": "3π/2", "6.28": "2π"};
 
     const xAxis = axisBottom(xScale)
-            .tickValues(xTickValues)
-            .tickFormat((t) => {
-              return t === 0 ? '' : piMap[t.toString()];
-            });
+      .tickValues(xTickValues)
+      .tickFormat((t) => {
+        return t === 0 ? '' : piMap[t.toString()];
+      });
 
     const findZeroTick = (data) => {
       return data === 0.0;
@@ -271,16 +270,16 @@ class Sine extends Component {
                                     })[0];
 
     const xAxisGroup = graphContainer
-            .append('g')
-            .attr('class', 'x axis')
-            .attr('transform', `translate(0, ${yAxisZero})`)
-            .call(xAxis);
+      .append('g')
+      .attr('class', 'x axis')
+      .attr('transform', `translate(0, ${yAxisZero})`)
+      .call(xAxis);
 
     const leftXAxis = axisBottom(xScale)
-            .tickValues(xTickValues)
-            .tickFormat(() => '')
-            .tickSizeInner(0)
-            .tickSizeOuter(0);
+      .tickValues(xTickValues)
+      .tickFormat(() => '')
+      .tickSizeInner(0)
+      .tickSizeOuter(0);
 
     graphContainer
       .append('g')
@@ -301,13 +300,13 @@ class Sine extends Component {
 
   render(el, props) {
     return (
-      <X.Grid>
-        <X.Row>
-          <X.Col lg={6} md={6} xs={8}>
+      <Grid>
+        <Row>
+          <Col lg={6} md={6} xs={8}>
             <div id="sine" ref={el => this.sine = el}/>
-          </X.Col>
-        </X.Row>
-      </X.Grid>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import * as X from './index';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 require("../styles/hexagon.scss");
 
 export default () => {
   return (
-    <X.Grid>
-      <X.Row>
-        <X.Col sm={12}>
+    <Grid>
+      <Row>
+        <Col sm={12}>
           <div className="row">
             <div className="hexagon-container">
               <div>
@@ -27,8 +27,8 @@ export default () => {
               </div>
             </div>
           </div>
-        </X.Col>
-      </X.Row>
-    </X.Grid>
+        </Col>
+      </Row>
+    </Grid>
   );
 }
