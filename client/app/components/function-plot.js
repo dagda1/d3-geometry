@@ -23,14 +23,14 @@ import { transform } from 'd3-zoom';
 require("../styles/functions.scss");
 
 @connect((state) => {
-    return {
-        expression: state.func.expression,
-        maxX: state.func.maxX,
-        minX: state.func.minX
-    }
+  return {
+    expression: state.func.expression,
+    maxX: state.func.maxX,
+    minX: state.func.minX
+  }
 }, {
-    setExpression,
-    changeScale
+  setExpression,
+  changeScale
 })
 export default class FunctionPlot extends Component {
   handleSubmit(fn, e) {
@@ -76,16 +76,16 @@ export default class FunctionPlot extends Component {
     const dimensions = this.getDimensions();
 
     this.svg = select(el).append("svg")
-      .attr('class', 'function-svg')
-      .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
-      .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
-      .append("g");
+                         .attr('class', 'function-svg')
+                         .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
+                         .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
+                         .append("g");
 
     this.xScale = scaleLinear()
-          .range([0, dimensions.width]);
+      .range([0, dimensions.width]);
 
     this.yScale = scaleLinear()
-          .range([dimensions.height, 0]);
+      .range([dimensions.height, 0]);
 
     const data = this.getDataFromProps(this.props);
 
@@ -133,31 +133,31 @@ export default class FunctionPlot extends Component {
     const svg = this.svg;
 
     const lin = line()
-            .curve(curveBasis)
-            .x( (d) => {return xScale(d.x);})
-            .y( (d) => {return yScale(d.y);});
+      .curve(curveBasis)
+      .x( (d) => {return xScale(d.x);})
+      .y( (d) => {return yScale(d.y);});
 
     const me = this;
 
     const g = svg.append('g');
 
     g.append('circle')
-      .attr('class', 'diff')
-      .attr('cx', 0)
-      .attr('cy', 0)
-      .attr('r', 7)
-      .style('fill', 'red');
+     .attr('class', 'diff')
+     .attr('cx', 0)
+     .attr('cy', 0)
+     .attr('r', 7)
+     .style('fill', 'red');
 
     g.append('text')
-      .attr('class', 'difflabel');
+     .attr('class', 'difflabel');
 
     g.append('line')
-      .style('stroke', 'red')
-      .attr('class', 'tangent')
-      .attr('x1', xScale(0))
-      .attr('y1', yScale(0))
-      .attr('x2', xScale(0))
-      .attr('y2', yScale(0));
+     .style('stroke', 'red')
+     .attr('class', 'tangent')
+     .attr('x1', xScale(0))
+     .attr('y1', yScale(0))
+     .attr('x2', xScale(0))
+     .attr('y2', yScale(0));
 
     const maxX = max(data, (d) => d.x);
 
@@ -186,18 +186,18 @@ export default class FunctionPlot extends Component {
       }
 
       g.select('.diff')
-        .attr('cx', x)
-        .attr('cy', y);
+       .attr('cx', x)
+       .attr('cy', y);
 
       g.select('.difflabel')
-        .text( function() {
-          const xLabel = Math.round(point.x);
-          const yLabel = Math.round(point.y);
+       .text( function() {
+         const xLabel = Math.round(point.x);
+         const yLabel = Math.round(point.y);
 
-          return `(${xLabel}, ${yLabel})`;
-        })
-        .attr('dx', x + 10)
-        .attr('dy', y + 8);
+         return `(${xLabel}, ${yLabel})`;
+       })
+       .attr('dx', x + 10)
+       .attr('dy', y + 8);
 
       const derivative = math.diff(math.parse(me.props.expression), "x");
 
@@ -228,16 +228,16 @@ export default class FunctionPlot extends Component {
       const tangentPoint2 = getTangentPoint(- length);
 
       g.select('.tangent')
-        .attr('x1', xScale(tangentPoint1.x))
-        .attr('y1', yScale(tangentPoint1.y))
-        .attr('x2', xScale(tangentPoint2.x))
-        .attr('y2', yScale(tangentPoint2.y));
+       .attr('x1', xScale(tangentPoint1.x))
+       .attr('y1', yScale(tangentPoint1.y))
+       .attr('x2', xScale(tangentPoint2.x))
+       .attr('y2', yScale(tangentPoint2.y));
     };
 
     this.svg.append('path')
-      .datum(data)
-      .attr('class', 'curve')
-      .attr('d', lin);
+        .datum(data)
+        .attr('class', 'curve')
+        .attr('d', lin);
 
     select('.function-svg').on('mousemove', mouseMove);
   }
@@ -272,9 +272,9 @@ export default class FunctionPlot extends Component {
     };
 
     this.svg.append('g')
-      .attr('class', 'axis y-axis')
-      .style('visibility', 'hidden')
-      .call(yAxis);
+        .attr('class', 'axis y-axis')
+        .style('visibility', 'hidden')
+        .call(yAxis);
 
     if(nonNegativeXAxis) {
       yScaleDomain = [0, max(data, (d) => d.y)];
@@ -290,9 +290,9 @@ export default class FunctionPlot extends Component {
     }
 
     this.svg.append('g')
-      .attr('class', 'axis x-axis')
-      .attr('transform', `translate(0, ${xAxisPosition})`)
-      .call(xAxis);
+        .attr('class', 'axis x-axis')
+        .attr('transform', `translate(0, ${xAxisPosition})`)
+        .call(xAxis);
 
     select('.y-axis').remove();
 
@@ -315,9 +315,9 @@ export default class FunctionPlot extends Component {
     }
 
     this.svg.append('g')
-      .attr('class', 'axis y-axis')
-      .attr('transform', `translate(${yAxisPosition}, 0)`)
-      .call(yAxis);
+        .attr('class', 'axis y-axis')
+        .attr('transform', `translate(${yAxisPosition}, 0)`)
+        .call(yAxis);
 
     const expression = this.props.expression;
 
@@ -337,10 +337,10 @@ export default class FunctionPlot extends Component {
       const y = fn(data);
 
       svg.append('line')
-        .attr('x1', xScale(data))
-        .attr('y1', yScale(0))
-        .attr('x2', xScale(data))
-        .attr('y2', yScale(y));
+         .attr('x1', xScale(data))
+         .attr('y1', yScale(0))
+         .attr('x2', xScale(data))
+         .attr('y2', yScale(y));
     };
 
     selectAll('.x-axis .tick').on('click', clickable);
@@ -372,63 +372,63 @@ export default class FunctionPlot extends Component {
     return (
       <Grid>
         <Row className="plotter">
-          <Col md={5}>
-             <h2 ref={el => this.expr = el}>{latextExpression}</h2>
-             <div>
-                 <div ref={el => this.curve = el}></div>
-             </div>
+          <Col md={6}>
+            <h2 ref={el => this.expr = el}>{latextExpression}</h2>
+            <div>
+              <div ref={el => this.curve = el}></div>
+            </div>
           </Col>
-         <Col md={5}>
-           <Row>
-               <Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3}>
-                   <div className="panel panel-default text-center">
-                       <div className="panel-heading">
-                           <label>Enter Expression</label>
-                       </div>
-                       <div className="panel-body">
-                           <div className="input-group">
-                               <input type="text"
-                                      defaultValue={this.props.expression}
-                                      onKeyDown={this.handleSubmit.bind(this, this.setExpression.bind(this))}
-                                      onBlur={this.handleExpressionBlur.bind(this)}
-                                      ref={el => this.expressionInput = el}
-                                      className="form-control"
-                               />
-                               <span className="input-group-btn">
-                                   <button className="btn btn-primary" onClick={this.setExpression.bind(this)}>Go</button>
-                               </span>
-                           </div>
-                       </div>
-                   </div>
-             </Col>
-           </Row>
-           <Row>
-             <Col lg={6} lg-offset={0} md={6} md-offset={0} sm={4} sm-offset={1} xs={7} xs-offset={3}>
-               <div className="panel panel-default scale text-center">
-                 <div className="panel-heading">
-                   <label>X Range</label>
-                 </div>
-                 <div className="panel-body">
-                   <input type="text"
-                          defaultValue={this.props.minX}
-                          onBlur={this.handleXScaleBlur.bind(this)}
-                          onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
-                          className="form-control"
-                          ref={el => this.lowerX = el}
-                   />
-                   <label className="range">&lt; x &lt;</label>
-                   <input type="text"
-                          defaultValue={this.props.maxX}
-                          onBlur={this.handleXScaleBlur.bind(this)}
-                          onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
-                          className="form-control"
-                          ref={el => this.upperX = el}
-                   />
-                 </div>
-               </div>
-             </Col>
-           </Row>
-         </Col>
+          <Col md={6}>
+            <Row>
+              <Col md={6} sm-offset={2} sm={10}>
+                <div className="panel panel-default text-center">
+                  <div className="panel-heading">
+                    <label>Enter Expression</label>
+                  </div>
+                  <div className="panel-body">
+                    <div className="input-group">
+                      <input type="text"
+                             defaultValue={this.props.expression}
+                             onKeyDown={this.handleSubmit.bind(this, this.setExpression.bind(this))}
+                             onBlur={this.handleExpressionBlur.bind(this)}
+                             ref={el => this.expressionInput = el}
+                             className="form-control"
+                      />
+                      <span className="input-group-btn">
+                        <button className="btn btn-primary" onClick={this.setExpression.bind(this)}>Go</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6} sm-offset={2} sm={10}>
+                <div className="panel panel-default scale text-center">
+                  <div className="panel-heading">
+                    <label>X Range</label>
+                  </div>
+                  <div className="panel-body">
+                    <input type="text"
+                           defaultValue={this.props.minX}
+                           onBlur={this.handleXScaleBlur.bind(this)}
+                           onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
+                           className="form-control"
+                           ref={el => this.lowerX = el}
+                    />
+                    <label className="range">&lt; x &lt;</label>
+                    <input type="text"
+                           defaultValue={this.props.maxX}
+                           onBlur={this.handleXScaleBlur.bind(this)}
+                           onKeyDown={this.handleSubmit.bind(this, this.setXRange.bind(this))}
+                           className="form-control"
+                           ref={el => this.upperX = el}
+                    />
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          </Col>
         </Row>
       </Grid>
     );
