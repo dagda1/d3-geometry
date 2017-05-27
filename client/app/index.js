@@ -19,6 +19,7 @@ import Sine2 from "./components/sine2";
 import Cube from './components/cube';
 import Pyramid from './components/pyramid';
 import Hexagon from './components/hexagon';
+import Circle from './components/Circle/Circle';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -41,6 +42,7 @@ ReactDOM.render(
         <Route path="cube" component={Cube}/>
         <Route path="pyramid" component={Pyramid}/>
         <Route path="hexagon" component={Hexagon}/>
+        <Route path="circle" component={Circle} />
       </Route>
     </Router>
   </Provider>,

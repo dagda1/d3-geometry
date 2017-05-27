@@ -264,15 +264,10 @@ class Sine extends Component {
       return data === 0.0;
     };
 
-    const yAxisZero = graphContainer.selectAll(".y.axis .tick").filter(findZeroTick)._groups
-                                    .map((tick) => {
-                                      return parseFloat(select(select(tick[0])._groups[0][0]).attr('transform').split(',')[1].replace(/\)/, ''), 10)
-                                    })[0];
-
     const xAxisGroup = graphContainer
       .append('g')
       .attr('class', 'x axis')
-      .attr('transform', `translate(0, ${yAxisZero})`)
+      .attr('transform', `translate(0, ${yScale(0)})`)
       .call(xAxis);
 
     const leftXAxis = axisBottom(xScale)
@@ -284,7 +279,7 @@ class Sine extends Component {
     graphContainer
       .append('g')
       .attr('class', 'x axis')
-      .attr('transform', `translate(${-300}, ${yAxisZero})`)
+      .attr('transform', `translate(${-300}, ${yScale(0)})`)
       .call(leftXAxis);
 
     return {
@@ -293,7 +288,6 @@ class Sine extends Component {
       graphContainer,
       xAxisGroup,
       yAxisGroup,
-      yAxisZero,
       increase: (TWO_PI / 360)
     };
   }

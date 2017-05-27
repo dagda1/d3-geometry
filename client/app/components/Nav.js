@@ -32,6 +32,7 @@ const Nav = (props) => {
                     <li className="dropdown-submenu">
                       <Link to="/sine">Sine Wave</Link>
                       <Link to="/sine2">Yet Another Sine</Link>
+                      <Link to="/circle">Circle</Link>
                       <Link to="/equation-of-a-line">Equation of a Line</Link>
                       <Link to="/triangles">Triangles</Link>
                     </li>

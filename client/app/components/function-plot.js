@@ -280,10 +280,7 @@ export default class FunctionPlot extends Component {
       yScaleDomain = [0, max(data, (d) => d.y)];
       xAxisPosition = dimensions.height;
     } else if(positiveAndNegativeXAxis) {
-      xAxisPosition = this.svg.selectAll(".tick").filter(findZeroTick)._groups
-                          .map((tick) => {
-                            return parseFloat(select(select(tick[0])._groups[0][0]).attr('transform').split(',')[1].replace(/\)/, ''), 10)
-                          });
+      xAxisPosition = this.yScale(0);
     } else {
       yScaleDomain = extent(data, (d) => d.y);
       xAxisPosition = 0;
@@ -309,9 +306,7 @@ export default class FunctionPlot extends Component {
     } else if(negativeXOnly) {
       yAxisPosition = dimensions.width;
     } else {
-      yAxisPosition = selectAll(".x-axis .tick").filter(findZeroTick)._groups.map((tick) => {
-        return parseFloat(/\(([^)]+)\,/.exec(select(tick[0]).attr('transform'))[1]);
-      });
+      yAxisPosition = this.xScale(0);
     }
 
     this.svg.append('g')
