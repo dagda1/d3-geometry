@@ -8,7 +8,7 @@ export function availableViewPort() {
   };
 }
 
-export function viewPortFromElement(el) {
+export function viewPortFromElement(el, square) {
   const margin = {
     top: 20,
     right: 100,
@@ -16,9 +16,17 @@ export function viewPortFromElement(el) {
     left: 30
   };
 
-  const w = el.offsetWidth;
+  let h, w;
 
-  const h =  w * 0.68;
+  h = el.clientHeight || Math.min(document.documentElement.clientHeight - 100, 500)
+
+  if(square) {
+    w = h;
+  } else {
+    w = Math.min(el.clientWidth, document.documentElement.clientWidth);
+  }
+
+  console.log(w);
 
   return {
     margin,

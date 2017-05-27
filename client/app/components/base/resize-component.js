@@ -5,10 +5,6 @@ import { select } from 'd3-selection';
 export var ResizeComponent = ComposedComponent  => class extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      registerReize: this.registerReize
-    };
   }
 
   registerReize() {

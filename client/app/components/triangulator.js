@@ -25,7 +25,7 @@ export default class Triangulator {
       window.removeEventListener("resize", props.resizeFunc);
     }
 
-    const dimensions = viewPortFromElement(el);
+    const dimensions = viewPortFromElement(el, true);
 
     const xScale = scaleLinear()
             .domain([0, 20])

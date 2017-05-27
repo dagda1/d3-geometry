@@ -53,9 +53,9 @@ class Sine extends Component {
 
     const svg = select(el).append("svg")
                           .attr('class', 'sine2-container')
-                          .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
-                          .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.top)
-                          .attr("transform", `translate(${dimensions.margin.left}, ${dimensions.margin.top})`);
+                          .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right + 100)
+                          .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.top);
+
 
     let state = this.initializeArea(svg, dimensions);
 
@@ -296,7 +296,7 @@ class Sine extends Component {
     return (
       <Grid>
         <Row>
-          <Col lg={6} md={6} xs={8}>
+          <Col xs={9}>
             <div id="sine" ref={el => this.sine = el}/>
           </Col>
         </Row>

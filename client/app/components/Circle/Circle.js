@@ -8,13 +8,16 @@ import { drag } from 'd3-drag';
 import { format } from 'd3-format';
 import { range } from 'd3-array';
 import { line, curveMonotoneX, arc } from 'd3-shape';
+import {
+  viewPortFromElement
+} from '../../utils/dom';
 import './_circle.scss';
 
 export default class Circle extends Component {
   componentDidMount() {
     const container = this.container;
 
-    const width = container.offsetWidth - 100;
+    const width = container.offsetWidth * .5;
     const height = width;
 
     const dimensions = {
@@ -45,9 +48,10 @@ export default class Circle extends Component {
       .tickSizeOuter(0);
 
     const svg = select(container).append('svg')
-                                 .attr('class', 'circle-container')
                                  .attr("width", dimensions.width)
                                  .attr("height", dimensions.height)
+                                 .attr('viewBox','0 0 '+Math.min(width,height) +' '+Math.min(width,height) )
+                                 .attr('preserveAspectRatio','xMinYMin')
                                  .attr("transform", `translate(20, 0)`);
 
 
