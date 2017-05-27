@@ -26,8 +26,6 @@ export function viewPortFromElement(el, square) {
     w = Math.min(el.clientWidth, document.documentElement.clientWidth);
   }
 
-  console.log(w);
-
   return {
     margin,
     width: w,

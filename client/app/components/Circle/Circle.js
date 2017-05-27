@@ -17,13 +17,7 @@ export default class Circle extends Component {
   componentDidMount() {
     const container = this.container;
 
-    const width = container.offsetWidth * .5;
-    const height = width;
-
-    const dimensions = {
-      width: width,
-      height: height
-    }
+    const dimensions = viewPortFromElement(container, true);
 
     const xScale = scaleLinear()
       .domain([-3, 3])
@@ -32,8 +26,6 @@ export default class Circle extends Component {
     const yScale = scaleLinear()
       .domain([-3, 3])
       .range([0, dimensions.height - 30]);
-
-    const yTranslate = 10;
 
     const tickValues = [-3, -2, -1, 0, 1, 2, 3];
 
@@ -47,22 +39,24 @@ export default class Circle extends Component {
       .tickFormat(format(",.0f"))
       .tickSizeOuter(0);
 
+    const { width, height} = dimensions;
+
     const svg = select(container).append('svg')
                                  .attr("width", dimensions.width)
                                  .attr("height", dimensions.height)
                                  .attr('viewBox','0 0 '+Math.min(width,height) +' '+Math.min(width,height) )
                                  .attr('preserveAspectRatio','xMinYMin')
-                                 .attr("transform", `translate(20, 0)`);
-
+                                 .append('g')
+                                 .attr("transform", `translate(0, 20)`);
 
     svg.append('g')
        .attr('class', 'x-axis')
-       .attr('transform', `translate(0, ${yScale(0) + yTranslate})`)
+       .attr('transform', `translate(0, ${yScale(0)})`)
        .call(xAxis);
 
     svg.append('g')
        .attr('class', 'y-axis')
-       .attr('transform', `translate(${xScale(0)}, ${yTranslate})`)
+       .attr('transform', `translate(${xScale(0)}, 0)`)
        .call(yAxis);
 
     const outer = svg.append('circle')
@@ -70,7 +64,18 @@ export default class Circle extends Component {
                      .attr('cx', xScale(0))
                      .attr('cy', yScale(0))
                      .attr('r', xScale(3) / 2)
-                     .attr('transform', `translate(0, ${yTranslate})`)
+
+    const inner = svg.append('circle')
+                     .attr('class', 'inner-circle')
+                     .attr('cx', xScale(2))
+                     .attr('cy', yScale(0))
+                     .attr('r', xScale(3) / 6);
+
+    const dot = svg.append('circle')
+                   .attr('cx', xScale(2))
+                   .attr('cy', yScale(0))
+                   .attr('r', 5);
+
   }
 
   render() {

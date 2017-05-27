@@ -1,5 +1,10 @@
 .circle-container {
   .outer-circle {
+    stroke: blue;
+    fill: transparent;
+  }
+
+  .inner-circle {
     stroke: #333333;
     fill: transparent;
   }
