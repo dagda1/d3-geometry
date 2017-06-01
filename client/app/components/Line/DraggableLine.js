@@ -1,6 +1,6 @@
 import {
   viewPortFromElement
-} from "../utils/dom";
+} from "../../utils/dom";
 
 import { select, event } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';

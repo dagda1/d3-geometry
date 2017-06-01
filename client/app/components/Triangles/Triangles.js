@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import Triangulator from './triangulator';
-import RadioButtonGroup from './radio-button-group/radio-button-group';
-import { setTriangleMode } from '../actions/triangle-actions';
+import Triangulator from '../Triangles/Trianglulator';
+import RadioButtonGroup from '../radio-button-group/radio-button-group';
+import { setTriangleMode } from '../../actions/triangle-actions';
 import { connect } from 'react-redux';
 
 @connect((state) => {

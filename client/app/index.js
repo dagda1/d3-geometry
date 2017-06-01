@@ -10,20 +10,20 @@ import reducers from './reducers';
 import "./polyfills/index";
 
 import App from './components/app';
-import Home from './components/home';
-import Triangles from './components/triangles';
-import LineEquation from './components/equation-of-a-line';
-import FunctionPlot from "./components/function-plot";
-import SineWave from "./components/sine-wave";
-import Sine2 from "./components/sine2";
-import Cube from './components/cube';
-import Pyramid from './components/pyramid';
-import Hexagon from './components/hexagon';
+import Home from './components/Home/Home';
+import Triangles from './components/Triangles/Triangles';
+import LineEquation from './components/Line/EquationOfaLine';
+import FunctionPlot from './components/FunctionPlot/FunctionPlot';
+import SineWave from './components/SineWave/SineWave';
+import Sine2 from './components/Sine2/Sine2';
+import Cube from './components/Cube/Cube'
+import Pyramid from './components/Pyramid/Pyramid';
+import Hexagon from './components/Hexagon/Hexagon';
 import Circle from './components/Circle/Circle';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-require("../app/styles/style.scss");
+require('../app/styles/style.scss');
 
 const store = createStore(reducers);
 

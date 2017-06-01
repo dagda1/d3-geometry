@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Grid, Row, Col } from 'react-bootstrap';
-
-require("../styles/pyramid.scss");
+import './_Pyramid.scss';
 
 export default () => {
   return (

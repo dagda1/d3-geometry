@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import DraggableLine from './draggable-line';
+import DraggableLine from './DraggableLine';
 
 export default class LineEquation extends Component {
   componentDidMount() {

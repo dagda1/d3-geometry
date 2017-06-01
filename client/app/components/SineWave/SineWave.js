@@ -12,13 +12,12 @@ import { line, curveMonotoneX } from 'd3-shape';
 
 import {
   viewPortFromElement
-} from "../utils/dom";
+} from "../../utils/dom";
 
 import {
   wait
-} from "../utils/common";
-
-require("../styles/sine.scss");
+} from "../../utils/common";
+import './_Sine.scss';
 
 const radius = 90;
 

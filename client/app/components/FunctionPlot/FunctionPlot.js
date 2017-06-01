@@ -4,12 +4,12 @@ import ReactDOM from 'react-dom';
 import { find } from 'lodash';
 import math from 'mathjs';
 import { Grid, Row, Col } from 'react-bootstrap';
-import "../plugins/mathdiff.js";
+import "../../plugins/mathdiff.js";
 import {
   getYIntercept
-} from "../utils/line";
+} from "../../utils/line";
 
-import { setExpression, changeScale } from '../actions/function-actions';
+import { setExpression, changeScale } from '../../actions/function-actions';
 import { select, selectAll, event, mouse } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
@@ -19,8 +19,7 @@ import { range } from 'd3-array';
 import { line, curveMonotoneX, curveBasis, arc } from 'd3-shape';
 import { max, min, extent } from 'd3-array';
 import { transform } from 'd3-zoom';
-
-require("../styles/functions.scss");
+import "./_FunctionPlot.scss";
 
 @connect((state) => {
   return {

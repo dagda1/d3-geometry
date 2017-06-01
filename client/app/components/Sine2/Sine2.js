@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { debounce } from 'lodash';
-import { ResizeComponent } from "./base/resize-component";
+import { ResizeComponent } from "../base/resize-component";
 import { Grid, Row, Col } from 'react-bootstrap';
 import {
   viewPortFromElement
-} from "../utils/dom";
+} from "../../utils/dom";
 
 import {
   wait
-} from "../utils/common";
+} from "../../utils/common";
 
 import { select, selectAll, event } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';

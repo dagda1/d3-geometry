@@ -1,4 +1,4 @@
-import {solveMatrix} from '../utils/matrices';
+import {solveMatrix} from '../../utils/matrices';
 
 import {
   distance,
@@ -6,11 +6,11 @@ import {
   gradient,
   perpendicularGradient,
   getYIntercept
-} from "../utils/line";
+} from "../../utils/line";
 
 import {
   viewPortFromElement
-} from "../utils/dom";
+} from "../../utils/dom";
 
 import { select, selectAll, event } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
