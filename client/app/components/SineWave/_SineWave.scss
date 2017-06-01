@@ -1,6 +1,4 @@
-$stroke-width: 2px;
-$thick-stroke-width: 5px;
-$stroke-colour: steelblue;
+@import '../../styles/variables';
 
 .axis path,
 .axis line {
@@ -15,44 +13,8 @@ $stroke-colour: steelblue;
   stroke: steelblue;
 }
 
-.sine2-container {
-  $triangle-legs-color: red;
-  $tracer-color: blue;
-
-  .graph-container {
-    .x.axis .tick:first-child {
-      display: none;
-    }
-  }
-
-  .ln {
-    stroke-width: 3px;
-    stroke: black;
-  }
-
-  .sine-curve {
-    stroke: $triangle-legs-color;
-    stroke-width: $thick-stroke-width;
-	  fill: none;
-  }
-
-  .hypotenuse {
-    stroke-width: $thick-stroke-width;
-  }
-
-  .opposite{
-    stroke: $triangle-legs-color;
-    stroke-width: $thick-stroke-width;
-  }
-
-  .adjacent {
-    stroke: $tracer-color;
-    stroke-width: $thick-stroke-width;
-  }
-
-  .arc {
-    fill: $tracer-color;
-  }
+#sine-wave {
+  width: calc(100vw - 50px);
 }
 
 .sinewave-container {

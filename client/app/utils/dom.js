@@ -18,12 +18,12 @@ export function viewPortFromElement(el, square) {
 
   let h, w;
 
-  h = el.clientHeight || Math.min(document.documentElement.clientHeight - 100, 500)
+  h = el.clientHeight || Math.min(document.documentElement.clientHeight - 100, 800)
 
   if(square) {
     w = h;
   } else {
-    w = Math.min(el.clientWidth, document.documentElement.clientWidth);
+    w = Math.min(el.clientWidth, document.documentElement.clientWidth, 1000);
   }
 
   return {

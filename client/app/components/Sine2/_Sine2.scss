@@ -1,0 +1,41 @@
+@import '../../styles/variables';
+
+.sine2-container {
+  $triangle-legs-color: red;
+  $tracer-color: blue;
+
+  .graph-container {
+    .x.axis .tick:first-child {
+      display: none;
+    }
+  }
+
+  .ln {
+    stroke-width: 3px;
+    stroke: black;
+  }
+
+  .sine-curve {
+    stroke: $triangle-legs-color;
+    stroke-width: $thick-stroke-width;
+	  fill: none;
+  }
+
+  .hypotenuse {
+    stroke-width: $thick-stroke-width;
+  }
+
+  .opposite{
+    stroke: $triangle-legs-color;
+    stroke-width: $thick-stroke-width;
+  }
+
+  .adjacent {
+    stroke: $tracer-color;
+    stroke-width: $thick-stroke-width;
+  }
+
+  .arc {
+    fill: $tracer-color;
+  }
+}

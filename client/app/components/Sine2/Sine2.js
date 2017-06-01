@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { debounce } from 'lodash';
-import { ResizeComponent } from "../base/resize-component";
 import { Grid, Row, Col } from 'react-bootstrap';
 import {
   viewPortFromElement
@@ -18,6 +17,7 @@ import { drag } from 'd3-drag';
 import { format } from 'd3-format';
 import { range } from 'd3-array';
 import { line, curveMonotoneX, arc } from 'd3-shape';
+import './_Sine2.scss';
 
 const TWO_PI = (Math.PI *2);
 
@@ -26,24 +26,6 @@ class Sine extends Component {
     this.cancelled = false;
 
     this.createDocument();
-
-    this.resizeFunc = debounce(this.resize.bind(this), 200);
-
-    window.addEventListener("resize", this.resizeFunc);
-  }
-
-  resize() {
-    select('.sine2-container').remove();
-
-    setTimeout(this.createDocument.bind(this), 500);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunc);
-
-    this.cancelled = true;
-
-    select('.sine2-container').remove();
   }
 
   createDocument() {
@@ -51,10 +33,14 @@ class Sine extends Component {
 
     const dimensions = viewPortFromElement(el);
 
+    const { width, height } = dimensions;
+
+    console.log(dimensions);
+
     const svg = select(el).append("svg")
                           .attr('class', 'sine2-container')
-                          .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right + 100)
-                          .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.top);
+                          .attr('viewBox', `0 0 1300  ${height}`)
+                          .attr('preserveAspectRatio','xMinYMin meet')
 
 
     let state = this.initializeArea(svg, dimensions);
@@ -292,8 +278,8 @@ class Sine extends Component {
     return (
       <Grid>
         <Row>
-          <Col xs={9}>
-            <div id="sine" ref={el => this.sine = el}/>
+          <Col xs={12}>
+            <div id="sine2" ref={el => this.sine = el}/>
           </Col>
         </Row>
       </Grid>
@@ -301,4 +287,4 @@ class Sine extends Component {
   }
 }
 
-export default ResizeComponent(Sine);
+export default Sine;

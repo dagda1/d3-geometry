@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import DraggableLine from './DraggableLine';
+import './_EquationOfALine.scss';
 
 export default class LineEquation extends Component {
   componentDidMount() {
@@ -13,8 +14,8 @@ export default class LineEquation extends Component {
     return (
       <Grid>
         <Row>
-          <Col lg={7} md={7} xs={8} className="equation-of-a-line">
-            <div  ref={el => this.equationOfALine = el}/>
+          <Col xs={12}>
+            <div className="equation-of-a-line" ref={el => this.equationOfALine = el}/>
           </Col>
         </Row>
       </Grid>

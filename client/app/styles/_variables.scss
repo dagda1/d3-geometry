@@ -1,3 +1,10 @@
+@import './partials/colors';
+
 .black {
- background: #24292e;
+  background: #24292e;
 }
+
+$stroke-width: 2px;
+$thick-stroke-width: 5px;
+
+$tick-font-size: 16px;

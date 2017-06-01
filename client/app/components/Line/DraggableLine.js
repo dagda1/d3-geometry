@@ -13,36 +13,39 @@ export default class DraggableLine {
     const dimensions = viewPortFromElement(el);
 
     const xScale = scaleLinear()
-          .domain([0, 20])
-          .range([0, dimensions.width]);
+      .domain([0, 20])
+      .range([0, dimensions.width]);
 
     const yScale = scaleLinear()
-          .domain([0, 20])
-          .range([dimensions.height, 0]);
+      .domain([0, 20])
+      .range([dimensions.height, 0]);
 
     const xAxis = axisBottom(xScale)
       .tickSizeInner(-dimensions.height)
       .tickPadding(10);
 
     const yAxis = axisLeft(yScale)
-          .tickSizeInner(-dimensions.width)
-          .tickSizeOuter(0)
-          .tickPadding(10);
+      .tickSizeInner(-dimensions.width)
+      .tickSizeOuter(0)
+      .tickPadding(10);
+
+    const { width, height } = dimensions;
 
     const svg = select(el).append("svg")
-          .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
-          .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
+                          .attr('viewBox', `0 0 1300 900`)
+                          .attr('preserveAspectRatio','xMinYMin meet')
+
+                          .append("g")
+                          .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
 
     svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + dimensions.height + ")")
-      .call(xAxis);
+       .attr("class", "x axis")
+       .attr("transform", "translate(0," + dimensions.height + ")")
+       .call(xAxis);
 
     svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis);
+       .attr("class", "y axis")
+       .call(yAxis);
 
     const line = {
       start: {x: xScale(2), y: yScale(3), type: 'start'},
@@ -52,20 +55,20 @@ export default class DraggableLine {
     const g = svg.append('g');
 
     g.append('line')
-      .style('stroke', 'blue')
-      .attr('class', 'line')
-      .attr('x1', line.start.x)
-      .attr('y1', line.start.y)
-      .attr('x2', line.finish.x)
-      .attr('y2', line.finish.y);
+     .style('stroke', 'blue')
+     .attr('class', 'line')
+     .attr('x1', line.start.x)
+     .attr('y1', line.start.y)
+     .attr('x2', line.finish.x)
+     .attr('y2', line.finish.y);
 
     svg.append('text')
-      .attr('class', 'title')
-      .text(this.equationOfLine(line.start, line.finish))
-      .attr('x', xScale(2))
-      .attr('y', yScale(18))
-      .attr("font-family", "sans-serif")
-      .attr("font-size", "24px");
+       .attr('class', 'title')
+       .text(this.equationOfLine(line.start, line.finish))
+       .attr('x', xScale(2))
+       .attr('y', yScale(18))
+       .attr("font-family", "sans-serif")
+       .attr("font-size", "24px");
 
     const lineData = [line.start, line.finish];
 
@@ -118,9 +121,9 @@ export default class DraggableLine {
      .attr('y', d => d.y)
      .attr('class', d => "text" + d.type)
      .text(formatText)
-      .attr("font-family", "sans-serif")
-      .attr("font-size", "14px")
-      .attr("fill", "red");
+     .attr("font-family", "sans-serif")
+     .attr("font-size", "14px")
+     .attr("fill", "red");
   }
 
   equationOfLine(start, finish) {

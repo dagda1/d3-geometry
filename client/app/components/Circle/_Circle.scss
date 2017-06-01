@@ -5,6 +5,12 @@
     fill: transparent;
   }
 
+  .circle-svg {
+    display: block;
+    width: 100%;
+    height: calc(100vh - 100px);
+  }
+
   .inner-circle {
     stroke: #333333;
     fill: transparent;

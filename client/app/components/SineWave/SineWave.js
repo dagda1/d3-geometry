@@ -17,7 +17,7 @@ import {
 import {
   wait
 } from "../../utils/common";
-import './_Sine.scss';
+import './_SineWave.scss';
 
 const radius = 90;
 
@@ -26,24 +26,6 @@ export default class SineWave extends Component {
     this.cancelled = false;
 
     this.createDocument();
-
-    this.resizeFunc = debounce(this.resize.bind(this), 200);
-
-    window.addEventListener("resize", this.resizeFunc);
-  }
-
-  resize() {
-    select('.sinewave-container').remove();
-
-    setTimeout(this.createDocument.bind(this), 500);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunc);
-
-    this.cancelled = true;
-
-    select('.sinewave-container').remove();
   }
 
   createDocument() {
@@ -59,10 +41,14 @@ export default class SineWave extends Component {
       .domain([0, 20])
       .range([dimensions.height, 0]);
 
+    const { width, height } = dimensions;
+
+    console.log(width)
+
     const svg = select(el).append("svg")
                           .attr('class', 'sinewave-container')
-                          .attr("width", dimensions.width)
-                          .attr("height", dimensions.height);
+                          .attr('viewBox', `0 0 ${width} ${height}`)
+                          .attr('preserveAspectRatio','xMinYMin meet');
 
     const state = this.addGraphContainer(svg, xScale, yScale);
 
@@ -337,7 +323,7 @@ export default class SineWave extends Component {
         <Row>
           <Col sm={12}>
             <Col xsOffset={3} mdOffset={1} componentClass="h2">sin(x)</Col>
-            <div id="sineWave" ref={(sine) => { this.sine = sine }} />
+            <div id="sine-wave" ref={(sine) => { this.sine = sine }} />
           </Col>
         </Row>
       </Grid>

@@ -11,7 +11,7 @@ import { line, curveMonotoneX, arc } from 'd3-shape';
 import {
   viewPortFromElement
 } from '../../utils/dom';
-import './_circle.scss';
+import './_Circle.scss';
 
 export default class Circle extends Component {
   componentDidMount() {
@@ -22,10 +22,9 @@ export default class Circle extends Component {
     const { width, height} = dimensions;
 
     const svg = select(container).append('svg')
-                                 .attr("width", dimensions.width)
-                                 .attr("height", dimensions.height)
+                                 .attr('class', 'circle-svg')
                                  .attr('viewBox','0 0 '+Math.min(width,height) +' '+Math.min(width,height) )
-                                 .attr('preserveAspectRatio','xMinYMin')
+                                 .attr('preserveAspectRatio','xMinYMin meet')
                                  .append('g')
                                  .attr("transform", `translate(0, 20)`);
 
