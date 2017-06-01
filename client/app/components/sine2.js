@@ -260,10 +260,6 @@ class Sine extends Component {
         return t === 0 ? '' : piMap[t.toString()];
       });
 
-    const findZeroTick = (data) => {
-      return data === 0.0;
-    };
-
     const xAxisGroup = graphContainer
       .append('g')
       .attr('class', 'x axis')

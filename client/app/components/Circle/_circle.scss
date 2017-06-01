@@ -1,11 +1,17 @@
 .circle-container {
   .outer-circle {
     stroke: blue;
+    stroke-width: 1px;
     fill: transparent;
   }
 
   .inner-circle {
     stroke: #333333;
     fill: transparent;
+  }
+
+  .radial {
+    stroke-width: 3px;
+    stroke: steelblue;
   }
 }

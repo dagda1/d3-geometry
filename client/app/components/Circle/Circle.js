@@ -19,6 +19,17 @@ export default class Circle extends Component {
 
     const dimensions = viewPortFromElement(container, true);
 
+    const { width, height} = dimensions;
+
+    const svg = select(container).append('svg')
+                                 .attr("width", dimensions.width)
+                                 .attr("height", dimensions.height)
+                                 .attr('viewBox','0 0 '+Math.min(width,height) +' '+Math.min(width,height) )
+                                 .attr('preserveAspectRatio','xMinYMin')
+                                 .append('g')
+                                 .attr("transform", `translate(0, 20)`);
+
+
     const xScale = scaleLinear()
       .domain([-3, 3])
       .range([0, dimensions.width - 30]);
@@ -38,16 +49,6 @@ export default class Circle extends Component {
       .tickValues(tickValues)
       .tickFormat(format(",.0f"))
       .tickSizeOuter(0);
-
-    const { width, height} = dimensions;
-
-    const svg = select(container).append('svg')
-                                 .attr("width", dimensions.width)
-                                 .attr("height", dimensions.height)
-                                 .attr('viewBox','0 0 '+Math.min(width,height) +' '+Math.min(width,height) )
-                                 .attr('preserveAspectRatio','xMinYMin')
-                                 .append('g')
-                                 .attr("transform", `translate(0, 20)`);
 
     svg.append('g')
        .attr('class', 'x-axis')
@@ -76,6 +77,12 @@ export default class Circle extends Component {
                    .attr('cy', yScale(0))
                    .attr('r', 5);
 
+    const line = svg.append('line')
+                    .attr('class', 'radial')
+                    .attr('x1', xScale(2))
+                    .attr('y1', yScale(0))
+                    .attr('x2', xScale(3))
+                    .attr('y2', yScale(0))
   }
 
   render() {
