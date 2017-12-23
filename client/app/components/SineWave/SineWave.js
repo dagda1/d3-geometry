@@ -33,6 +33,8 @@ export default class SineWave extends Component {
 
     const dimensions = viewPortFromElement(el);
 
+    console.log(dimensions);
+
     const xScale = scaleLinear()
       .domain([0, 20])
       .range([0, dimensions.width]);

@@ -12,6 +12,7 @@ export default class DraggableLine {
   render(el, props = {}) {
     const dimensions = viewPortFromElement(el);
 
+    console.log(dimensions);
     const xScale = scaleLinear()
       .domain([0, 20])
       .range([0, dimensions.width]);
@@ -32,9 +33,10 @@ export default class DraggableLine {
     const { width, height } = dimensions;
 
     const svg = select(el).append("svg")
-                          .attr('viewBox', `0 0 1300 900`)
+                          .attr('width', width)
+                          .attr('height', height)
+                          .attr('viewBox', `0 0 ${width * 2} ${height * 2}`)
                           .attr('preserveAspectRatio','xMinYMin meet')
-
                           .append("g")
                           .attr("transform", "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")");
 

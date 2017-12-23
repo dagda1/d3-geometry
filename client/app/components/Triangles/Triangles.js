@@ -35,7 +35,7 @@ export default class Triangles extends Component {
     return (
       <Grid>
         <Row>
-          <Col md={7} sm={7}>
+          <Col xs={12}>
             <RadioButtonGroup
                 values={['Perpendicular Bisectors', 'Medians', 'Altitudes']}
                 selected={this.props.mode}
@@ -44,7 +44,7 @@ export default class Triangles extends Component {
           </Col>
         </Row>
         <Row>
-          <Col lg={6} md={6} xs={8}>
+          <Col xs={12}>
             <div ref={el => this.triangleContainer = el} className="triangle-container"></div>
           </Col>
         </Row>

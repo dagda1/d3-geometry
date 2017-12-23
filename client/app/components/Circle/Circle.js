@@ -1,3 +1,6 @@
+// http://people.math.binghamton.edu/alex/animated_gifs.html
+// https://en.wikipedia.org/wiki/Hypocycloid
+// https://mail.google.com/mail/u/0/?shva=1#inbox/15c59b030e32ee50
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 
@@ -8,9 +11,7 @@ import { drag } from 'd3-drag';
 import { format } from 'd3-format';
 import { range } from 'd3-array';
 import { line, curveMonotoneX, arc } from 'd3-shape';
-import {
-  viewPortFromElement
-} from '../../utils/dom';
+import { viewPortFromElement } from '../../utils/dom';
 import './_Circle.scss';
 
 export default class Circle extends Component {
@@ -19,15 +20,18 @@ export default class Circle extends Component {
 
     const dimensions = viewPortFromElement(container, true);
 
-    const { width, height} = dimensions;
+    const { width, height } = dimensions;
 
-    const svg = select(container).append('svg')
-                                 .attr('class', 'circle-svg')
-                                 .attr('viewBox','0 0 '+Math.min(width,height) +' '+Math.min(width,height) )
-                                 .attr('preserveAspectRatio','xMinYMin meet')
-                                 .append('g')
-                                 .attr("transform", `translate(0, 20)`);
-
+    const svg = select(container)
+      .append('svg')
+      .attr('class', 'circle-svg')
+      .attr(
+        'viewBox',
+        '0 0 ' + Math.min(width, height) + ' ' + Math.min(width, height)
+      )
+      .attr('preserveAspectRatio', 'xMinYMin meet')
+      .append('g')
+      .attr('transform', `translate(0, 20)`);
 
     const xScale = scaleLinear()
       .domain([-3, 3])
@@ -41,47 +45,53 @@ export default class Circle extends Component {
 
     const xAxis = axisBottom(xScale)
       .tickValues(tickValues)
-      .tickFormat(format(",.0f"))
+      .tickFormat(format(',.0f'))
       .tickSizeOuter(0);
 
     const yAxis = axisLeft(yScale)
       .tickValues(tickValues)
-      .tickFormat(format(",.0f"))
+      .tickFormat(format(',.0f'))
       .tickSizeOuter(0);
 
-    svg.append('g')
-       .attr('class', 'x-axis')
-       .attr('transform', `translate(0, ${yScale(0)})`)
-       .call(xAxis);
+    svg
+      .append('g')
+      .attr('class', 'x-axis')
+      .attr('transform', `translate(0, ${yScale(0)})`)
+      .call(xAxis);
 
-    svg.append('g')
-       .attr('class', 'y-axis')
-       .attr('transform', `translate(${xScale(0)}, 0)`)
-       .call(yAxis);
+    svg
+      .append('g')
+      .attr('class', 'y-axis')
+      .attr('transform', `translate(${xScale(0)}, 0)`)
+      .call(yAxis);
 
-    const outer = svg.append('circle')
-                     .attr('class', 'outer-circle')
-                     .attr('cx', xScale(0))
-                     .attr('cy', yScale(0))
-                     .attr('r', xScale(3) / 2)
+    const outer = svg
+      .append('circle')
+      .attr('class', 'outer-circle')
+      .attr('cx', xScale(0))
+      .attr('cy', yScale(0))
+      .attr('r', xScale(3) / 2);
 
-    const inner = svg.append('circle')
-                     .attr('class', 'inner-circle')
-                     .attr('cx', xScale(2))
-                     .attr('cy', yScale(0))
-                     .attr('r', xScale(3) / 6);
+    const inner = svg
+      .append('circle')
+      .attr('class', 'inner-circle')
+      .attr('cx', xScale(2))
+      .attr('cy', yScale(0))
+      .attr('r', xScale(3) / 6);
 
-    const dot = svg.append('circle')
-                   .attr('cx', xScale(2))
-                   .attr('cy', yScale(0))
-                   .attr('r', 5);
+    const dot = svg
+      .append('circle')
+      .attr('cx', xScale(2))
+      .attr('cy', yScale(0))
+      .attr('r', 5);
 
-    const line = svg.append('line')
-                    .attr('class', 'radial')
-                    .attr('x1', xScale(2))
-                    .attr('y1', yScale(0))
-                    .attr('x2', xScale(3))
-                    .attr('y2', yScale(0))
+    const line = svg
+      .append('line')
+      .attr('class', 'radial')
+      .attr('x1', xScale(2))
+      .attr('y1', yScale(0))
+      .attr('x2', xScale(3))
+      .attr('y2', yScale(0));
   }
 
   render() {
@@ -89,7 +99,10 @@ export default class Circle extends Component {
       <Grid>
         <Row>
           <Col xs={12}>
-            <div className="circle-container" ref={el => this.container = el}/>
+            <div
+              className="circle-container"
+              ref={el => (this.container = el)}
+            />
           </Col>
         </Row>
       </Grid>

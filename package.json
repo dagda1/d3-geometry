@@ -5,11 +5,7 @@
   "main": "index.js",
   "author": "Paul Cowan (dagda1@scotalt.net)",
   "babel": {
-    "presets": [
-      "es2015",
-      "react",
-      "stage-0"
-    ]
+    "presets": ["es2015", "react", "stage-0"]
   },
   "scripts": {
     "start": "`npm bin`/webpack-dev-server",
@@ -56,7 +52,7 @@
     "imports-loader": "^0.6.5",
     "jquery": "^2.1.4",
     "koa": "^1.1.2",
-    "mathjs": "^2.7.0",
+    "mathjs": "^3.17.0",
     "react": "^0.14.7",
     "react-bootstrap": "^0.28.1",
     "react-redux": "^4.4.0",
@@ -78,7 +74,7 @@
     "jquery": "^2.2.4",
     "lodash": "^4.17.4",
     "moment": "^2.11.2",
-    "node-sass": "^3.13.1",
+    "node-sass": "^4.5.3",
     "react": "^0.14.3",
     "react-bootstrap": "^0.28.5",
     "react-dom": "^0.14.3",
@@ -89,12 +85,5 @@
     "sass-loader": "^4.0.0",
     "webpack": "^1.14.0"
   },
-  "keywords": [
-    "d3",
-    "react",
-    "reactjs",
-    "redux",
-    "koa",
-    "visualisation"
-  ]
+  "keywords": ["d3", "react", "reactjs", "redux", "koa", "visualisation"]
 }

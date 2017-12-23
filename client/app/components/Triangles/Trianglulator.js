@@ -28,12 +28,12 @@ export default class Triangulator {
     const dimensions = viewPortFromElement(el, true);
 
     const xScale = scaleLinear()
-            .domain([0, 20])
-            .range([0, dimensions.height]);
+      .domain([0, 20])
+      .range([0, dimensions.height]);
 
     const yScale = scaleLinear()
-            .domain([0, 20])
-            .range([dimensions.height, 0]);
+      .domain([0, 20])
+      .range([dimensions.height, 0]);
 
     let points;
 
@@ -67,19 +67,20 @@ export default class Triangulator {
     const margin = {top: 20, right: 100, bottom: 30, left: 30};
 
     const svg = select(el).append("svg")
-            .attr("width", dimensions.width + margin.left + margin.right)
-            .attr("height", dimensions.height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                          .attr('viewBox', `0 0 1300 900`)
+                          .attr('preserveAspectRatio','xMinYMin meet')
+
+                          .append("g")
+                          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     svg.append('g')
-      .attr('class', 'x axis')
-      .attr("transform", "translate(0," + dimensions.height + ")")
-      .call(xAxis);
+       .attr('class', 'x axis')
+       .attr("transform", "translate(0," + dimensions.height + ")")
+       .call(xAxis);
 
     svg.append('g')
-      .attr('class', 'y axis')
-      .call(yAxis);
+       .attr('class', 'y axis')
+       .call(yAxis);
 
     const area = {
       el: el,
@@ -264,12 +265,12 @@ export default class Triangulator {
     const dist = distance(this.convertPoint(area, 'b'), circumCircleCentre);
 
     area.g.append('circle')
-      .attr('cx', area.xScale(circumCircleCentre.x))
-      .attr('cy', area.yScale(circumCircleCentre.y))
-      .attr('r', area.xScale(dist))
-      .attr('class', 'circumcircle')
-      .attr('fill-opacity', 0.0)
-      .style('stroke', 'red');
+        .attr('cx', area.xScale(circumCircleCentre.x))
+        .attr('cy', area.yScale(circumCircleCentre.y))
+        .attr('r', area.xScale(dist))
+        .attr('class', 'circumcircle')
+        .attr('fill-opacity', 0.0)
+        .style('stroke', 'red');
   }
 
   addCurrentEffects(area) {
@@ -281,25 +282,25 @@ export default class Triangulator {
 
   drawTriangle(points, g) {
     g.append('path')
-      .attr('d', function() {
-        return 'M ' + points.a.x +' '+ points.a.y +
-          ' L' + points.b.x + ' ' + points.b.y +
-          ' L' + points.c.x + ' ' + points.c.y +
-          ' z';
-      })
-      .attr('class', 'triangle')
-      .attr('fill-opacity', 0.3)
-      .style('stroke', 'red');
+     .attr('d', function() {
+       return 'M ' + points.a.x +' '+ points.a.y +
+              ' L' + points.b.x + ' ' + points.b.y +
+              ' L' + points.c.x + ' ' + points.c.y +
+              ' z';
+     })
+     .attr('class', 'triangle')
+     .attr('fill-opacity', 0.3)
+     .style('stroke', 'red');
   }
 
   drawTriangleLine(group, vertices) {
     group.append('line')
-      .style('stroke', 'red')
-      .attr('class', 'line')
-      .attr('x1', vertices.x1)
-      .attr('y1', vertices.y1)
-      .attr('x2', vertices.x2)
-      .attr('y2', vertices.y2);
+         .style('stroke', 'red')
+         .attr('class', 'line')
+         .attr('x1', vertices.x1)
+         .attr('y1', vertices.y1)
+         .attr('x2', vertices.x2)
+         .attr('y2', vertices.y2);
   }
 
   convertPoint(area, point) {
@@ -311,20 +312,20 @@ export default class Triangulator {
 
   addPointLabels(area, vertices) {
     area.g.selectAll('text')
-      .data(vertices)
-      .enter().append('text')
-      .attr("x", function(d){return d.point.x + 10;})
-      .attr("y", function(d){return d.point.y + 10;})
-      .attr('class', function(d) {return "label " + d.label;})
-      .text( function(d) {
-        const x = Math.round(area.xScale.invert(d.point.x));
-        const y = Math.round(area.yScale.invert(d.point.y));
+        .data(vertices)
+        .enter().append('text')
+        .attr("x", function(d){return d.point.x + 10;})
+        .attr("y", function(d){return d.point.y + 10;})
+        .attr('class', function(d) {return "label " + d.label;})
+        .text( function(d) {
+          const x = Math.round(area.xScale.invert(d.point.x));
+          const y = Math.round(area.yScale.invert(d.point.y));
 
-        return `${d.label.toUpperCase()} (${x}, ${y})`;
-      })
-      .attr("font-family", "sans-serif")
-      .attr("font-size", "24px")
-      .attr("fill", "black");
+          return `${d.label.toUpperCase()} (${x}, ${y})`;
+        })
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "24px")
+        .attr("fill", "black");
   }
 
   draggable(area, d) {
@@ -357,16 +358,16 @@ export default class Triangulator {
 
   addGrabbers(area, vertices) {
     const dragger = drag()
-            .on("drag", this.draggable.bind(this, area));
+      .on("drag", this.draggable.bind(this, area));
 
     area.g.selectAll('.grabber')
-      .data(vertices)
-      .enter().append('circle')
-      .attr('class', d => 'grabber ' + d.label)
-      .attr('cx', d => d.point.x)
-      .attr('cy', d => d.point.y)
-      .attr('r', 10)
-      .style('fill', 'red')
-      .call(dragger);
+        .data(vertices)
+        .enter().append('circle')
+        .attr('class', d => 'grabber ' + d.label)
+        .attr('cx', d => d.point.x)
+        .attr('cy', d => d.point.y)
+        .attr('r', 10)
+        .style('fill', 'red')
+        .call(dragger);
   }
 };
