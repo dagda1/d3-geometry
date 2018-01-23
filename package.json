@@ -5,7 +5,11 @@
   "main": "index.js",
   "author": "Paul Cowan (dagda1@scotalt.net)",
   "babel": {
-    "presets": ["es2015", "react", "stage-0"]
+    "presets": [
+      "es2015",
+      "react",
+      "stage-0"
+    ]
   },
   "scripts": {
     "start": "`npm bin`/webpack-dev-server",
@@ -22,6 +26,28 @@
     "url": "https://github.com/dagda1/d3-geometry/issues"
   },
   "homepage": "https://github.com/dagda1/d3-geometry",
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "classnames": "^2.2.5",
+    "css-loader": "^0.21.0",
+    "d3": "^4.6.0",
+    "eslint-plugin-mocha": "^2.0.0",
+    "history": "^3.0.0",
+    "jquery": "^3.3.1",
+    "lodash": "^4.17.4",
+    "mathjs": "^3.17.0",
+    "moment": "^2.11.2",
+    "node-sass": "^4.5.3",
+    "react": "^0.14.3",
+    "react-bootstrap": "^0.28.5",
+    "react-dom": "^0.14.3",
+    "react-prop-types": "^0.4.0",
+    "react-redux": "^4.4.0",
+    "react-router": "^3.0.0",
+    "react-router-redux": "^4.0.4",
+    "redux": "^3.3.1",
+    "redux-simple-router": "^2.0.4"
+  },
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-core": "^6.5.1",
@@ -39,7 +65,6 @@
     "babel-preset-stage-3": "^6.22.0",
     "babel-register": "^6.24.0",
     "babel-runtime": "^6.23.0",
-    "bootstrap": "^3.3.6",
     "css-loader": "^0.21.0",
     "eslint": "^2.13.1",
     "eslint-plugin-react": "^4.1.0",
@@ -47,43 +72,22 @@
     "gulp": "^3.9.0",
     "gulp-shell": "^0.5.2",
     "gulp-ssh": "^0.5.3",
-    "history": "^1.13.1",
     "html-webpack-plugin": "^1.6.2",
     "imports-loader": "^0.6.5",
-    "jquery": "^2.1.4",
     "koa": "^1.1.2",
-    "mathjs": "^3.17.0",
-    "react": "^0.14.7",
-    "react-bootstrap": "^0.28.1",
-    "react-redux": "^4.4.0",
-    "redux": "^3.3.1",
     "redux-devtools": "^3.1.1",
+    "sass-loader": "^4.0.0",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.14.1"
   },
-  "dependencies": {
-    "babel-runtime": "^6.5.0",
-    "bootstrap": "^3.3.6",
-    "classnames": "^2.2.5",
-    "css-loader": "^0.21.0",
-    "d3": "^4.6.0",
-    "eslint-plugin-mocha": "^2.0.0",
-    "history": "^3.0.0",
-    "jquery": "^2.2.4",
-    "lodash": "^4.17.4",
-    "moment": "^2.11.2",
-    "node-sass": "^4.5.3",
-    "react": "^0.14.3",
-    "react-bootstrap": "^0.28.5",
-    "react-dom": "^0.14.3",
-    "react-prop-types": "^0.4.0",
-    "react-router": "^3.0.0",
-    "react-router-redux": "^4.0.4",
-    "redux-simple-router": "^2.0.4",
-    "sass-loader": "^4.0.0",
-    "webpack": "^1.14.0"
-  },
-  "keywords": ["d3", "react", "reactjs", "redux", "koa", "visualisation"]
+  "keywords": [
+    "d3",
+    "react",
+    "reactjs",
+    "redux",
+    "koa",
+    "visualisation"
+  ]
 }
