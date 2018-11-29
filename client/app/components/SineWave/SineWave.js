@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { debounce } from 'lodash';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { select, selectAll, event } from 'd3-selection';
+import { select } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
-import { drag } from 'd3-drag';
 import { format } from 'd3-format';
 import { range } from 'd3-array';
 import { line, curveMonotoneX } from 'd3-shape';
@@ -23,17 +20,14 @@ const radius = 90;
 
 export default class SineWave extends Component {
   componentDidMount() {
-    this.cancelled = false;
-
     this.createDocument();
+    this.cancel = undefined;
   }
 
   createDocument() {
     const el = this.sine;
 
     const dimensions = viewPortFromElement(el);
-
-    console.log(dimensions);
 
     const xScale = scaleLinear()
       .domain([0, 20])
@@ -44,8 +38,6 @@ export default class SineWave extends Component {
       .range([dimensions.height, 0]);
 
     const { width, height } = dimensions;
-
-    console.log(width)
 
     const svg = select(el).append("svg")
                           .attr('class', 'sinewave-container')
@@ -184,11 +176,7 @@ export default class SineWave extends Component {
   }
 
   drawGraph(state) {
-    if(this.cancelled) {
-      return;
-    }
-
-    const increase = ((Math.PI * 2) / 360);
+      const increase = ((Math.PI * 2) / 360);
 
     state.time += increase;
     state.xIncrement += increase;
@@ -234,7 +222,9 @@ export default class SineWave extends Component {
          .attr('x2', state.dot.attr('cx'))
          .attr('y2', state.dot.attr('cy'));
 
-    requestAnimationFrame(this.drawGraph.bind(this, state));
+    this.cancel = requestAnimationFrame(this.drawGraph.bind(this, state));
+
+    console.log(this.cancel)
   }
 
   drawSineWave(state) {
@@ -317,6 +307,14 @@ export default class SineWave extends Component {
     };
 
     wait((window.hasOwnProperty('MathJax')), continuation.bind(this));
+  }
+
+  componentWillUnmount() {
+    if(!this.cancel) {
+      return;
+    }
+
+    window.cancelAnimationFrame(this.cancel)
   }
 
   render() {

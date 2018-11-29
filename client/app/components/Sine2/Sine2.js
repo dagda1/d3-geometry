@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { debounce } from 'lodash';
 import { Grid, Row, Col } from 'react-bootstrap';
 import {
   viewPortFromElement
 } from "../../utils/dom";
 
-import {
-  wait
-} from "../../utils/common";
-
-import { select, selectAll, event } from 'd3-selection';
+import { select } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
-import { drag } from 'd3-drag';
-import { format } from 'd3-format';
-import { range } from 'd3-array';
 import { line, curveMonotoneX, arc } from 'd3-shape';
 import './_Sine2.scss';
 
@@ -23,9 +14,8 @@ const TWO_PI = (Math.PI *2);
 
 class Sine extends Component {
   componentDidMount() {
-    this.cancelled = false;
-
     this.createDocument();
+    this.cancel = undefined;
   }
 
   createDocument() {
@@ -34,8 +24,6 @@ class Sine extends Component {
     const dimensions = viewPortFromElement(el);
 
     const { width, height } = dimensions;
-
-    console.log(dimensions);
 
     const svg = select(el).append("svg")
                           .attr('class', 'sine2-container')
@@ -63,10 +51,6 @@ class Sine extends Component {
   }
 
   animate(state, direction) {
-    if(this.cancelled) {
-      return;
-    }
-
     if(direction.forward) {
       state.time += state.increase;
     } else {
@@ -151,7 +135,7 @@ class Sine extends Component {
 
     this.progressSineGraph(state, direction);
 
-    requestAnimationFrame(this.animate.bind(this, state, direction));
+    this.cancel = requestAnimationFrame(this.animate.bind(this, state, direction));
   }
 
   addShapes(state) {
@@ -193,12 +177,12 @@ class Sine extends Component {
                           .attr('x2', 0)
                           .attr('y2', 0);
 
-    const sine = state.sine = line()
+    state.sine = line()
       .curve(curveMonotoneX)
 		  .x((d, i) => { return state.xScale(d); })
 		  .y((d, i) => { return state.yScale(Math.sin(d) + 1); });
 
-    const sineData = state.sineData = [];
+    state.sineData = [];
 
     state.sineCurve = state.xAxisGroup.append('path')
                            .attr('class', 'sine-curve');
@@ -272,6 +256,14 @@ class Sine extends Component {
       yAxisGroup,
       increase: (TWO_PI / 360)
     };
+  }
+
+  componentWillUnmount() {
+    if(!this.cancel) {
+      return;
+    }
+
+    window.cancelAnimationFrame(this.cancel)
   }
 
   render(el, props) {
