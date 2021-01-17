@@ -16,9 +16,8 @@ import { axisBottom, axisLeft } from 'd3-axis';
 import { drag } from 'd3-drag';
 import { format } from 'd3-format';
 import { range } from 'd3-array';
-import { line, curveMonotoneX, curveBasis, arc } from 'd3-shape';
+import { line, curveBasis } from 'd3-shape';
 import { max, min, extent } from 'd3-array';
-import { transform } from 'd3-zoom';
 import "./_FunctionPlot.scss";
 
 @connect((state) => {
