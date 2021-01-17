@@ -80,7 +80,7 @@
     "imports-loader": "^0.6.5",
     "koa": "^1.1.2",
     "mime": "^2.3.1",
-    "mixin-deep": "^2.0.0",
+    "mixin-deep": "^2.0.1",
     "redux-devtools": "^3.1.1",
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.0",

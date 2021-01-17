@@ -1285,7 +1285,7 @@ boom@5.x.x:
 
 bootstrap@^3.3.6:
   version "3.3.7"
-  resolved "http://registry.npmjs.org/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
+  resolved "https://registry.npmjs.org/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
   integrity sha1-WjiTlFSfIzMIdaOxUGVldPip63E=
 
 brace-expansion@^1.0.0, brace-expansion@^1.1.7:
@@ -4878,10 +4878,10 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
-mixin-deep@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/mixin-deep/-/mixin-deep-2.0.0.tgz#9dfd525156720ec6cbee14fcb4b968253ba358ee"
-  integrity sha512-2tAhDtV+OCFCeknyf2cJD5rD+xfvM2ax/RZ3iI1G67Eh6x5UxKJlGDVpmCX27y7WvuXpAkMHQs9ooaxIHIit+A==
+mixin-deep@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-2.0.1.tgz#9a6946bef4a368401b784970ae3caaaa6bab02fa"
+  integrity sha512-imbHQNRglyaplMmjBLL3V5R6Bfq5oM+ivds3SKgc6oRtzErEnBUUc5No11Z2pilkUvl42gJvi285xTNswcKCMA==
 
 "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@~0.5.1:
   version "0.5.1"
