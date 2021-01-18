@@ -4,7 +4,7 @@ export function availableViewPort() {
 
   return {
     w: w,
-    h: h
+    h: h,
   };
 }
 
@@ -13,14 +13,14 @@ export function viewPortFromElement(el, square) {
     top: 20,
     right: 100,
     bottom: 30,
-    left: 30
+    left: 30,
   };
 
   let h, w;
 
-  h = el.clientHeight || Math.min(document.documentElement.clientHeight - 100, 800)
+  h = el.clientHeight || Math.min(document.documentElement.clientHeight - 100, 800);
 
-  if(square) {
+  if (square) {
     w = h;
   } else {
     w = Math.min(el.clientWidth, document.documentElement.clientWidth, 1000);
@@ -29,6 +29,6 @@ export function viewPortFromElement(el, square) {
   return {
     margin,
     width: w,
-    height: h
+    height: h,
   };
 }
