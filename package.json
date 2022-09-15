@@ -28,7 +28,7 @@
   "homepage": "https://github.com/dagda1/d3-geometry",
   "dependencies": {
     "atob": "^2.1.2",
-    "bootstrap": "^3.3.6",
+    "bootstrap": "^3.4.1",
     "classnames": "^2.2.5",
     "css-loader": "^0.21.0",
     "d3": "^4.6.0",
